@@ -1,0 +1,175 @@
+/* -- Empty State --- */
+.noAnnouncements {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  margin-top: 1rem;
+  background-color: #f8fafc; /* Softer slate-gray background */
+  border: 2px dashed #cbd5e1; /* Lighter, less aggressive dash */
+  border-radius: 0.75rem; /* 12px radius */
+  color: #64748b; 
+  font-size: 1rem; 
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Smoother spring-like animation */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.formContainer {
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* Slightly more breathing room */
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155; /* Slate color instead of pure black */
+  margin-bottom: 0.375rem;
+}
+
+/* --- Inputs --- */
+.inputField {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem; /* 8px radius */
+  padding: 0.625rem 0.75rem; /* Taller, more clickable area */
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: #0f172a;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* Modern blue focus ring */
+}
+
+/* --- Buttons --- */
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+}
+
+.cancelBtn {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  color: #475569;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelBtn:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.submitBtn {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle baseline depth */
+}
+
+.submitBtn:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); /* Elevates on hover */
+}
+
+.submitBtn:active {
+  transform: translateY(1px); /* Tactile click effect */
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem; /* Reduced from 5rem so it scales better on smaller screens */
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e2e8f0; 
+}
+
+.headerTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: -0.025em; /* Tighter tracking looks more premium */
+  margin: 0; 
+}
+
+.createBtn {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #10b981; 
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.createBtn:hover {
+  background-color: #059669; 
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+}
+
+.createBtn:active {
+  transform: translateY(1px);
+}
+
+/* --- View-Only State --- */
+.viewOnlyInput {
+  background-color: #f8fafc;
+  color: #64748b;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+}
+
+.viewOnlyInput:focus {
+  outline: none;
+  border-color: #e2e8f0;
+  box-shadow: none;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+    align-items: start; 
+}

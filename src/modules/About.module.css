@@ -1,0 +1,128 @@
+/* --- Page Wrapper --- */
+.pageWrapper {
+    min-height: calc(100vh - 70px);
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContent {
+    flex: 1;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+/* --- Hero Section --- */
+.heroSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.heroText h1 {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0 0 1rem 0;
+    letter-spacing: -1px;
+}
+
+.heroText h2 {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+}
+
+.primaryBtn {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 0.85rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.primaryBtn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* --- Bio Section --- */
+.bioSection {
+    background: var(--surface);
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.bioSection h2 {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.bioSection p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* --- Experience Timeline --- */
+.experienceSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.experienceItem {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.year {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.expDetails h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.expDetails p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 768px) {
+    .heroSection {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .experienceItem {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+}

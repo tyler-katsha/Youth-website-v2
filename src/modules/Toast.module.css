@@ -1,0 +1,63 @@
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  padding: 14px 20px;
+  border-radius: 12px; /* Slightly rounder for a modern feel */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: system-ui, -apple-system, sans-serif; /* Crisp system font */
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ffffff;
+  
+  /* Layered shadows create a much smoother, realistic depth */
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05),
+    0 12px 24px -4px rgba(0, 0, 0, 0.15);
+    
+  /* Subtle inner border for contrast on busy backgrounds */
+  border: 1px solid rgba(255, 255, 255, 0.15); 
+  
+  /* Spring-like easing makes the entrance feel organic and snappy */
+  animation: slideIn 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+  z-index: 9999;
+  max-width: 400px; /* Prevents text from stretching too wide on large screens */
+}
+
+/* Modern, vibrant but visually comfortable colors */
+.success { background-color: #10B981; } /* Emerald Green */
+.error { background-color: #EF4444; } /* Vibrant Red */
+
+@keyframes slideIn {
+  from { 
+    transform: translateX(calc(-100% - 24px)); /* Perfectly clears the left edge */
+    opacity: 0; 
+  }
+  to { 
+    transform: translateX(0); 
+    opacity: 1; 
+  }
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7); /* Slightly muted default state */
+  cursor: pointer;
+  margin-left: auto; /* Always pushes the button to the far right */
+  padding: 4px; /* Increases the clickable area */
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Smooth hover interaction */
+.closeBtn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}

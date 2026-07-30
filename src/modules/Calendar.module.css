@@ -1,0 +1,122 @@
+/* --- Main Container --- */
+.calendarWrapper {
+    width: 100%;
+    max-width: 380px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+/* --- Header (Month / Year & Buttons) --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.monthYear {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: #0f172a;
+}
+
+.navButton {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    color: #475569;
+    transition: all 0.2s ease;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navButton:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+/* --- The Grid --- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.dayName {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.dayCell {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: #334155;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Container for dots */
+.eventDots {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2px;
+}
+
+/* Single dot */
+.eventDot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #2563eb;
+}
+
+/* Make dots visible on selected day */
+.selected .eventDot {
+    background: white;
+}
+
+.dayCell:hover:not(.empty) {
+    background-color: #f1f5f9;
+}
+
+.empty {
+    cursor: default;
+}
+
+.today {
+    border-color: #cbd5e1;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.selected {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border-color: #2563eb;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}

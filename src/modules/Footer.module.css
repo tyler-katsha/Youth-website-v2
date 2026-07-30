@@ -1,0 +1,108 @@
+/* --- Main Footer Container --- */
+.footer {
+    background-color: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    padding: 3rem 0 1.5rem 0;
+    width: 100%;
+    margin-top: auto; /* Pushes the footer to the bottom of the page */
+}
+
+/* --- Top Content Area --- */
+.footerContent {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+/* --- Left Side: Branding --- */
+.brandSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 300px;
+}
+
+.brandName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.brandTagline {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* --- Right Side: Links --- */
+.linksSection {
+    display: flex;
+    gap: 4rem;
+}
+
+.linkGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.linkGroup h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.linkGroup a {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.linkGroup a:hover {
+    color: #2563eb;
+}
+
+/* --- Bottom Copyright Bar --- */
+.bottomBar {
+    max-width: 950px;
+    margin: 3rem auto 0;
+    padding: 1.5rem 2rem 0;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+    .footerContent {
+        flex-direction: column;
+    }
+    
+    .linksSection {
+        flex-direction: column;
+        gap: 2rem;
+        width: 100%;
+    }
+    
+    .bottomBar {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+}

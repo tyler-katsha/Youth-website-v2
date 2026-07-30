@@ -1,0 +1,129 @@
+/* AnnouncementCard.module.css */
+
+.cardContainer {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+/* New class for urgent announcements */
+.urgentCard {
+    border-left: 5px solid #dc3545; /* Prominent red indicator */
+    background-color: #fffafb;      /* Very subtle red tint */
+}
+
+/* Header layout */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+/* Wrapper for the badge and title */
+.titleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.cardTitle {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333333;
+}
+
+/* New badge styling */
+.urgentBadge {
+    background-color: #dc3545;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+/* Container for dates */
+.metaData {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+}
+
+.cardTime {
+    font-size: 0.85rem;
+    color: #666666;
+}
+
+/* New expiration date styling */
+.cardExpires {
+    font-size: 0.8rem;
+    color: #d97706; /* A warning orange/brown color */
+    font-style: italic;
+}
+
+/* Body & Message */
+.cardBody {
+    margin: 0;
+}
+
+.cardMessage {
+    margin: 0;
+    color: #444444;
+    line-height: 1.5;
+}
+
+/* Admin Buttons */
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.editBtn, .deleteBtn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.editBtn {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+.editBtn:hover {
+    background-color: #cbd5e1;
+}
+
+.deleteBtn {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.deleteBtn:hover {
+    background-color: #fecaca;
+}
+
+/* Optional: Dynamic Types (if you use styles[type] for colors) */
+.info { border-top: 4px solid #3b82f6; }
+.warning { border-top: 4px solid #f59e0b; }
+.success { border-top: 4px solid #10b981; }

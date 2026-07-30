@@ -1,0 +1,213 @@
+/* ===========================
+   Upload Container
+=========================== */
+
+.uploadContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    width: 100%;
+
+    padding: 1.5rem;
+
+    background: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+
+    transition: .25s ease;
+}
+
+.uploadContainer:hover {
+    border-color: #2563eb;
+    background: #f8fbff;
+}
+
+/* ===========================
+   File Input
+=========================== */
+
+.fileInput {
+    width: 100%;
+    cursor: pointer;
+    color: #475569;
+    font-size: .95rem;
+}
+
+.fileInput::file-selector-button {
+    background: #2563eb;
+    color: white;
+
+    border: none;
+    border-radius: 10px;
+
+    padding: .75rem 1.4rem;
+
+    margin-right: 1rem;
+
+    font-size: .9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.fileInput::file-selector-button:hover {
+    background: #1d4ed8;
+}
+
+.fileInput:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   Preview Grid
+=========================== */
+
+.previewGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+/* ===========================
+   Preview Card
+=========================== */
+
+.previewBox {
+    overflow: hidden;
+
+    background: white;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    box-shadow: 0 2px 10px rgba(15, 23, 42, .06);
+
+    transition: .2s;
+}
+
+.previewBox:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
+}
+
+/* ===========================
+   Image
+=========================== */
+
+.previewImage {
+    width: 100%;
+    height: 180px;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+/* ===========================
+   Footer
+=========================== */
+
+.fileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+
+    padding: 1rem;
+}
+
+.fileName {
+    color: #1e293b;
+
+    font-size: .9rem;
+    font-weight: 600;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* ===========================
+   Buttons
+=========================== */
+
+.removeBtn,
+.clearBtn {
+    border: none;
+    border-radius: 10px;
+
+    padding: .7rem 1rem;
+
+    font-size: .9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.removeBtn {
+    width: 100%;
+
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.removeBtn:hover {
+    background: #fecaca;
+}
+
+.clearBtn {
+    align-self: flex-end;
+
+    background: #2563eb;
+    color: white;
+
+    padding-inline: 1.5rem;
+}
+
+.clearBtn:hover {
+    background: #1d4ed8;
+}
+
+/* ===========================
+   Limit Message
+=========================== */
+
+.limitMessage {
+    text-align: center;
+
+    padding: .9rem;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+
+    color: #2563eb;
+
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 768px) {
+
+    .previewGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .previewImage {
+        height: 220px;
+    }
+
+    .clearBtn {
+        width: 100%;
+    }
+}

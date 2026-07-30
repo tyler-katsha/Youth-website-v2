@@ -1,0 +1,213 @@
+/* --- Page Layout --- */
+.pageWrapper {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box; /* Ensures padding doesn't cause scrolling */
+}
+
+/* --- Card Container --- */
+.formContainer {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    width: 100%;
+    max-width: 400px;
+}
+
+.formContainer h1 {
+    font-size: 1.75rem;
+    color: #0f172a;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* --- Input Groups --- */
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.inputGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.inputField {
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #0f172a;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8fafc;
+    width: 100%; /* Ensures it fills the container */
+    box-sizing: border-box;
+}
+
+.inputField:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.inputField::placeholder {
+    color: #94a3b8;
+}
+
+/* --- The Password Wrapper --- */
+.passwordWrapper {
+    display: flex;
+    align-items: stretch; /* Stretches children to be the same height */
+    gap: 0.5rem; /* Space between the input and the button */
+    width: 100%;
+}
+
+/* Reset the specific padding since the button is no longer inside */
+.passwordWrapper .inputField {
+    flex: 1; /* Makes the input take up all remaining horizontal space */
+    padding-right: 1rem; 
+}
+
+/* --- The Show/Hide Toggle Button --- */
+.toggleBtn {
+    /* Removed absolute positioning */
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 1rem; /* Match visual weight */
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.toggleBtn:hover {
+    color: #0f172a;
+    background-color: #e2e8f0;
+    border-color: #94a3b8;
+}
+
+/* Give it the same nice blue glow on focus as the inputs */
+.toggleBtn:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- Submit Button --- */
+.submitBtn {
+    background-color: #2563eb;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.85rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.submitBtn:hover {
+    background-color: #1d4ed8;
+}
+
+.submitBtn:active {
+    transform: scale(0.98);
+}
+
+/* --- Helper Links --- */
+.linkText {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #64748b;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.linkText:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+/* --- Social Login Divider --- */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin: 1.5rem 0;
+}
+
+.divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+/* --- Social Button Grid --- */
+/* .socialGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+} */
+.socialGrid {
+    display: grid;
+    grid-template-columns: repeat(1fr);
+    gap: 10px;
+}
+.socialBtn {
+    background: white;
+    border: 1px solid #e2e8f0;
+    padding: 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2rem; /* If using icons */
+    transition: all 0.2s;
+}
+
+.socialBtn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* --- Guest Button --- */
+.guestBtn {
+    background: transparent;
+    color: #64748b;
+    border: 1px dashed #cbd5e1;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.guestBtn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}

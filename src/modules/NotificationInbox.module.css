@@ -1,0 +1,240 @@
+
+
+
+
+@keyframes slideDown {
+  from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+/* --- List & Items --- */
+.inboxList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.emptyState {
+  padding: 32px 16px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.notifItem {
+  display: flex;
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  position: relative;
+}
+
+.notifItem:last-child {
+  border-bottom: none;
+}
+
+.notifItem.unread {
+  background-color: #f0fdf4; /* Very subtle green tint for unread items */
+}
+
+.notifItem.read {
+  opacity: 0.7;
+}
+
+.notifItem:hover {
+  background-color: #f8fafc;
+}
+
+/* --- Content Styling --- */
+.notifIndicator {
+  width: 4px;
+  border-radius: 4px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Color codes based on notification type */
+.notifIndicator.info { background-color: #3b82f6; }
+.notifIndicator.success { background-color: #10b981; }
+.notifIndicator.warning { background-color: #f59e0b; }
+
+.notifContent {
+  flex-grow: 1;
+}
+
+.notifTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.notifTitleRow h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.notifTime {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.notifMessage {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+/* --- Main Container --- */
+.inboxWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* --- Bell Button & Badge --- */
+.bellBtn {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.bellBtn:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: var(--danger);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid var(--surface); /* Keeps the cutout effect in both themes */
+  pointer-events: none;
+}
+
+/* --- Dropdown Panel --- */
+.inboxDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 340px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+  animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top right;
+}
+
+/* --- Header --- */
+.inboxHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-hover);
+}
+
+.inboxHeader h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.markAllBtn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.markAllBtn:hover { text-decoration: underline; }
+
+/* --- List & Items --- */
+.emptyState {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.notifItem {
+  display: flex;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.notifItem.unread {
+  background-color: rgba(16, 185, 129, 0.1); /* Subtle green tint */
+}
+
+.notifItem.read { opacity: 0.7; }
+.notifItem:hover { background-color: var(--surface-hover); }
+
+/* --- Content Styling --- */
+.notifTitleRow h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.notifTime {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.notifMessage {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Indicators */
+.notifIndicator.info { background-color: var(--primary); }
+.notifIndicator.success { background-color: #10b981; }
+.notifIndicator.warning { background-color: #f59e0b; }
+
+
+/* Small dot to grab attention for unread items */
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  margin-top: 4px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}

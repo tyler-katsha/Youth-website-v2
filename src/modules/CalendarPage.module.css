@@ -1,0 +1,378 @@
+/* ===========================
+   PAGE LAYOUT
+=========================== */
+
+.pageWrapper {
+    min-height: calc(100vh - 70px);
+    padding: 2rem;
+    background: #f8fafc;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.contentContainer {
+    width: 100%;
+    max-width: 950px;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.calendarSection {
+    flex: 0 0 380px;
+}
+
+/* ===========================
+   EVENTS PANEL
+=========================== */
+
+.eventsPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+    padding: 1.5rem;
+    min-height: 500px;
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.panelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.panelHeader h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #0f172a;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+.addBtn,
+.cancelBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+
+    cursor: pointer;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.addBtn {
+    background: #2563eb;
+    color: white;
+}
+
+.addBtn:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
+.addBtn:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+.cancelBtn {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.cancelBtn:hover {
+    background: #cbd5e1;
+}
+
+/* ===========================
+   EVENT LIST
+=========================== */
+
+.eventList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.scrollable {
+    max-height: 520px;
+    overflow-y: auto;
+    padding-right: .5rem;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 999px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ===========================
+   EVENT CARD
+=========================== */
+
+.eventCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 1rem;
+
+    padding: 1rem;
+
+    background: #f8fafc;
+    border-radius: 10px;
+    border-left: 5px solid #2563eb;
+
+    transition: .2s;
+}
+
+.eventCard:hover {
+    background: #f1f5f9;
+}
+
+.eventInfo {
+    flex: 1;
+}
+
+.eventInfo h4 {
+    margin: 0 0 .35rem;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.eventInfo p {
+    margin: 0;
+    color: #64748b;
+    font-size: .9rem;
+}
+
+.actionBtns {
+    display: flex;
+    gap: .5rem;
+}
+
+.editBtn,
+.deleteBtn {
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+
+    padding: .45rem .75rem;
+
+    cursor: pointer;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.editBtn {
+    color: #2563eb;
+}
+
+.editBtn:hover:not(:disabled) {
+    background: #dbeafe;
+}
+
+.deleteBtn {
+    color: #ef4444;
+}
+
+.deleteBtn:hover:not(:disabled) {
+    background: #fee2e2;
+}
+
+.editBtn:disabled,
+.deleteBtn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   FORM
+=========================== */
+
+.planForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    padding: 1rem;
+}
+
+.inputField {
+    width: 100%;
+
+    padding: .75rem 1rem;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    font-size: .95rem;
+    box-sizing: border-box;
+}
+
+.inputField:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+.timeRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.timeSelect {
+    width: 170px;
+    padding: 0.75rem 1rem;
+    border: 2px solid #d1d5db;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #1f2937;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+
+    /* Remove default browser styling */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* Custom dropdown arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23666' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 7.5L10 12l4.5-4.5' stroke='%23666' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 16px;
+    padding-right: 2.8rem;
+}
+
+.timeSelect:hover {
+    border-color: #6366f1;
+}
+
+.timeSelect:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.timeSelect:invalid {
+    color: #9ca3af;
+}
+
+.timeSelect option {
+    color: #1f2937;
+    background: #fff;
+}
+
+.timeSeparator {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width: 768px) {
+
+    .pageWrapper {
+        padding: 1rem;
+    }
+
+    .contentContainer {
+        flex-direction: column;
+    }
+
+    .calendarSection,
+    .eventsPanel {
+        width: 100%;
+        flex: none;
+    }
+
+    .eventCard {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .actionBtns {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .panelHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .timeRow {
+        flex-direction: column;
+    }
+
+    .timeSelect {
+        width: 100%;
+    }
+}
+.characterCount {
+    align-self: flex-end;
+    margin-top: -0.5rem;
+    margin-bottom: 0.25rem;
+
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.characterCount strong {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.characterCount.warning strong {
+    color: #f59e0b;
+}
+
+.characterCount.danger strong {
+    color: #ef4444;
+}

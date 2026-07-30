@@ -1,0 +1,197 @@
+.pageWrapper {
+    min-height: 100vh;
+    /* A very subtle off-white to make the white dashboard card pop */
+    background-color: #f8fafc; 
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* --- Main Container (Matches Calendar Wrapper) --- */
+.dashboardContainer {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    box-sizing: border-box;
+}
+
+/* --- Header --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.searchInput {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    color: #334155;
+    width: 300px;
+    outline: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.searchInput:focus {
+    background-color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.searchInput::placeholder {
+    color: #94a3b8;
+}
+
+/* --- The Table --- */
+.tableWrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background-color: transparent;
+}
+
+.logTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: transparent;
+}
+
+.logTable th {
+    background-color: transparent;
+    padding: 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logTable td {
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    color: #334155;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.logTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Matches the calendar day cell hover */
+.logTable tbody tr:hover td {
+    background-color: #f1f5f9; 
+}
+
+/* Matches the calendar selected blue */
+.userCell {
+    font-weight: 600;
+    color: #2563eb; 
+}
+
+.emptyState {
+    text-align: center;
+    padding: 40px !important;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* --- Status Badges --- */
+.statusBadge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.statusSuccess {
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.statusFailed {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    color: #64748b;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.dropDownBox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    min-width: 180px;
+    padding: 10px 40px 10px 14px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+
+    background: #fff;
+    color: #1f2937;
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+
+    background-image:
+        linear-gradient(45deg, transparent 50%, #6b7280 50%),
+        linear-gradient(135deg, #6b7280 50%, transparent 50%);
+    background-position:
+        calc(100% - 18px) calc(50% - 3px),
+        calc(100% - 12px) calc(50% - 3px);
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+}
+
+.dropDownBox:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.dropDownBox:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.dropDownOption {
+    background: #fff;
+    color: #1f2937;
+    font-size: 0.95rem;
+}
+.divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #e2e8f0;
+}

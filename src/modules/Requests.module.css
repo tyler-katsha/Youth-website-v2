@@ -1,0 +1,140 @@
+/* Container & Table Layout */
+.container { 
+    padding: 2rem; 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    font-family: 'Inter', sans-serif;
+}
+
+.container h1 {
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+}
+
+.table { 
+    width: 100%; 
+    border-collapse: separate; 
+    border-spacing: 0; 
+    background: #ffffff; 
+    border: 1px solid #e2e8f0;
+    border-radius: 12px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.table th { 
+    background: #f8fafc; 
+    padding: 1rem 1.5rem; 
+    text-align: left; 
+    color: #64748b; 
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table td { 
+    padding: 1.25rem 1.5rem; 
+    color: #334155;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #f1f5f9; 
+}
+
+/* --- TableRow Styles --- */
+.row:last-child td { border-bottom: none; }
+.row:hover { background-color: #fcfcfc; }
+
+/* Buttons */
+.btn { 
+    padding: 0.5rem 1rem; 
+    border-radius: 6px; 
+    font-size: 0.85rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    border: 1px solid transparent;
+}
+
+.accept { 
+    background: #f0fdf4; 
+    color: #166534; 
+    margin-right: 0.75rem; 
+}
+.accept:hover { background: #dcfce7; border-color: #bbf7d0; }
+
+.deny { 
+    background: #fef2f2; 
+    color: #991b1b; 
+}
+.deny:hover { background: #fee2e2; border-color: #fecaca; }
+
+.emptyState {
+    text-align: center;
+    padding: 40px !important;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.commentBox {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9fafb;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    resize: none;
+}
+
+.commentActions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.confirmBtn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+/* dark background overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+/* modal box */
+.modal {
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}

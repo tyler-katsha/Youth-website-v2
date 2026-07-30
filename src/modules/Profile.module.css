@@ -1,0 +1,487 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--background);
+}
+
+.pageWrapper {
+    flex: 1;
+    max-width: 900px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.profileCard {
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Header & Banner Layout */
+.coverPhoto {
+    height: 160px;
+    background: linear-gradient(135deg, #1d4ed8 0%, #5683ff 100%);
+    position: relative;
+}
+
+.avatarContainer {
+    position: absolute;
+    bottom: -40px;
+    left: 2rem;
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.headerInfo {
+    padding: 3.5rem 2rem 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.nameSection h1 {
+    font-size: 1.75rem;
+    color: #1e293b;
+    margin: 0 0 0.25rem 0;
+}
+
+.roleBadge {
+    background: #e0f2fe;
+    color: #0a83c4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Content Dynamic Grid Layout */
+.contentLayout {
+    padding: 2rem;
+}
+
+.detailsGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .detailsGrid {
+        grid-template-columns: 1fr;
+    }
+    .headerInfo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
+
+.infoBlock h3 {
+    font-size: 1.1rem;
+    color: #475569;
+    margin-bottom: 0.75rem;
+}
+
+.bioText {
+    color: #334155;
+    line-height: 1.6;
+}
+
+.statItem {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.statLabel {
+    display: block;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.statValue {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Section Line Breaks */
+.sectionDivider {
+    border: 0;
+    height: 1px;
+    background: #f1f5f9;
+    margin: 2rem 0;
+}
+
+/* Row-wise Settings Adjustments (Security & Danger Zones) */
+.profileSection .sectionTitle {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.dangerTitle {
+    color: #b91c1c !important;
+}
+
+.settingRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    background: #fafafa;
+    padding: 1.25rem;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+.dangerZoneSection .settingRow {
+    background: #fff5f5;
+    border-color: #fee2e2;
+}
+
+.settingMeta h4 {
+    margin: 0 0 0.25rem 0;
+    color: #1e293b;
+    font-size: 1rem;
+}
+
+.settingMeta p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/* Consistent Interactive Buttons */
+.editBtn, .passwordBtn, .deactivateBtn {
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.editBtn {
+    background: #4979fd;
+    color: #ffffff;
+}
+
+.editBtn:hover { 
+    background: #2e66ff; 
+}
+
+.passwordBtn {
+    background: #ffffff;
+    color: #1d4ed8;
+    border-color: #e2e8f0;
+}
+.passwordBtn:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+.deactivateBtn {
+    background: #dc2626;
+    color: #ffffff;
+}
+.deactivateBtn:hover { background: #b91c1c; }
+
+/* Modals Overlay Base styling remains standard */
+.modalOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.cancelBtn {
+    background: #e2e8f0;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.confirmDeactivateBtn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.themeToggleBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    min-width: 170px;
+    justify-content: center;
+
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+
+    background: #ffffff;
+    color: #1e293b;
+
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.themeToggleBtn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.lightActive {
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+}
+
+.lightActive:hover {
+    background: #f8fafc;
+}
+.themeIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.themeIcon img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block;
+}
+.darkActive {
+    background: #1e293b;
+    color: #ffffff;
+    border: 1px solid #334155;
+}
+
+.darkActive:hover {
+    background: #334155;
+}
+
+@media (max-width: 768px) {
+    .settingRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .themeToggleBtn,
+    .passwordBtn,
+    .editBtn,
+    .deactivateBtn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--background);
+}
+
+.pageWrapper {
+    flex: 1;
+    max-width: 900px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.profileCard {
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.coverPhoto {
+    height: 160px;
+    background: linear-gradient(135deg, #1d4ed8 0%, #5683ff 100%);
+    position: relative;
+}
+
+.avatarContainer {
+    position: absolute;
+    bottom: -40px;
+    left: 2rem;
+    border: 4px solid var(--surface);
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.headerInfo {
+    padding: 3.5rem 2rem 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.nameSection h1 {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.roleBadge {
+    background: #e0f2fe;
+    color: #0a83c4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.contentLayout { padding: 2rem; }
+
+.detailsGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.infoBlock h3 {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.bioText {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.statItem {
+    background: var(--background);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.statLabel {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.statValue {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sectionDivider {
+    border: 0;
+    height: 1px;
+    background: var(--border);
+    margin: 2rem 0;
+}
+
+/* --- Settings --- */
+.profileSection .sectionTitle {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.dangerTitle { color: var(--danger) !important; }
+
+.settingRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    background: var(--surface-hover);
+    padding: 1.25rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.dangerZoneSection .settingRow {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+}
+
+.settingMeta h4 { margin: 0 0 0.25rem 0; color: var(--text-primary); font-size: 1rem; }
+.settingMeta p { margin: 0; font-size: 0.875rem; color: var(--text-secondary); }
+
+/* --- Buttons --- */
+.editBtn, .passwordBtn, .deactivateBtn {
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.editBtn { background: var(--primary); color: #ffffff; }
+.editBtn:hover { background: var(--primary-hover); }
+
+.passwordBtn { background: var(--surface); color: var(--primary); border-color: var(--border); }
+.passwordBtn:hover { background: var(--surface-hover); }
+
+.deactivateBtn { background: var(--danger); color: #ffffff; }
+.deactivateBtn:hover { filter: brightness(0.8); }
+
+/* --- Modals --- */
+.modal { background: var(--surface); color: var(--text-primary); }
+.cancelBtn { background: var(--border); border: none; cursor: pointer; }
+.confirmDeactivateBtn { background: var(--danger); color: white; border: none; }
+
+/* --- Theme Toggle --- */
+.themeToggleBtn {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 1.25rem; border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.themeToggleBtn:hover { background: var(--surface-hover); }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .detailsGrid { grid-template-columns: 1fr; }
+    .headerInfo { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .settingRow { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .themeToggleBtn, .passwordBtn, .editBtn, .deactivateBtn { width: 100%; justify-content: center; }
+}

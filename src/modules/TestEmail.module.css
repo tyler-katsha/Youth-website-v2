@@ -1,0 +1,79 @@
+/* Container styling for an admin dashboard feel */
+.emailTestPanel {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 32px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  border: 1px solid #f1f5f9;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.panelHeader h2 {
+  margin: 0 0 8px 0;
+  color: #0f172a;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.panelHeader p {
+  margin: 0 0 24px 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* Responsive grid that automatically adjusts column count based on screen size */
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* Button as an interactive card */
+.testBtn {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 16px 20px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add a subtle arrow icon using CSS to indicate it's an action */
+.testBtn::after {
+  content: "→";
+  color: #94a3b8;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+/* Tactile hover and active states */
+.testBtn:hover {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.testBtn:hover::after {
+  color: #3b82f6; /* Arrow turns blue on hover */
+  transform: translateX(4px);
+}
+
+.testBtn:active {
+  transform: translateY(0);
+  box-shadow: none;
+  background-color: #f1f5f9;
+}
