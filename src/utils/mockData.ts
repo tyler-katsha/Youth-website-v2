@@ -63,6 +63,7 @@ export const membersData: YouthProfileProps[] = [
         enabled:true,
         dateOfBirth:'2000-01-12',
         bio: "I've been coming to Engedi Youth for 2 years! I love playing video games, soccer, and hanging out with my small group.",
+        authProvider: 'OAUTH2'
     },
     {
         name: "Sarah Jenkins",
@@ -72,7 +73,8 @@ export const membersData: YouthProfileProps[] = [
         dateOfBirth:'2001-12-12',
         enabled:true,
         bio: "Currently studying at university. Passionate about worship and helping students grow in their faith.",
-        profileImageUrl: "https://i.pravatar.cc/150?img=47" // Sample placeholder image
+        profileImageUrl: "https://i.pravatar.cc/150?img=47", // Sample placeholder image
+        authProvider: 'OAUTH2'
     },
     {
         name: "Marcus Chen",
@@ -82,7 +84,8 @@ export const membersData: YouthProfileProps[] = [
         enabled:true,
         dateOfBirth:'2002-10-29',
         bio: "Youth Pastor at Engedi Community Church. Coffee enthusiast and avid reader.",
-        profileImageUrl: "https://i.pravatar.cc/150?img=11"
+        profileImageUrl: "https://i.pravatar.cc/150?img=11",
+         authProvider: 'OAUTH2'
     },
     {
         name: "Chloe Davis",
@@ -90,7 +93,8 @@ export const membersData: YouthProfileProps[] = [
         dateOfBirth:'2009-06-14',
         roles: ["GUEST"],
         enabled:true,
-        email:'fake12@example.com'
+        email:'fake12@example.com',
+        authProvider: 'OAUTH2'
     }
 ];
 
