@@ -25,6 +25,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     const [selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
     const [isUpdatingRole, setIsUpdatingRole] = useState(false);
     const [isDowngradingRole, setIsDowngradingRole] = useState(false);
+    let tempObj:any = {enabled:true,email:null};
     const loaderRef = useRef<HTMLDivElement>(null);
     const openDetails = (record: Member) => {
         setSelectedRecord(record);
@@ -82,7 +83,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             setUsers(prev => prev.map(member => member.email === selectedRecord.email ? { ...member, roles: selectedRoles } : member));
 
             setSelectedRecord(prev => prev ? { ...prev, roles: selectedRoles } : null);
-
         } catch (err) {
             console.error(err);
         } finally {
@@ -94,7 +94,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
         if (!selectedRecord) return;
         try {
-            const response = await fetch(`${API}/users/${selectedRecord.email}/deactivate`, {
+            const response = await fetch(`${API}/users/${tempObj.email}/deactivate`, {
                 method: "PUT",
                 credentials: "include"
             });
@@ -105,7 +105,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
             setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: false}: user)
         );
-            closeDetails();
+        tempObj.enabled = true;
         } catch (err) {
             console.error(err);
         } finally{
@@ -116,7 +116,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     const handleActivate = async () => {
         if (!selectedRecord) return;
         try {
-            const response = await fetch(`${API}/users/${selectedRecord.email}/activate`, {
+            const response = await fetch(`${API}/users/${tempObj.email}/activate`, {
                 method: "PUT",
                 credentials: "include"
             });
@@ -126,7 +126,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             }
             setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: true}: user))
 
-            closeDetails();
+            tempObj.enabled = false;
         } catch (err) {
             console.error(err);
         } finally{
@@ -171,6 +171,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
         findAllMembers(0);
     }, []);
 
+    console.log(selectedRecord)
     useEffect(() => {
 
         const observer = new IntersectionObserver(entries => {
@@ -227,7 +228,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                                 <span className={styles.value}>{formatRoles(selectedRecord.roles)}</span>
                             </div>
 
-
+                            
 
                             <div className={styles.detailRow}>
                                 <span className={styles.label}>Birthday</span>
@@ -246,14 +247,10 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
                                 <button className={styles.saveBtn} disabled={isUpdatingRole} onClick={handleUpdateRole}>{isUpdatingRole ? "Updating..." : "Update Role"}</button>
                                 <button className={styles.saveBtn} disabled={isDowngradingRole} onClick={handleDowngradeRole}>{isDowngradingRole ? "Downgrading..." : "Downgrade Role"}</button>
-                                {selectedRecord.enabled ? 
-                                (<button className={styles.deactivateBtn} disabled={isDeactivating} onClick={handleDeactivate}>
-                                    {isDeactivating ? "Deactivating..." : "Deactivate Member"}
-                                </button>) 
+                                {selectedRecord.enabled !== false ? 
+                                (<button className={styles.deactivateBtn} disabled={isDeactivating} onClick={() => {setShowDeactivateModal(true);closeDetails();tempObj.enabled=true}}>{isDeactivating ? "Deactivating..." : "Deactivate Member"}</button>) 
                                 : 
-                                (<button className={styles.activateBtn} disabled={isActivating} onClick={handleActivate}>
-                                    {isActivating ? "Activating..." : "Activate Member"}
-                                </button>)
+                                (<button className={styles.activateBtn} disabled={isActivating} onClick={() => {setShowDeactivateModal(true);closeDetails();tempObj.enabled=false}}>{isActivating ? "Activating..." : "Activate Member"}</button>)
                                 }
                             </div>)}
                         </div>
@@ -334,14 +331,13 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             {showDeactivateModal && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modal}>
-                        <h2>Deactivate Account</h2>
+                        <h2>{tempObj.enabled ? "Deactivate Account" : "Activate Account"}</h2>
                         <p>
-                            Are you sure you want to deactivate your account?
-                            This action cannot be undone.
+                            Are you sure you want to {tempObj.enabled ? "deactivate":"activate"} your account?
                         </p>
                         <div className={styles.modalButtons}>
                             <button className={styles.cancelBtn} onClick={() => setShowDeactivateModal(false)}>Cancel</button>
-                            <button className={styles.confirmDeactivateBtn} onClick={handleDeactivate}>Yes, Deactivate</button>
+                            <button className={styles.confirmDeactivateBtn} onClick={() => {tempObj.enabled ?  handleDeactivate:handleActivate}}>Yes, {tempObj.enabled ? "deactivate":"activate"}</button>
                         </div>
                     </div>
                 </div>

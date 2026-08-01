@@ -143,7 +143,7 @@ export const ProfilePage = () => {
                             </div>
                         </div>
 
-                        <hr className={styles.sectionDivider} />
+                        {/* <hr className={styles.sectionDivider} /> */}
 
                         {/* <div className={styles.profileSection}>
                             <h3 className={styles.sectionTitle}>Appearance</h3>

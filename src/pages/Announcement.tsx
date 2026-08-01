@@ -157,6 +157,24 @@ export const Announcement = () => {
         saveAnnouncement({ ...formData, id: selectedRecord.id } as AnnouncementProps);
     };
 
+
+    // dont run more than once
+    // const tempMethod = async () => {
+    //     try{
+    //         const response = await fetch(`${API}/tempControllerMethod`,{
+    //             method:"GET",
+    //             credentials:'include'
+    //         })
+
+    //         if(!response.ok){
+    //             throw new Error('This bum method failed to run')
+    //         }
+
+    //     } catch(err){
+    //         console.error(err);
+    //     }
+    // }
+
     useEffect(() => {
         findAnnouncements(0);
     }, []);

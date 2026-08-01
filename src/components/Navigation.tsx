@@ -69,7 +69,6 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
                 <ul className={styles.navLinks}>
                     {navigateLink('/','Home')}
                     {navigateLink('/contact-us','Contact Us')}
-                    {/* {navigateLink('/announcements','Announcements')} */}
                     {isLoggedIn && (
                         <>
                             {navigateLink('/profile','Profile')}
@@ -92,6 +91,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
                             {/* {navigateLink('/about','About')} */}
                             {/* {navigateLink('/test-popup','popup')} */}
                             {/* {navigateLink('/test-emails','Test Emails')} */}
+                            {/* {navigateLink('/announcements','Announcements')} */}
                         </>
                     )}
                 </ul>
