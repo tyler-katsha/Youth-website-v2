@@ -24,7 +24,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
 
     const signout = async () => {
         try {
-            await fetch(API + '/auth/logout', {
+            await fetch(`${API}/auth/logout`, {
                 method: "POST",
                 credentials: 'include',
             })
@@ -90,7 +90,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
                             {navigateLink('/performances','System Performances')}
                             {/* {navigateLink('/about','About')} */}
                             {/* {navigateLink('/test-popup','popup')} */}
-                            {/* {navigateLink('/test-emails','Test Emails')} */}
+                            {navigateLink('/test-emails','Test Emails')}
                             {/* {navigateLink('/announcements','Announcements')} */}
                         </>
                     )}

@@ -5,6 +5,10 @@ import { API } from '../utils/API';
 export const VerifyEmail = () => {
     const [status, setStatus] = useState('loading');
     const [message, setMessage] = useState('Verifying your email...');
+    const queryParams = new URLSearchParams(window.location.search);
+    const token = queryParams.get('token');
+    const email = queryParams.get('email');
+    
 
     const [popupConfig, setPopupConfig] = useState({
         isOpen: false,
@@ -16,8 +20,10 @@ export const VerifyEmail = () => {
 
     const handleResend = async () => {
         try {
-            const response = await fetch(`${API}/email/resend-verification`,
-                { method: 'POST' }
+            const response = await fetch(`${API}/email/resend-verification`,{ 
+                    method: 'POST',
+                    body: JSON.stringify({email:email})
+                },
             );
 
             if (response.ok) {
@@ -41,19 +47,12 @@ export const VerifyEmail = () => {
             });
         }
     };
-    useEffect(() => {
-        const queryParams = new URLSearchParams(window.location.search);
-        const token = queryParams.get('token');
-
-        if (!token) {
-            setStatus('error');
-            setMessage('Invalid or missing verification token.');
-            return;
-        }
-
-        const verifyToken = async () => {
+    const verifyToken = async (token:string) => {
             try {
-                const response = await fetch(`http://localhost:8080/api/auth/verify?token=${token}`);
+                const response = await fetch(`${API}/auth/verify?token=${token}`,{
+                    method:"GET",
+                    credentials:'include'
+                });
 
                 if (response.ok) {
                     setStatus('success');
@@ -67,8 +66,15 @@ export const VerifyEmail = () => {
                 setMessage('Network error. Please try again later.');
             }
         };
+    useEffect(() => {
+        
+        if (!token) {
+            setStatus('error');
+            setMessage('Invalid or missing verification token.');
+            return;
+        }
 
-        verifyToken();
+        verifyToken(token);
     }, []);
 
     const styles = {
@@ -105,7 +111,10 @@ export const VerifyEmail = () => {
         <div style={styles.container}>
             <div style={styles.card}>
 
-                <CustomPopup {...popupConfig} onClose={closePopup} />
+                <CustomPopup 
+                    {...popupConfig} 
+                    onClose={closePopup} 
+                />
                 <h2>Email Verification</h2>
                 <p>{message}</p>
 

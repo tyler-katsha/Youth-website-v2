@@ -246,7 +246,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                                 </label>
 
                                 <button className={styles.saveBtn} disabled={isUpdatingRole} onClick={handleUpdateRole}>{isUpdatingRole ? "Updating..." : "Update Role"}</button>
-                                <button className={styles.saveBtn} disabled={isDowngradingRole} onClick={handleDowngradeRole}>{isDowngradingRole ? "Downgrading..." : "Downgrade Role"}</button>
+                                <button className={styles.saveBtn} disabled={isDowngradingRole || selectedRecord.roles.length <= 1} onClick={handleDowngradeRole}>{isDowngradingRole ? "Downgrading..." : "Downgrade Role"}</button>
                                 {selectedRecord.enabled !== false ? 
                                 (<button className={styles.deactivateBtn} disabled={isDeactivating} onClick={() => {setShowDeactivateModal(true);closeDetails();tempObj.enabled=true}}>{isDeactivating ? "Deactivating..." : "Deactivate Member"}</button>) 
                                 : 

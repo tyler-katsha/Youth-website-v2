@@ -49,7 +49,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return;
         }
         try {
-            const response = await fetch(API + '/users/me', {
+            const response = await fetch(`${API}/users/me`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: { 'content-type': 'application/json' }
