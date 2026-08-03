@@ -48,7 +48,7 @@ function App() {
                 {/* <Route path="/request-page" element={<ProtectedRoute><RequestsPage /></ProtectedRoute>} /> */}
                 <Route path="/logs" element={<ProtectedRoute><Logs /></ProtectedRoute>} />
                 <Route path="/performances" element={<ProtectedRoute><Performance /></ProtectedRoute>} />
-                <Route path="/oauth2/redirect" element={<ProtectedRoute><OAuth2Redirect /></ProtectedRoute>} />
+                <Route path="/oauth2/redirect" element={<OAuth2Redirect />} />
                 <Route path="/verify" element={<VerifyEmail />}/>
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/reset-email" element={<ResetEmail />} />

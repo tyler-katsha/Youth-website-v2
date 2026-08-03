@@ -17,7 +17,6 @@ export const Home = () => {
 
     const { user, isLoading } = useUser();
     const isGuest = localStorage.getItem('isGuest')
-
     if (isLoading) {
         return <HomeSkeleton />
     }
