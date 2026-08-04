@@ -12,7 +12,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     const [users, setUsers] = useState<Member[]>([]);
     const [search, setSearch] = useState("");
     const {user} = useUser();
-    const [showDeactivateModal,setShowDeactivateModal] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState<Member | null>(null);
     const [view, setView] = useState<ViewMode>("cards");
     const [hasMore, setHasMore] = useState(true);
@@ -25,7 +24,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     const [selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
     const [isUpdatingRole, setIsUpdatingRole] = useState(false);
     const [isDowngradingRole, setIsDowngradingRole] = useState(false);
-    let tempObj:any = {enabled:true,email:null};
     const loaderRef = useRef<HTMLDivElement>(null);
     const openDetails = (record: Member) => {
         setSelectedRecord(record);
@@ -248,9 +246,9 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                                 <button className={styles.saveBtn} disabled={isUpdatingRole} onClick={handleUpdateRole}>{isUpdatingRole ? "Updating..." : "Update Role"}</button>
                                 <button className={styles.saveBtn} disabled={isDowngradingRole || selectedRecord.roles.length <= 1} onClick={handleDowngradeRole}>{isDowngradingRole ? "Downgrading..." : "Downgrade Role"}</button>
                                 {selectedRecord.enabled !== false ? 
-                                (<button className={styles.deactivateBtn} disabled={isDeactivating} onClick={() => {setShowDeactivateModal(true);closeDetails();tempObj.enabled=true}}>{isDeactivating ? "Deactivating..." : "Deactivate Member"}</button>) 
+                                (<button className={styles.deactivateBtn} disabled={isDeactivating} onClick={() => {handleDeactivate();closeDetails();}}>{isDeactivating ? "Deactivating..." : "Deactivate Member"}</button>) 
                                 : 
-                                (<button className={styles.activateBtn} disabled={isActivating} onClick={() => {setShowDeactivateModal(true);closeDetails();tempObj.enabled=false}}>{isActivating ? "Activating..." : "Activate Member"}</button>)
+                                (<button className={styles.activateBtn} disabled={isActivating} onClick={() => {handleActivate();closeDetails();}}>{isActivating ? "Activating..." : "Activate Member"}</button>)
                                 }
                             </div>)}
                         </div>
@@ -327,21 +325,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                     </>
                 )}
             </div>
-
-            {showDeactivateModal && (
-                <div className={styles.modalOverlay}>
-                    <div className={styles.modal}>
-                        <h2>{tempObj.enabled ? "Deactivate Account" : "Activate Account"}</h2>
-                        <p>
-                            Are you sure you want to {tempObj.enabled ? "deactivate":"activate"} your account?
-                        </p>
-                        <div className={styles.modalButtons}>
-                            <button className={styles.cancelBtn} onClick={() => setShowDeactivateModal(false)}>Cancel</button>
-                            <button className={styles.confirmDeactivateBtn} onClick={() => {tempObj.enabled ?  handleDeactivate:handleActivate}}>Yes, {tempObj.enabled ? "deactivate":"activate"}</button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
         </>
     );

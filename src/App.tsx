@@ -19,7 +19,7 @@ import { Home } from './pages/Home'
 import { ResetPassword } from './pages/ResetPassword'
 import { About } from './pages/About'
 // import { TestPopup } from './pages/TestPopup'
-import { TestEmail } from './pages/TestEmails'
+// import { TestEmail } from './pages/TestEmails'
 import { ThemeProvider } from './contexts/ThemeContext'
 // import { Announcement } from './pages/Announcement'
 import { ResetEmail } from './pages/ResetEmail'
@@ -54,7 +54,7 @@ function App() {
                 <Route path="/reset-email" element={<ResetEmail />} />
                 <Route path="/error" element={<ResetEmail />} />
                 {/* <Route path="/test-popup" element={<ProtectedRoute><TestPopup /></ProtectedRoute>} /> */}
-                <Route path="/test-emails" element={<ProtectedRoute><TestEmail /></ProtectedRoute>} />
+                {/* <Route path="/test-emails" element={<ProtectedRoute><TestEmail /></ProtectedRoute>} /> */}
                 {/* <Route path="/announcements" element={<ProtectedRoute><Announcement /></ProtectedRoute>} /> */}
               </Routes>
 
