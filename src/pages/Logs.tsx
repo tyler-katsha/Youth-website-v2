@@ -8,9 +8,11 @@ import { RedirectUser } from '../components/RedirectUser';
 import { Toast, type PartialToast } from '../modals/Toast';
 import { Footer } from '../components/Footer';
 import type { AuditLog } from '../utils/types';
+import { getToken } from '../utils/Utils';
 
 
 export const Logs = () => {
+
 
     const [logs, setLogs] = useState<AuditLog[]>([]);
     const [_isLoading, setIsLoading] = useState(true);
@@ -33,7 +35,8 @@ export const Logs = () => {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
                 }
             });
 

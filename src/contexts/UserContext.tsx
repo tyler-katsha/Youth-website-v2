@@ -2,6 +2,7 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { API } from "../utils/API";
 import { type ProfileProps, type YouthProfileProps } from "../utils/types";
 import { HomeSkeleton } from "../skeletons/pages/HomeSkeleton";
+import { getToken } from "../utils/Utils";
 
 
 interface UserContextType {
@@ -52,7 +53,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const response = await fetch(`${API}/users/me`, {
                 method: 'GET',
                 credentials: 'include',
-                headers: { 'content-type': 'application/json' }
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {

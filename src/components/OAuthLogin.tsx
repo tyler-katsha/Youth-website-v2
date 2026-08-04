@@ -4,7 +4,7 @@ import styles from '../modules/Auth.module.css'
 import googleIcon from '../assets/google-icon.png';
 import { useState } from 'react';
 import type { ToastResponse } from '../utils/types';
-import { API } from '../utils/API';
+import { API, OAUTH_API } from '../utils/API';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import { removeAll } from '../utils/Utils';
@@ -21,7 +21,7 @@ export const OAuthLogin = () => {
     const handleOAuth2Login = (provider: string) => {
         removeAll();
         try {
-            window.location.href = `https://youthengedi-app-v1-0.onrender.com/oauth2/authorization/${provider}`
+            window.location.href = `${OAUTH_API}/${provider}`
         } catch (err) {
             setPopupConfig({
                 isOpen: true,

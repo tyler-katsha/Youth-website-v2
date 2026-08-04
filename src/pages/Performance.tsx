@@ -6,6 +6,8 @@ import styles from '../modules/Logs.module.css';
 import { Navigation } from '../components/Navigation';
 import { Modal } from "../modals/Modal";
 import { RedirectUser } from "../components/RedirectUser";
+import { getToken } from "../utils/Utils";
+import { Toast, type PartialToast } from "../modals/Toast";
 // import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface PerformanceMetrics {
@@ -21,6 +23,7 @@ export const Performance = () => {
     const { user, isLoading: userLoading } = useUser();
     const [performances, setPerformances] = useState<PerformanceMetrics[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [toast, setToast] = useState<PartialToast | null>(null)
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [viewMode, setViewMode] = useState<"table" | "dashboard" | "graph">("table");
@@ -44,10 +47,19 @@ export const Performance = () => {
             const response = await fetch(`${API}/admin/performances?page=${pageNumber}&size=100`, {
                 method: 'GET',
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization':`Bearer ${getToken()}`
+                 }
             });
 
-            if (!response.ok) throw new Error('Failed to fetch');
+            if (!response.ok) {
+                setToast({
+                    type: 'error',
+                    message: await response.text() ?? 'Failed to deactivate account'
+                })
+                return;
+            }
 
             const temp = await response.json();
 
@@ -60,7 +72,10 @@ export const Performance = () => {
 
             setPage(pageNumber);
         } catch (err) {
-            console.error(err);
+            setToast({
+                type: 'error',
+                message: 'Something went wrong Please try again'
+            })
         } finally {
             setIsLoading(false);
             setLoading(false);
@@ -252,6 +267,9 @@ export const Performance = () => {
                 </div>
 
             </div>
+
+            {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
+            
         </>
     );
 };

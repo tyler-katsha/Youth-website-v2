@@ -45,9 +45,11 @@ export const ContactPage = () => {
         });
 
         try {
-            const response = await fetch(API + "/email/send-email", {
+            const response = await fetch(`${API}/email/send-email`, {
                 method: "POST",
-                headers: { 'content-type': 'application/json' },
+                headers: { 
+                    'content-type': 'application/json'
+                },
                 body: JSON.stringify(formData)
             });
 

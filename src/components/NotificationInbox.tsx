@@ -3,7 +3,8 @@ import styles from '../modules/NotificationInbox.module.css';
 import type { AnnouncementProps, NotificationProps } from '../utils/types';
 import { notificationsMockData } from '../utils/mockData';
 import { API } from '../utils/API';
-import type { PartialToast } from '../modals/Toast';
+import { Toast, type PartialToast } from '../modals/Toast';
+import { getToken } from '../utils/Utils';
 
 export const NotificationInbox = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,7 @@ export const NotificationInbox = () => {
     const [_loading, setLoading] = useState(false);
     const [_hasMore, setHasMore] = useState(true);
     const [_page, setPage] = useState<number>(0);
-    const [_toast, setToast] = useState<PartialToast | null>(null);
+    const [toast, setToast] = useState<PartialToast | null>(null);
     // const unreadCount = mockNotifications.filter(n => !n.isRead).length;
     const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -33,7 +34,10 @@ export const NotificationInbox = () => {
             const response = await fetch(`${API}/announcements?page=${pageNumber}&size=30`, {
                 method: "GET",
                 credentials: 'include',
-                headers: { 'content-type': 'application/json' }
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {
@@ -58,7 +62,7 @@ export const NotificationInbox = () => {
         findAnnouncements(0);
     }, []);
     return (
-        // 2. Apply classes using styles.className
+        <>
         <div className={styles.inboxWrapper}>
 
             <button className={styles.bellBtn} onClick={toggleOpen} aria-label="Notifications">
@@ -101,6 +105,9 @@ export const NotificationInbox = () => {
                 </div>
             )}
         </div>
+
+        {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
+        </>
     );
 
 }

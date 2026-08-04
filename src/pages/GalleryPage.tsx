@@ -11,7 +11,7 @@ import { Modal } from "../modals/Modal";
 import { FileUpload, type FileUploadRef } from "../components/FileUpload";
 import { acceptArray, CHUNK_SIZE } from "../utils/types";
 import { Profile } from "../components/Profile";
-import { extractName, formatDate } from "../utils/Utils";
+import { extractName, formatDate, getToken } from "../utils/Utils";
 import { Toast, type PartialToast } from "../modals/Toast";
 
 export interface GalleryImage {
@@ -157,7 +157,10 @@ export const Gallery = () => {
                 const response = await fetch(`${API}/images/upload-chunks`, {
                     method: "POST",
                     body: formData,
-                    credentials: 'include'
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
                 });
 
                 if (!response.ok) {

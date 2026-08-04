@@ -7,6 +7,7 @@ import { Toast, type PartialToast } from "../modals/Toast";
 import styles from '../modules/Announcement.module.css';
 import { API } from "../utils/API";
 import type { AnnouncementProps } from "../utils/types";
+import { getToken } from "../utils/Utils";
 
 const INITIAL_FORM_STATE: Omit<AnnouncementProps, 'id'> = {
     title: '',
@@ -69,7 +70,10 @@ export const Announcement = () => {
             const response = await fetch(`${API}/announcements?page=${pageNumber}&size=30`, {
                 method: "GET",
                 credentials: 'include',
-                headers: { 'content-type': 'application/json' }
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {
@@ -99,7 +103,10 @@ export const Announcement = () => {
             const response = await fetch(`${API}/announcements`, {
                 method,
                 credentials: 'include',
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${getToken()}`
+                },
                 body: JSON.stringify(dataToSave)
             });
             
@@ -134,7 +141,10 @@ export const Announcement = () => {
             const response = await fetch(`${API}/announcements/${announcement.id}`, {
                 method: 'DELETE',
                 credentials: 'include',
-                headers: { 'content-type': 'application/json' }
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {

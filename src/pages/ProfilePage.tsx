@@ -9,7 +9,7 @@ import { useUser } from '../contexts/UserContext';
 import { API } from '../utils/API';
 import { ProfileSkeleton } from '../skeletons/pages/ProfileSkeleton';
 import { RedirectUser } from '../components/RedirectUser';
-import { ColorUtil, formatRoles, getAge, isLocal } from '../utils/Utils';
+import { ColorUtil, formatRoles, getAge, getToken, isLocal, removeAll } from '../utils/Utils';
 import { Profile } from '../components/Profile';
 import { useNavigate } from 'react-router-dom';
 import { Toast, type PartialToast } from '../modals/Toast';
@@ -65,7 +65,10 @@ export const ProfilePage = () => {
         try {
             const response = await fetch(`${API}/users`, {
                 method: "DELETE",
-                credentials: "include"
+                credentials: "include",
+                headers: {
+                    'Authorization':`Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {
@@ -90,7 +93,7 @@ export const ProfilePage = () => {
             })
         } finally {
             setShowDeactivateModal(false);
-            localStorage.removeItem("isGuest");
+            removeAll();
         }
     };
 

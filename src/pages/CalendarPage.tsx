@@ -7,7 +7,7 @@ import { useUser } from "../contexts/UserContext";
 import { API } from "../utils/API";
 import { eventColors, times, type EventType } from "../utils/types";
 import style from '../modules/CalendarPage.module.css';
-import { formatTime, isPermitted, resetCalendarForm } from "../utils/Utils";
+import { formatTime, getToken, isPermitted, resetCalendarForm } from "../utils/Utils";
 import { Toast, type PartialToast } from "../modals/Toast";
 import { RedirectUser } from "../components/RedirectUser";
 
@@ -53,7 +53,13 @@ export const CalendarPage = () => {
     const timeOptions = times.map((time) => (<option key={time} value={time}>{time}</option>))
     const fetchAllEvents = async () => {
         try {
-            const response = await fetch(`${API}/event/events`, { credentials: "include" });
+            const response = await fetch(`${API}/event/events`, { 
+                method: 'GET',
+                credentials: "include",
+                headers: {
+                    'Authorization': `Bearer ${getToken()}`
+                } 
+            });
             if (!response.ok) {
                 const error = await response.json();
                 setToast({message: error.message ?? "Failed to find all events.",type:"error"});
@@ -81,8 +87,6 @@ export const CalendarPage = () => {
         const currentEditingId = editingId;
         const tempId = Date.now();
 
-
-
         if (currentEditingId !== null) {
             setUpdatingPlans(prev => new Set(prev).add(currentEditingId));
         }
@@ -109,6 +113,7 @@ export const CalendarPage = () => {
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': `Bearer ${getToken()}`
                 },
                 body: JSON.stringify({ ...formData, dateKey }),
             });

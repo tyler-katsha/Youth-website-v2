@@ -5,6 +5,7 @@ import { useUser } from '../contexts/UserContext';
 import { API } from '../utils/API';
 import type { Requests } from '../components/TableRow';
 import { RequestsSkeleton } from '../skeletons/pages/RequestsSkeleton';
+import { getToken } from '../utils/Utils';
 
 export const RequestsPage = () => {
 
@@ -25,7 +26,10 @@ export const RequestsPage = () => {
             const response = await fetch(`${API}/requests?page=${pageNumber}&size=100`, {
                 method: "GET",
                 credentials: 'include',
-                headers: { "content-type": "application/json" }
+                headers: { 
+                    "content-type": "application/json",
+                    'Authorization':`Bearer ${getToken()}`
+                }
             })
 
            

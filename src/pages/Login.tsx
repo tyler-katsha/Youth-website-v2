@@ -57,7 +57,7 @@ export const Login = () => {
                 method: "POST",
                 credentials: 'include',
                 headers: {
-                    'content-type': 'application/json'
+                    'content-type': 'application/json',
                 },
                 body: JSON.stringify({
                     email: data.email,
@@ -83,14 +83,18 @@ export const Login = () => {
                 });
                 return;
             }
+            
+            const token = await response.json();
+            console.log(`Token: ${token}`)
 
-            await fetchUser();
-
+            localStorage.setItem('jwt-token',token)
             setPopupConfig({
                 isOpen: true,
                 type: 'success',
                 message: 'Login Successful!'
             });
+
+            await fetchUser();
 
             navigate('/')
 

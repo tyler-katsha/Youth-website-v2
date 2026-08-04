@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { API } from "../utils/API";
 import { Modal } from "../modals/Modal";
 import type { AppRole, MemberListProps, Status, ViewMode } from "../utils/types";
-import { formatDate, formatRoles, validAdmin } from "../utils/Utils";
+import { formatDate, formatRoles, getToken, validAdmin } from "../utils/Utils";
 import { useUser } from "../contexts/UserContext";
 import { RedirectUser } from "./RedirectUser";
+import { Toast, type PartialToast } from "../modals/Toast";
 
 export const MemberList: React.FC<MemberListProps> = ({ title }) => {
+
     const [users, setUsers] = useState<Member[]>([]);
     const [search, setSearch] = useState("");
     const {user} = useUser();
@@ -25,6 +27,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     const [isUpdatingRole, setIsUpdatingRole] = useState(false);
     const [isDowngradingRole, setIsDowngradingRole] = useState(false);
     const loaderRef = useRef<HTMLDivElement>(null);
+    const [toast, setToast] = useState<PartialToast | null>(null);
     const openDetails = (record: Member) => {
         setSelectedRecord(record);
         setSelectedRoles(record.roles);
@@ -42,11 +45,12 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': `Bearer ${getToken()}`
                 },
             });
 
             if (!res.ok) {
-                throw new Error("Failed to update role");
+                throw new Error("Failed to upgrade role");
             }
 
             setUsers(prev => prev.map(member => member.email === selectedRecord.email ? { ...member, roles: selectedRoles } : member));
@@ -54,7 +58,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             setSelectedRecord(prev => prev ? { ...prev, roles: selectedRoles } : null);
 
         } catch (err) {
-            console.error(err);
+            setToast({ message: 'Failed to upgrade role', type: 'error' });
         } finally {
             setIsUpdatingRole(false);
         }
@@ -71,6 +75,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': `Bearer ${getToken()}`
                 },
             });
 
@@ -82,7 +87,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
             setSelectedRecord(prev => prev ? { ...prev, roles: selectedRoles } : null);
         } catch (err) {
-            console.error(err);
+            setToast({ message: 'Failed to downgrade role', type: 'error' });
         } finally {
             setIsDowngradingRole(false);
         }
@@ -94,7 +99,10 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
         try {
             const response = await fetch(`${API}/users/${selectedRecord.email}/deactivate`, {
                 method: "PUT",
-                credentials: "include"
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {
@@ -104,7 +112,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: false}: user)
         );
         } catch (err) {
-            console.error(err);
+            setToast({ message: 'Failed to deactivate account', type: 'error' });
         } finally{
             setIsDeactivating(false);
         }
@@ -124,7 +132,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: true}: user))
 
         } catch (err) {
-            console.error(err);
+             setToast({ message: 'Failed to activate account', type: 'error' });
         } finally{
             setIsActivating(false);
         }
@@ -140,7 +148,10 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             const res = await fetch(`${API}/users?page=${pageNumber}&size=100`, {
                 method: "GET",
                 credentials: "include",
-                headers: { 'content-type': 'application/json' }
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!res.ok) {
@@ -157,7 +168,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
             setPage(pageNumber);
         } catch (err) {
-            console.error(err);
+            setToast({ message: 'Could not find all members.', type: 'error' });
         } finally {
             setLoading(false);
         }
@@ -323,7 +334,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                     </>
                 )}
             </div>
-
+            {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
         </>
     );
 };

@@ -64,7 +64,7 @@ export const TableRow: React.FC<TableRowProps> = ({ roleReqId, userId, requested
 
             setShowCommentBox(false);
         } catch (err) {
-            console.error(err);
+            setToast({ message: 'Unable to send request' ,type:'error'})
         } finally {
             setSubmitting(false);
         }
@@ -83,13 +83,6 @@ export const TableRow: React.FC<TableRowProps> = ({ roleReqId, userId, requested
                     <button className={`${styles.btn} ${styles.deny}`} onClick={() => openAction('reject')}>Deny</button>
                 </td>
 
-                {toast && (
-                    <Toast
-                        message={toast.message}
-                        type={toast.type}
-                        onClose={() => setToast(null)}
-                    />
-                )}
             </tr>
             {showCommentBox && (
                 <div className={styles.commentBox}>
@@ -111,6 +104,7 @@ export const TableRow: React.FC<TableRowProps> = ({ roleReqId, userId, requested
                     </div>
                 </div>
             )}
+            {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
         </>
     );
 }

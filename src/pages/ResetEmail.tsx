@@ -4,6 +4,7 @@ import type { ToastResponse } from '../utils/types';
 import { CustomPopup } from '../popups/CustomPopup';
 import { API } from '../utils/API';
 import { useNavigate } from 'react-router-dom';
+import { getToken } from '../utils/Utils';
 
 export const ResetEmail = () => {
     const navigate = useNavigate();
@@ -28,7 +29,10 @@ export const ResetEmail = () => {
             const response = await fetch(`${API}/email/reset-password`,{
                 method:"POST",
                 credentials:'include',
-                headers: {'content-type':'application/json'},
+                headers: {
+                    'content-type':'application/json',
+                    'Authorization':`Bearer ${getToken()}`
+                },
                 body:JSON.stringify({email:email})
             })
 

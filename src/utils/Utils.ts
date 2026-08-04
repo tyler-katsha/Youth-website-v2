@@ -107,29 +107,43 @@ export function isPermitted(roles: AppRole[]): boolean {
     return roles.includes('ADMIN') || roles.includes('YOUTH_LEADER')
 }
 export function validAdmin(roles: AppRole[]): boolean {
-    if(!roles) return false;
+    if (!roles) return false;
     return roles.includes('ADMIN');
 }
-export function validGuest(isGuest:string | null,route:string): string{
+export function validGuest(isGuest: string | null, route: string): string {
 
     return isGuest ? '/login' : route
 }
 
-export function resetCalendarForm(): PartialPlan{
-    return  {title: '', description: '', startTime: '', endTime: '', color: '#2563eb', eventType: 'GENERAL' as EventType}
+export function resetCalendarForm(): PartialPlan {
+    return { title: '', description: '', startTime: '', endTime: '', color: '#2563eb', eventType: 'GENERAL' as EventType }
 }
-export function invalidDate(date:string): boolean {
+export function invalidDate(date: string): boolean {
     const parsedDate = new Date(date).getTime();
 
-    if(isNaN(parsedDate)){
+    if (isNaN(parsedDate)) {
         return true;
     }
     return parsedDate < Date.now();
 }
-export function removeAll(){
+export function removeAll() {
     localStorage.removeItem('isGuest')
     localStorage.removeItem('email')
 }
-export function isLocal(authProvider:AuthProvider): boolean{
+export function isLocal(authProvider: AuthProvider): boolean {
     return authProvider === 'LOCAL';
+}
+export function getToken(): string | null {
+    const token = localStorage.getItem('jwt-token');
+    try {
+    
+        if (token === null) {
+            throw new Error('No jwt token found')
+        }
+        
+    } catch (err) {
+        console.error(err)
+    }
+   
+    return token;
 }
