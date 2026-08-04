@@ -92,7 +92,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
         if (!selectedRecord) return;
         try {
-            const response = await fetch(`${API}/users/${tempObj.email}/deactivate`, {
+            const response = await fetch(`${API}/users/${selectedRecord.email}/deactivate`, {
                 method: "PUT",
                 credentials: "include"
             });
@@ -103,7 +103,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
             setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: false}: user)
         );
-        tempObj.enabled = true;
         } catch (err) {
             console.error(err);
         } finally{
@@ -114,7 +113,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     const handleActivate = async () => {
         if (!selectedRecord) return;
         try {
-            const response = await fetch(`${API}/users/${tempObj.email}/activate`, {
+            const response = await fetch(`${API}/users/${selectedRecord.email}/activate`, {
                 method: "PUT",
                 credentials: "include"
             });
@@ -124,7 +123,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             }
             setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: true}: user))
 
-            tempObj.enabled = false;
         } catch (err) {
             console.error(err);
         } finally{
