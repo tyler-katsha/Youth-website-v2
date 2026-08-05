@@ -27,7 +27,7 @@ export const Footer = () => {
                         <h4>Connect</h4>
                         <Link to='/contact-us' replace>Contact Us</Link>
                         <Link to='https://www.instagram.com/engedi_offical/' replace>Instagram</Link>
-                        {/* <Link to='/contact-us' replace>YouTube</Link> */}
+                        {/* <Link to='www.youtube.com' replace>YouTube</Link> */}
                     </div>
                 </div>
                 

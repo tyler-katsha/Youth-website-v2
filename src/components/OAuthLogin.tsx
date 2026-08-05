@@ -62,7 +62,6 @@ export const OAuthLogin = () => {
             });
             navigate('/login')
         } finally{
-            localStorage.removeItem("isGuest");
             setIsGuestLoading(false);
         }
     }

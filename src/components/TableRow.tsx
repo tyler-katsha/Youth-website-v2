@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styles from '../modules/Requests.module.css'
 import { Toast } from '../modals/Toast';
 import { API } from '../utils/API';
-import { formatRole } from '../utils/Utils';
+import { formatRole, getToken } from '../utils/Utils';
 
 export interface Requests {
     roleReqId: number;
@@ -44,7 +44,7 @@ export const TableRow: React.FC<TableRowProps> = ({ roleReqId, userId, requested
 
             const response = await fetch(`${API}/upgrade-request`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${getToken()}` },
                 body: JSON.stringify({
                     roleReqId,
                     requestStatus: actionType === "accept" ? "APPROVED" : "REJECTED",
