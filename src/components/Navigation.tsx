@@ -114,7 +114,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
 
                 )}
 
-                <NotificationInbox/>
+                {isLoggedIn && <NotificationInbox/>}
             </div>
         </nav>
     )

@@ -35,6 +35,7 @@ export const Login = () => {
         email_not_verified: "Please verify your email before signing in.",
         oauth_failed: "Google authentication failed. Please try again.",
         oauth_cancelled: "Google sign-in was cancelled.",
+        token_missing: "Session expired",
         server_error: "Something went wrong. Please try again later."
     };
 
@@ -55,7 +56,6 @@ export const Login = () => {
         try {
             const response = await fetch(`${API}/auth/login`, {
                 method: "POST",
-                credentials: 'include',
                 headers: {
                     'content-type': 'application/json',
                 },

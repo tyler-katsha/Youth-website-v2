@@ -8,8 +8,26 @@ export const OAuth2Redirect = () => {
     const navigate = useNavigate();
 
     const run = async () => {
-        await fetchUser();
-        navigate("/");
+        const params = new URLSearchParams(location.search);
+        const token = params.get("token");
+
+        if (!token) {
+            navigate("/login?error=token_missing", { replace: true });
+            return;
+        }
+
+        try {
+            localStorage.setItem("jwt_token", token);
+
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            await fetchUser();
+            
+            navigate("/", { replace: true });
+        } catch (err) {
+            localStorage.removeItem("jwt_token");
+            navigate("/login?error=authentication_failed", { replace: true });
+        }
     };
 
     useEffect(() => {

@@ -147,3 +147,8 @@ export function getToken(): string | null {
    
     return token;
 }
+export function isCheck() {
+    if(localStorage.getItem('isGuest') === 'true'){
+        return;
+    }
+}
