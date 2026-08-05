@@ -85,7 +85,6 @@ export const Login = () => {
             }
             
             const token = await response.json();
-            console.log(`Token: ${token}`)
 
             localStorage.setItem('jwt-token',token)
             setPopupConfig({
