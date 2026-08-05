@@ -123,7 +123,11 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
         try {
             const response = await fetch(`${API}/users/${selectedRecord.email}/activate`, {
                 method: "PUT",
-                credentials: "include"
+                credentials: "include",
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {

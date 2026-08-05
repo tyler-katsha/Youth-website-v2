@@ -36,7 +36,11 @@ export const ProfilePage = () => {
             const response = await fetch(`${API}/users/update-me`, {
                 method: "PUT",
                 credentials: "include",
-                body: dataToSubmit
+                body: dataToSubmit,
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {

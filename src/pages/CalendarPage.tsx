@@ -56,9 +56,10 @@ export const CalendarPage = () => {
             const response = await fetch(`${API}/event/events`, { 
                 method: 'GET',
                 credentials: "include",
-                headers: {
+                headers: { 
+                    'content-type': 'application/json',
                     'Authorization': `Bearer ${getToken()}`
-                } 
+                }
             });
             if (!response.ok) {
                 const error = await response.json();
@@ -167,7 +168,14 @@ export const CalendarPage = () => {
     const handleDeletePlan = async (id: number) => {
         setDeletingPlans(prev => new Set(prev).add(id));
         try {
-            const response = await fetch(`${API}/event/events/${id}`, { method: "DELETE", credentials: "include" });
+            const response = await fetch(`${API}/event/events/${id}`, { 
+                method: "DELETE", 
+                credentials: "include",
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
+            });
             setPlans(prev => prev.filter(p => p.id !== id));
             
             if(!response.ok){

@@ -34,7 +34,7 @@ export const Gallery = () => {
     const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState(true);
     const [images, setImages] = useState<GalleryImage[]>([]);
-    
+
 
     const [selectedRecord, setSelectedRecord] = useState<GalleryImage | null>(null);
     const openDetails = (record: GalleryImage) => setSelectedRecord(record);
@@ -44,7 +44,7 @@ export const Gallery = () => {
     const uploadRef = useRef<FileUploadRef>(null);
 
     const [toast, setToast] = useState<PartialToast | null>(null);
-    
+
     const fetchImages = useCallback(async (pageNumber: number) => {
         if (isFetching) return;
 
@@ -55,11 +55,15 @@ export const Gallery = () => {
             const response = await fetch(`${API}/images?page=${pageNumber}&size=100`, {
                 method: "GET",
                 credentials: "include",
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             });
 
             if (!response.ok) {
                 const data = await response.json();
-                setToast({message: data.message ?? 'Failed to fetch images.',type:'error'})
+                setToast({ message: data.message ?? 'Failed to fetch images.', type: 'error' })
                 return;
             }
 
@@ -81,7 +85,7 @@ export const Gallery = () => {
             setPage(pageNumber);
 
         } catch (error) {
-            setToast({message:'Network issue occurred',type:'error'})
+            setToast({ message: 'Network issue occurred', type: 'error' })
         } finally {
             setIsFetching(false);
         }
@@ -109,11 +113,15 @@ export const Gallery = () => {
                         method: "POST",
                         credentials: "include",
                         body: formData,
+                        headers: {
+                            'content-type': 'application/json',
+                            'Authorization': `Bearer ${getToken()}`
+                        }
                     });
 
                     if (!response.ok) {
                         const data = await response.json();
-                        setToast({message: data.message ?? 'Server error',type:'error'})
+                        setToast({ message: data.message ?? 'Server error', type: 'error' })
                         return;
                     }
                 })
@@ -129,7 +137,7 @@ export const Gallery = () => {
             await fetchImages(0);
 
         } catch (error) {
-            setToast({message:'Network issue occurred',type:'error'})
+            setToast({ message: 'Network issue occurred', type: 'error' })
         } finally {
             setIsUploading(false);
         }
@@ -165,42 +173,45 @@ export const Gallery = () => {
 
                 if (!response.ok) {
                     const data = await response.json();
-                    setToast({message: data.message ?? 'Server error',type:'error'})
+                    setToast({ message: data.message ?? 'Server error', type: 'error' })
                     return;
                 }
 
-                setToast({message:'Uploaded Image successfully',type:'success'})
+                setToast({ message: 'Uploaded Image successfully', type: 'success' })
             }
 
         } catch (error) {
-            setToast({message:'Network issue occurred',type:'error'})
+            setToast({ message: 'Network issue occurred', type: 'error' })
         }
     }
 
-    const removeImage = async(id:number) => {
+    const removeImage = async (id: number) => {
         setLoading(true);
         const previousImages = [...images];
         setImages(prev => prev.filter(i => i.imageId !== id));
-        try{
+        try {
 
-            const response = await fetch(`${API}/images/${id}`,{
-                method:"DELETE",
-                credentials:'include',
-                headers:{'content-type':'application/json'}
+            const response = await fetch(`${API}/images/${id}`, {
+                method: "DELETE",
+                credentials: 'include',
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                }
             })
 
-            if(!response.ok){
+            if (!response.ok) {
                 setImages(previousImages);
                 const data = await response.json();
-                setToast({message: data.message ?? 'Server error',type:'error'})
+                setToast({ message: data.message ?? 'Server error', type: 'error' })
                 return;
             }
 
-            setToast({message:'Image deleted successfully',type:'success'})
-        } catch(error){
+            setToast({ message: 'Image deleted successfully', type: 'success' })
+        } catch (error) {
             setImages(previousImages);
-            setToast({message:'Network issue occurred',type:'error'})
-        } finally{
+            setToast({ message: 'Network issue occurred', type: 'error' })
+        } finally {
             setLoading(false);
             closeDetails();
         }
@@ -263,7 +274,7 @@ export const Gallery = () => {
                             <img src={selectedRecord.imageUrl} alt={selectedRecord.alt} className={styles.previewImage} />
                         </div>
 
-                        <button className={styles.removeButton} onClick={() => removeImage(selectedRecord.imageId)}>{loading ? "Removing..." :"Remove Image"}</button>
+                        <button className={styles.removeButton} onClick={() => removeImage(selectedRecord.imageId)}>{loading ? "Removing..." : "Remove Image"}</button>
                     </div>
                 )}
             </Modal>
@@ -302,7 +313,7 @@ export const Gallery = () => {
                 </div>
             </Modal>
 
-            {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)}/>)}
+            {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
             <Footer />
         </>
     );

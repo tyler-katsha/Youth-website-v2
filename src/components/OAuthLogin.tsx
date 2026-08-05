@@ -35,7 +35,8 @@ export const OAuthLogin = () => {
         try {
             const response = await fetch(`${API}/auth/continue-as-guest`, {
                 method: "POST",
-                credentials: 'include'
+                credentials: 'include',
+                
             });
 
 
