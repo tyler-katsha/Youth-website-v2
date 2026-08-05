@@ -17,7 +17,7 @@ export const OAuth2Redirect = () => {
         }
 
         try {
-            localStorage.setItem("jwt_token", token);
+            localStorage.setItem("jwt-token", token);
 
             window.history.replaceState({}, document.title, window.location.pathname);
 
@@ -25,7 +25,7 @@ export const OAuth2Redirect = () => {
             
             navigate("/", { replace: true });
         } catch (err) {
-            localStorage.removeItem("jwt_token");
+            localStorage.removeItem("jwt-token");
             navigate("/login?error=authentication_failed", { replace: true });
         }
     };

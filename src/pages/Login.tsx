@@ -86,7 +86,8 @@ export const Login = () => {
             
             const token = await response.json();
 
-            localStorage.setItem('jwt-token',token)
+            localStorage.setItem('jwt-token',token);
+              
             setPopupConfig({
                 isOpen: true,
                 type: 'success',
