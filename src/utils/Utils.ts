@@ -138,7 +138,7 @@ export function getToken(): string | null {
     try {
     
         if (token === null) {
-            throw new Error('No jwt token found')
+            return null;
         }
         
     } catch (err) {
