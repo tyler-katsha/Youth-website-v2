@@ -38,6 +38,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
             await signout();
         } finally {
             logout();
+            localStorage.removeItem("jwt-token");
             localStorage.removeItem("isGuest");
             navigate('/')
         }
