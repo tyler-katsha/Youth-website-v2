@@ -1,3 +1,5 @@
+import type { lightTheme } from "../theme/theme";
+
 export interface UserPayload extends YouthProfileProps {
     createdAt:string;
 }
@@ -77,6 +79,125 @@ export interface LoginPayload {
     email: string;
     password: string;
 }
+export interface Member {
+    profileImageUrl?: string;
+    name: string;
+    roles:AppRole[]
+    dateOfBirth: string;
+    email?: string;
+    enabled:boolean;
+}
+
+// The raw event coming from the websocket
+export interface RawEvent {
+    connectionType: ConnectionType;
+    userId: number;
+    message: string;
+    timestamp: string | number;
+}
+
+// The processed event mapped for the chart
+export interface ChartEvent extends RawEvent {
+    time: string;
+    typeValue: number;
+}
+export type MoreUser = Member & {
+    isOnline: boolean;
+}
+export interface ToastProps {
+  message: string;
+  type: ToastResponse;
+  onClose: () => void;
+  duration?: number;
+}
+
+export interface PartialToast{
+  message:string;
+  type: ToastResponse;
+}
+
+export interface FileUploadRef {
+    clear: () => void;
+    remove: (index: number) => void;
+    getFiles: () => File[];
+}
+
+export interface FileUploadProps {
+    onFileSelect: (files: File[]) => void;
+    accept?: string;
+    multiple?: boolean;
+    maxFiles?: number;
+}
+export interface GalleryImage {
+    imageId: number;
+    imageUrl: string;
+    alt: string;
+    createdAt: string;
+}
+
+export interface UserContextType {
+    user: YouthProfileProps | null;
+    isLoading: boolean;
+    updateUser: (newData: YouthProfileProps) => void;
+    updatePartialUser: (profileData: ProfileProps) => void;
+    continueAsGuest: () => void;
+    logout: () => void;
+    fetchUser: () => Promise<void>;
+    isAuthenticated: boolean;
+    setUser: React.Dispatch<React.SetStateAction<YouthProfileProps | null>>
+}
+
+export interface ThemeContextType{
+    theme: typeof lightTheme;
+    toggleTheme: () => void;
+    isDark:boolean;
+}
+
+export interface LoadingContextType{
+    isLoading:boolean;
+    setLoading: (value:boolean) => void;
+}
+
+export interface Requests {
+    roleReqId: number;
+    userId: number;
+    wasReviewed: boolean;
+    requestedRole: string;
+    email: string;
+}
+
+export interface RequestAdminDetails extends Requests {
+    adminComment: string;
+    review_by: number;
+    adminEmail: string;
+}
+export type TableRowProps = Requests & {
+    setRequests: React.Dispatch<React.SetStateAction<Requests[]>>;
+};
+
+export interface TableProps{
+    requests:Requests[];
+    setRequests: React.Dispatch<React.SetStateAction<Requests[]>>
+}
+
+export interface CalendarProps {
+    plans?: Plan[];
+    onDateSelect?: (date: Date) => void;
+}
+
+export interface Plan extends PartialPlan {
+    id: number;
+    dateKey: string;
+
+}
+export interface PartialPlan {
+    title: string;
+    description: string;
+    startTime: string;
+    endTime: string;
+    color: string;
+    eventType: EventType;
+}
 
 export type AppRole = 'MEMBER' | 'YOUTH_LEADER' | 'GUEST' | 'ADMIN';
 export type Providers = 'Google' | 'Facebook' | 'Instagram';
@@ -138,3 +259,14 @@ export const times:string[] = [
     '21:00','21:30',
     '22:00','22:30',
     '23:00','23:30']
+
+export const errorMessages: Record<string, string> = {
+        account_disabled: "Your account has been disabled. Check email for verification link.",
+        invalid_credentials: "Incorrect email or password.",
+        account_locked: "Your account has been locked due to too many failed login attempts.",
+        email_not_verified: "Please verify your email before signing in.",
+        oauth_failed: "Google authentication failed. Please try again.",
+        oauth_cancelled: "Google sign-in was cancelled.",
+        token_missing: "Session expired",
+        server_error: "Something went wrong. Please try again later."
+};

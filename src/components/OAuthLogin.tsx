@@ -20,6 +20,7 @@ export const OAuthLogin = () => {
 
     const handleOAuth2Login = (provider: string) => {
         removeAll();
+        
         try {
             window.location.href = `${OAUTH_API}/${provider}`
         } catch (err) {
@@ -32,6 +33,7 @@ export const OAuthLogin = () => {
     };
     const handleContinueAsGuest = async () => {
         setIsGuestLoading(true);
+        removeAll();
         try {
             const response = await fetch(`${API}/auth/continue-as-guest`, {
                 method: "POST",
@@ -41,10 +43,12 @@ export const OAuthLogin = () => {
 
 
             if (!response.ok) {
+                const errorMessage = await response.json();
+
                 setPopupConfig({
                     isOpen: true,
                     type: 'error',
-                    message: 'Unable to create continue as guest token'
+                    message: errorMessage.message ?? 'Unable to create continue as guest token'
                 });
                 return;
             }

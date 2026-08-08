@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { Navigation } from "../components/Navigation";
-import { Footer } from "../components/Footer";
 import styles from '../modules/ContactPage.module.css';
 import { API } from '../utils/API';
 import { CustomPopup } from '../popups/CustomPopup';
@@ -76,8 +74,6 @@ export const ContactPage = () => {
     }
     return (
         <>
-            <Navigation title='Contact Us' />
-
             <div className={styles.pageWrapper}>
 
                 <CustomPopup
@@ -157,7 +153,6 @@ export const ContactPage = () => {
                 </div>
             </div>
 
-            <Footer />
         </>
     );
 };

@@ -9,6 +9,9 @@ import { PasswordRequirements } from '../components/PasswordRequirements';
 export const ResetPassword = () => {
 
     const navigate = useNavigate();
+    const queryParams = new URLSearchParams(window.location.search);
+    const token = queryParams.get('token')
+    const email = queryParams.get('email');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -20,6 +23,7 @@ export const ResetPassword = () => {
         type: 'success' as ToastResponse,
         message: ''
     });
+
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword)
@@ -56,7 +60,15 @@ export const ResetPassword = () => {
         try {
             const response = await fetch(`${API}/auth/forgot-password`, {
                 method: 'POST',
-                body: JSON.stringify({password:password})
+                headers: {
+                    'content-type':'application/json'
+                },
+                body: JSON.stringify(
+                {
+                    'email':email,
+                    'password': password,
+                    'token': token
+                })
             })
 
             if (!response.ok) {
@@ -73,8 +85,11 @@ export const ResetPassword = () => {
             setPopupConfig({
                 isOpen: true,
                 type: 'success',
-                message: 'Password updated successfully. Go back to login page.'
+                message: 'Password updated successfully. Go back to login/profile page.'
             });
+
+
+            navigate('/login')
 
         } catch (error) {
             setPopupConfig({

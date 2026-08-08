@@ -1,27 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Client } from "@stomp/stompjs";
-import { connectionTypeArray, type ConnectionType } from '../utils/types';
+import { connectionTypeArray, type ChartEvent, type MoreUser, type RawEvent } from '../utils/types';
 import styles from '../modules/PerformanceDashboard.module.css';
-import type { Member } from './MemberCard';
 import { API } from '../utils/API';
-
-// The raw event coming from the websocket
-interface RawEvent {
-    connectionType: ConnectionType;
-    userId: number;
-    message: string;
-    timestamp: string | number;
-}
-
-type MoreUser = Member & {
-    isOnline: boolean;
-}
-// The processed event mapped for the chart
-interface ChartEvent extends RawEvent {
-    time: string;
-    typeValue: number;
-}
 
 export const PerformanceDashboard: React.FC = () => {
     const [events, setEvents] = useState<ChartEvent[]>([]);

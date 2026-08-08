@@ -2,9 +2,10 @@ import styles from '../modules/Navigation.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Profile } from './Profile';
 import { useUser } from '../contexts/UserContext';
-import { API } from '../utils/API';
+// import { API } from '../utils/API';
 import { NotificationInbox } from './NotificationInbox';
 import { RedirectUser } from './RedirectUser';
+import { removeAll } from '../utils/Utils';
 // import { NotificationInbox } from './NotificationInbox';
 
 interface NavigationProps {
@@ -14,7 +15,7 @@ interface NavigationProps {
 export const Navigation: React.FC<NavigationProps> = ({ title }) => {
     const navigate = useNavigate();
 
-    const { user, logout } = useUser();
+    const { user, setUser,/* logout */ } = useUser();
 
 
     const isLoggedIn = !user?.roles.includes('GUEST');
@@ -22,26 +23,28 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
     const isAdmin = user?.roles.includes('ADMIN');
     const isLeaderOrAdmin = user?.roles.includes('ADMIN') || user?.roles.includes('YOUTH_LEADER');
 
-    const signout = async () => {
-        try {
-            await fetch(`${API}/auth/logout`, {
-                method: "POST",
-                credentials: 'include',
-            })
-        } catch (error) {
-            console.error(`Backend logout failed ${error}`)
-        }
-    }
+    // const signout = async () => {
+    //     try {
+    //         await fetch(`${API}/auth/logout`, {
+    //             method: "POST",
+    //             credentials: 'include',
+    //         })
+    //     } catch (error) { }
+    // }
 
     const handleLogout = async () => {
-        try {
-            await signout();
-        } finally {
-            logout();
-            localStorage.removeItem("jwt-token");
-            localStorage.removeItem("isGuest");
-            navigate('/')
-        }
+        // try {
+        //     await signout();
+        // } finally {
+        //     logout();
+        //     localStorage.removeItem("jwt-token");
+        //     removeAll()
+
+        //     navigate('/')
+        // }
+        localStorage.clear();
+        setUser(null);
+        navigate('/login')
     }
 
     const handleLoginRoute = () => {
@@ -50,16 +53,14 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
         } catch (err) {
             console.error(err);
         } finally {
-            localStorage.removeItem("isGuest");
+            removeAll()
         }
     }
 
-    if (!user) return <RedirectUser/>
+    if (!user) return <RedirectUser />
 
-    const navigateLink = (route:string,name:string) => (
-        (
-            <li><Link to={route}>{name}</Link></li>
-        ))
+    const navigateLink = (route: string, name: string) => <li><Link to={route}>{name}</Link></li>
+        
     return (
         <nav className={styles.navbar}>
             <div className={styles.navbarLeft}>
@@ -68,29 +69,28 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
 
             <div className={styles.navbarCenter}>
                 <ul className={styles.navLinks}>
-                    {navigateLink('/','Home')}
-                    {navigateLink('/contact-us','Contact Us')}
+                    {navigateLink('/', 'Home')}
+                    {navigateLink('/contact-us', 'Contact Us')}
                     {isLoggedIn && (
                         <>
-                            {navigateLink('/profile','Profile')}
-                            {navigateLink('/calendar','Calendar')}
-                            {navigateLink('/gallery','Gallery')}
+                            {navigateLink('/profile', 'Profile')}
+                            {navigateLink('/calendar', 'Calendar')}
+                            {navigateLink('/gallery', 'Gallery')}
                         </>
                     )}
 
                     {isLeaderOrAdmin && (
                         <>
-                            {navigateLink('/members','Members')}
+                            {navigateLink('/members', 'Members')}
                         </>
                     )}
 
                     {isAdmin && (
                         <>
                             {/* {navigateLink('/request-page','Requests')} */}
-                            {navigateLink('/logs','System Logs')}
-                            {navigateLink('/performances','System Performances')}
+                            {navigateLink('/logs', 'System Logs')}
+                            {navigateLink('/performances', 'System Performances')}
                             {/* {navigateLink('/about','About')} */}
-                            {/* {navigateLink('/test-popup','popup')} */}
                             {/* {navigateLink('/test-emails','Test Emails')} */}
                             {/* {navigateLink('/announcements','Announcements')} */}
                         </>
@@ -98,7 +98,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
                 </ul>
             </div>
             <div className={styles.navbarRight}>
-                
+
                 {isLoggedIn ? (
                     <>
                         <Profile name={user.name} profileImageUrl={user.profileImageUrl} />
@@ -115,7 +115,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
 
                 )}
 
-                {isLoggedIn && <NotificationInbox/>}
+                {isLoggedIn && <NotificationInbox />}
             </div>
         </nav>
     )

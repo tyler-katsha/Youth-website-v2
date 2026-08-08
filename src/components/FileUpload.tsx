@@ -1,20 +1,8 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import styles from "../modules/FileUpload.module.css";
+import type { FileUploadProps, FileUploadRef } from "../utils/types";
 
-export interface FileUploadRef {
-    clear: () => void;
-    remove: (index: number) => void;
-    getFiles: () => File[];
-}
-
-interface FileUploadProps {
-    onFileSelect: (files: File[]) => void;
-    accept?: string;
-    multiple?: boolean;
-    maxFiles?: number;
-}
-
-export const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onFileSelect, accept, multiple = false, maxFiles = 10, }, ref) => {
+export const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onFileSelect, accept, multiple = false, maxFiles = 10 }, ref) => {
     const [files, setFiles] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);

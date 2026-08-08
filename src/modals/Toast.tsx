@@ -1,18 +1,6 @@
 import { useEffect } from "react";
 import styles from "../modules/Toast.module.css";
-import type { ToastResponse } from "../utils/types";
-
-export interface ToastProps {
-  message: string;
-  type: ToastResponse;
-  onClose: () => void;
-  duration?: number;
-}
-
-export interface PartialToast{
-  message:string;
-  type: ToastResponse;
-}
+import type { ToastProps } from "../utils/types";
 
 export const Toast = ({ message, type, onClose, duration = 5000 }: ToastProps) => {
   useEffect(() => {

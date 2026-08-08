@@ -1,11 +1,10 @@
 import { Table } from '../components/Table'
-import { Navigation } from '../components/Navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { API } from '../utils/API';
-import type { Requests } from '../components/TableRow';
 import { RequestsSkeleton } from '../skeletons/pages/RequestsSkeleton';
 import { getToken } from '../utils/Utils';
+import type { Requests } from '../utils/types';
 
 export const RequestsPage = () => {
 
@@ -85,7 +84,6 @@ export const RequestsPage = () => {
 
     return (
         <>
-            <Navigation title='Admin' />
             <Table requests={requests} setRequests={setRequests} />
             <div ref={loaderRef}></div>
         </>

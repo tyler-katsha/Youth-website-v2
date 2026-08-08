@@ -1,9 +1,5 @@
 import { createContext, useContext, useState } from "react";
-
-interface LoadingContextType{
-    isLoading:boolean;
-    setLoading: (value:boolean) => void;
-}
+import type { LoadingContextType } from "../utils/types";
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 

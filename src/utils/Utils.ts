@@ -1,5 +1,4 @@
-import type { PartialPlan } from "../pages/CalendarPage";
-import { type AppRole, type AuthProvider, type EventType, type UserPayload, type YouthProfileProps } from "./types";
+import { type AppRole, type AuthProvider, type EventType, type PartialPlan, type UserPayload, type YouthProfileProps } from "./types";
 
 export function splitFullName(name: string) {
     const nameParts = name.split(' ');
@@ -129,6 +128,7 @@ export function invalidDate(date: string): boolean {
 export function removeAll() {
     localStorage.removeItem('isGuest')
     localStorage.removeItem('email')
+    localStorage.removeItem('login-register-pages')
 }
 export function isLocal(authProvider: AuthProvider): boolean {
     return authProvider === 'LOCAL';

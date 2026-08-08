@@ -1,6 +1,4 @@
 import styles from '../modules/About.module.css';
-import { Navigation } from '../components/Navigation';
-import { Footer } from '../components/Footer';
 import youthImage from '../assets/engedi-image.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,9 +6,6 @@ export const About = () => {
     const navigate = useNavigate();
     
     return (
-        <>
-            <Navigation title="About Us" />
-
             <div className={styles.pageWrapper}>
                 <main className={styles.mainContent}>
 
@@ -74,8 +69,5 @@ export const About = () => {
 
                 </main>
             </div>
-
-            <Footer />
-        </>
     );
 };

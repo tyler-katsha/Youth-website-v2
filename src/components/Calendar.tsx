@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../modules/Calendar.module.css';
-import type { Plan } from '../pages/CalendarPage'; // Assuming Plan has a dateKey property
-
-interface CalendarProps {
-    plans?: Plan[];
-    onDateSelect?: (date: Date) => void;
-}
+import type { CalendarProps } from '../utils/types';
 
 export const Calendar: React.FC<CalendarProps> = ({ plans = [], onDateSelect }) => {
     const [currentDate, setCurrentDate] = useState(new Date());

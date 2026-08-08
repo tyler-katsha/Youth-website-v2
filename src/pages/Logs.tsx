@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from '../modules/Logs.module.css';
-import { Navigation } from '../components/Navigation';
 import { API } from '../utils/API';
 import { useUser } from '../contexts/UserContext';
 import { Modal } from '../modals/Modal';
 import { RedirectUser } from '../components/RedirectUser';
-import { Toast, type PartialToast } from '../modals/Toast';
-import { Footer } from '../components/Footer';
-import type { AuditLog } from '../utils/types';
+import { Toast } from '../modals/Toast';
+import type { AuditLog, PartialToast } from '../utils/types';
 import { getToken } from '../utils/Utils';
 
 
@@ -92,7 +90,6 @@ export const Logs = () => {
 
     return (
         <>
-            <Navigation title='Admin'/>
 
             <Modal isOpen={!!selectedRecord} onClose={closeDetails} title="AuditLog Details">
                 {selectedRecord && (
@@ -157,10 +154,6 @@ export const Logs = () => {
                 </div>
             </div>
             {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
-            <Footer />
         </>
-
-
-
     );
 };

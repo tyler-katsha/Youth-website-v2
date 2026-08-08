@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getToken } from '../utils/Utils';
 
 export const ResetEmail = () => {
+
     const navigate = useNavigate();
 
     const loginPage = () => navigate('/login');
@@ -21,9 +22,7 @@ export const ResetEmail = () => {
 
     const handleFormEvent = async (e:React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        localStorage.setItem('email','true');
         setLoading(true);
-
 
         try{
             const response = await fetch(`${API}/email/reset-password`,{
@@ -36,20 +35,32 @@ export const ResetEmail = () => {
                 body:JSON.stringify({email:email})
             })
 
+            const data = await response.json();
+
+            if(!data.success){
+                setPopupConfig({
+                isOpen:true,
+                type:'error',
+                message: data.message ?? 'Unable to redirect user'
+            })
+                return;
+            }
             if(!response.ok){
                 setPopupConfig({
                 isOpen:true,
                 type:'error',
-                message:'Unable to send email'
+                message: data.message ?? 'Unable to redirect user'
             })
+            return;
             }
 
             setPopupConfig({
                 isOpen:true,
                 type:'success',
-                message:'Successfully sent email. Please check your inbox.'
+                message:'Successfully'
             })
 
+            window.location.href = data
         
         } catch(err){
             setPopupConfig({

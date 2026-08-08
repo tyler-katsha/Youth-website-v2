@@ -4,11 +4,13 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { API } from '../utils/API';
 import { CustomPopup } from '../popups/CustomPopup';
 import { useUser } from '../contexts/UserContext';
-import type { LoginPayload, ToastResponse } from '../utils/types';
+import { errorMessages, type LoginPayload, type ToastResponse } from '../utils/types';
 import { OAuthLogin } from '../components/OAuthLogin';
 import { removeAll } from '../utils/Utils';
 
 export const Login = () => {
+    
+    localStorage.setItem('login-register-pages','true')
     const navigate = useNavigate();
     const { fetchUser } = useUser();
     const [searchParams] = useSearchParams();
@@ -28,18 +30,6 @@ export const Login = () => {
 
     const error = searchParams.get("error");
 
-    const errorMessages: Record<string, string> = {
-        account_disabled: "Your account has been disabled. Check email for verification link.",
-        invalid_credentials: "Incorrect email or password.",
-        account_locked: "Your account has been locked due to too many failed login attempts.",
-        email_not_verified: "Please verify your email before signing in.",
-        oauth_failed: "Google authentication failed. Please try again.",
-        oauth_cancelled: "Google sign-in was cancelled.",
-        token_missing: "Session expired",
-        server_error: "Something went wrong. Please try again later."
-    };
-
-
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -53,7 +43,9 @@ export const Login = () => {
 
         e.preventDefault();
         removeAll();
+
         try {
+            
             const response = await fetch(`${API}/auth/login`, {
                 method: "POST",
                 headers: {
@@ -75,7 +67,6 @@ export const Login = () => {
             }
 
             if (!response.ok) {
-
                 setPopupConfig({
                     isOpen: true,
                     type: 'error',
@@ -84,8 +75,7 @@ export const Login = () => {
                 return;
             }
             
-            const token = await response.json();
-
+            const token = await response.text();
             localStorage.setItem('jwt-token',token);
               
             setPopupConfig({
@@ -109,7 +99,6 @@ export const Login = () => {
         }
     }
 
-
     useEffect(() => {
         if (searchParams.has('error')) {
             const timer = setTimeout(() => {
@@ -122,11 +111,6 @@ export const Login = () => {
     }, [navigate, searchParams])
     return (
         <>
-            {error && (
-                <div className={styles.error}>
-                    {errorMessages[error] ?? "An unexpected error occurred"}
-                </div>
-            )}
 
             <div className={styles.pageWrapper}>
 
@@ -139,6 +123,9 @@ export const Login = () => {
                 />
 
                 <div className={styles.formContainer}>
+
+                    {error && (<div className={styles.error}>{errorMessages[error] ?? "An unexpected error occurred"}</div>)}
+
                     <h1>Login</h1>
                     <form onSubmit={handleFormEvent} className={styles.loginForm}>
                         <div className={styles.inputGroup}>
@@ -152,13 +139,12 @@ export const Login = () => {
                             <button type="button" className={styles.toggleBtn} onClick={togglePasswordVisibility}>{showPassword ? 'Hide' : 'Show'}</button>
                         </div>
 
-                        <Link className={styles.linkText} to='/reset-email'>Forgot Password?</Link>
+                       <Link className={styles.linkText} to='/reset-email'>Forgot Password?</Link>
 
                         <button type="submit" className={styles.submitBtn}>Sign In</button>
 
 
                         <Link className={styles.linkText} to='/register'>Don't have an account? Register here</Link>
-
 
                     </form>
 

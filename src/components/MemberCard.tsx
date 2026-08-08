@@ -1,15 +1,6 @@
 import style from "../modules/Member.module.css";
-import type { AppRole } from "../utils/types";
+import type { Member } from "../utils/types";
 import { getInitials } from "../utils/Utils";
-
-export interface Member {
-    profileImageUrl?: string;
-    name: string;
-    roles:AppRole[]
-    dateOfBirth: string;
-    email?: string;
-    enabled:boolean;
-}
 
 export const MemberCard: React.FC<Member> = ({name, dateOfBirth, profileImageUrl,email}) => {
     const formattedDate = dateOfBirth && !isNaN(new Date(dateOfBirth).getTime()) ? new Date(dateOfBirth).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric"}): "No birthday found";

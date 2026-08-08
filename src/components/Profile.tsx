@@ -1,6 +1,6 @@
 import styles from '../modules/ProfileImage.module.css'
 import { useNavigate } from "react-router-dom";
-import { ColorUtil } from "../utils/ColorUtils";
+import { ColorUtil } from "../utils/Utils";
 import { getInitials } from '../utils/Utils';
 
 interface ProfileProps {

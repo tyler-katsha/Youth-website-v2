@@ -4,23 +4,7 @@ import styles from '../modules/Requests.module.css'
 import { Toast } from '../modals/Toast';
 import { API } from '../utils/API';
 import { formatRole, getToken } from '../utils/Utils';
-
-export interface Requests {
-    roleReqId: number;
-    userId: number;
-    wasReviewed: boolean;
-    requestedRole: string;
-    email: string;
-}
-
-export interface RequestAdminDetails extends Requests {
-    adminComment: string;
-    review_by: number;
-    adminEmail: string;
-}
-type TableRowProps = Requests & {
-    setRequests: React.Dispatch<React.SetStateAction<Requests[]>>;
-};
+import type { TableRowProps } from '../utils/types';
 
 export const TableRow: React.FC<TableRowProps> = ({ roleReqId, userId, requestedRole, email, setRequests }) => {
     const [toast, setToast] = useState<{ message: string, type: "success" | "error" } | null>(null);

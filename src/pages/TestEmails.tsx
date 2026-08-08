@@ -1,10 +1,9 @@
 import { useState } from "react"
-import { Toast, type PartialToast } from "../modals/Toast"
-import { Navigation } from "../components/Navigation"
-import { Footer } from "../components/Footer"
 import { API } from "../utils/API"
 import styles from '../modules/TestEmail.module.css'
-import type { EmailTestTypes } from "../utils/types"
+import type { EmailTestTypes, PartialToast } from "../utils/types"
+import { getToken } from "../utils/Utils"
+import { Toast } from "../modals/Toast"
 export const TestEmail = () => {
     const [toast, setToast] = useState<PartialToast | null>(null)
 
@@ -12,7 +11,11 @@ export const TestEmail = () => {
         try {
             const res = await fetch(`${API}/admin/test-email/${type}`, {
                 method: 'POST',
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    "content-type": "application/json",
+                    'Authorization': `Bearer ${getToken()}`
+                }
             })
 
             let msg;
@@ -33,6 +36,7 @@ export const TestEmail = () => {
                 type: 'success'
             })
         } catch (err) {
+            console.error(err)
             setToast({
                 message: 'Something went wrong. Please try again',
                 type: 'error'
@@ -41,8 +45,6 @@ export const TestEmail = () => {
     }
     return (
         <>
-
-            <Navigation title='Test Emails' />
 
             <div className={styles.emailTestPanel}>
                 <div className={styles.panelHeader}>
@@ -63,7 +65,6 @@ export const TestEmail = () => {
             </div>
 
             {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
-            <Footer />
         </>
 
     )

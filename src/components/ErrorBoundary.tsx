@@ -2,7 +2,7 @@ import { Component, type ErrorInfo, type ReactNode } from "react";
 import styles from '../modules/ErrorBoundary.module.css'
 
 interface Props{
-    children: ReactNode;
+    children?: ReactNode;
     title?:string;
     message?:string;
 }

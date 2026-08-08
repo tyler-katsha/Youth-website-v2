@@ -26,19 +26,19 @@ export const VerifyEmail = () => {
                 },
             );
 
-            if (response.ok) {
-                setPopupConfig({
-                    isOpen: true,
-                    type: 'success',
-                    message: 'Verification email resent!'
-                });
-            } else {
+            if (!response.ok) {
                 setPopupConfig({
                     isOpen: true,
                     type: 'error',
                     message: 'Failed to resend email'
                 });
-            }
+            } 
+            setPopupConfig({
+                    isOpen: true,
+                    type: 'success',
+                    message: 'Verification email resent!'
+                });
+
         } catch {
             setPopupConfig({
                 isOpen: true,
@@ -125,7 +125,7 @@ export const VerifyEmail = () => {
                 )}
                 {status === 'error' && (
                     <button style={styles.button} onClick={handleResend}>
-                        Resend verification email
+                        Try Again
                     </button>
                 )}
             </div>

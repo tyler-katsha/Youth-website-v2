@@ -1,30 +1,13 @@
 import { useEffect, useState } from "react";
-import { Navigation } from "../components/Navigation";
 import { Calendar } from "../components/Calendar";
-import { Footer } from "../components/Footer";
 import { CalendarSkeleton } from "../skeletons/pages/CalendarSkeleton";
 import { useUser } from "../contexts/UserContext";
 import { API } from "../utils/API";
-import { eventColors, times, type EventType } from "../utils/types";
+import { eventColors, times, type EventType, type PartialPlan, type PartialToast, type Plan } from "../utils/types";
 import style from '../modules/CalendarPage.module.css';
 import { formatTime, getToken, isPermitted, resetCalendarForm } from "../utils/Utils";
-import { Toast, type PartialToast } from "../modals/Toast";
+import { Toast } from "../modals/Toast";
 import { RedirectUser } from "../components/RedirectUser";
-
-export interface Plan extends PartialPlan {
-    id: number;
-    dateKey: string;
-
-}
-export interface PartialPlan {
-    title: string;
-    description: string;
-    startTime: string;
-    endTime: string;
-    color: string;
-    eventType: EventType;
-}
-
 
 export const CalendarPage = () => {
     const { user, isLoading: userLoading } = useUser();
@@ -211,7 +194,6 @@ export const CalendarPage = () => {
 
     return (
         <>
-            <Navigation title='Calendar' />
             <div className={style.pageWrapper}>
                 <div className={style.contentContainer}>
                     <div className={style.calendarSection}>
@@ -280,7 +262,6 @@ export const CalendarPage = () => {
                 </div>
             </div>
             {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
-            <Footer />
         </>
     );
 };

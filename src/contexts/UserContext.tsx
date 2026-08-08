@@ -1,20 +1,8 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { API } from "../utils/API";
-import { type ProfileProps, type YouthProfileProps } from "../utils/types";
+import { type ProfileProps, type UserContextType, type YouthProfileProps } from "../utils/types";
 import { HomeSkeleton } from "../skeletons/pages/HomeSkeleton";
 import { getToken } from "../utils/Utils";
-
-
-interface UserContextType {
-    user: YouthProfileProps | null;
-    isLoading: boolean;
-    updateUser: (newData: YouthProfileProps) => void;
-    updatePartialUser: (profileData: ProfileProps) => void;
-    continueAsGuest: () => void;
-    logout: () => void;
-    fetchUser: () => Promise<void>;
-    isAuthenticated: boolean;
-}
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -40,6 +28,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const fetchUser = async () => {
 
+        if(localStorage.getItem('login-register-pages') === 'true'){
+            setIsLoading(false);
+            return;
+        }
         if(localStorage.getItem('email') === 'true'){
             setIsLoading(false);
             return;
@@ -70,6 +62,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             setUser(data);
         } catch (err) {
+            console.error(err)
             setUser(null);
         } finally {
             setIsLoading(false)
@@ -99,7 +92,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!isReady) return <HomeSkeleton />;
 
     return (
-        <UserContext.Provider value={{ user, isLoading, updateUser, continueAsGuest, logout, fetchUser, updatePartialUser, isAuthenticated }}>
+        <UserContext.Provider value={{ user, isLoading, updateUser, continueAsGuest, logout, fetchUser, updatePartialUser, isAuthenticated,setUser }}>
             {children}
         </UserContext.Provider>
     )

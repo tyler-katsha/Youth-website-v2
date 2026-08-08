@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { Footer } from '../components/Footer';
-import { Navigation } from '../components/Navigation';
 import styles from '../modules/Home.module.css';
 import { useUser } from '../contexts/UserContext';
 import calendarIcon from '../assets/calendar-icon.png';
@@ -14,7 +12,6 @@ import { RedirectUser } from '../components/RedirectUser';
 export const Home = () => {
     const navigate = useNavigate();
 
-
     const { user, isLoading } = useUser();
     const isGuest = localStorage.getItem('isGuest')
     if (isLoading) {
@@ -24,10 +21,8 @@ export const Home = () => {
         return <RedirectUser />
     }
 
-    return (
-        <>
-            <Navigation title='Engedi Community Church' />
 
+    return (
             <div className={styles.pageWrapper}>
 
                 <div className={styles.mainContent}>
@@ -74,8 +69,5 @@ export const Home = () => {
 
                 </div>
             </div>
-
-            <Footer />
-        </>
     );
 };

@@ -4,6 +4,7 @@ import { validGuest } from '../utils/Utils';
 
 export const Footer = () => {
     const isGuest = localStorage.getItem('isGuest')
+    
     return (
         <footer className={styles.footer}>
             <div className={styles.footerContent}>

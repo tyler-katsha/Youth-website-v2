@@ -1,30 +1,30 @@
-import { MemberCard, type Member } from "./MemberCard";
+import { MemberCard } from "./MemberCard";
 import styles from "../modules/MemberList.module.css";
 import { useEffect, useRef, useState } from "react";
 import { API } from "../utils/API";
 import { Modal } from "../modals/Modal";
-import type { AppRole, MemberListProps, Status, ViewMode } from "../utils/types";
+import type { AppRole, Member, MemberListProps, PartialToast, Status, ViewMode, YouthProfileProps } from "../utils/types";
 import { formatDate, formatRoles, getToken, validAdmin } from "../utils/Utils";
 import { useUser } from "../contexts/UserContext";
 import { RedirectUser } from "./RedirectUser";
-import { Toast, type PartialToast } from "../modals/Toast";
+import { Toast } from "../modals/Toast";
 
 export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
     const [users, setUsers] = useState<Member[]>([]);
     const [search, setSearch] = useState("");
-    const {user} = useUser();
+    const { user } = useUser();
     const [selectedRecord, setSelectedRecord] = useState<Member | null>(null);
     const [view, setView] = useState<ViewMode>("cards");
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [isDeactivating, setIsDeactivating] = useState(false);
-    const [isActivating,setIsActivating] = useState(false);
+    const [isActivating, setIsActivating] = useState(false);
     const [roleFilter, setRoleFilter] = useState<AppRole | "ALL">("ALL");
     const [statusFilter, setStatusFilter] = useState<Status | "ALL">("ALL");
-    const [selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
-    const [isUpdatingRole, setIsUpdatingRole] = useState(false);
+    const [_selectedRoles, setSelectedRoles] = useState<AppRole[]>([]);
+    const [isUpgradingRole, setIsUpgradingRole] = useState(false);
     const [isDowngradingRole, setIsDowngradingRole] = useState(false);
     const loaderRef = useRef<HTMLDivElement>(null);
     const [toast, setToast] = useState<PartialToast | null>(null);
@@ -34,10 +34,10 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     };
     const closeDetails = () => setSelectedRecord(null);
 
-    const handleUpdateRole = async () => {
+    const handleUpgradeRole = async () => {
         if (!selectedRecord) return;
 
-        setIsUpdatingRole(true);
+        setIsUpgradingRole(true);
 
         try {
             const res = await fetch(`${API}/users/role/${selectedRecord.email}/upgrade`, {
@@ -53,14 +53,18 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                 throw new Error("Failed to upgrade role");
             }
 
-            setUsers(prev => prev.map(member => member.email === selectedRecord.email ? { ...member, roles: selectedRoles } : member));
+            const updatedUser: YouthProfileProps = await res.json();
 
-            setSelectedRecord(prev => prev ? { ...prev, roles: selectedRoles } : null);
+            setUsers(prev => prev.map(member => member.email === updatedUser.email ? updatedUser : member));
 
+            setSelectedRecord(prev => prev ? { ...prev, roles: updatedUser.roles } : null);
+
+            setToast({ message: `Successfully upgraded role`, type: 'success' })
         } catch (err) {
             setToast({ message: 'Failed to upgrade role', type: 'error' });
         } finally {
-            setIsUpdatingRole(false);
+            setIsUpgradingRole(false);
+            closeDetails();
         }
     };
 
@@ -82,14 +86,21 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             if (!res.ok) {
                 throw new Error("Failed to downgrade role");
             }
+            
+            const updatedUser: YouthProfileProps = await res.json();
 
-            setUsers(prev => prev.map(member => member.email === selectedRecord.email ? { ...member, roles: selectedRoles } : member));
+            setUsers(prev => prev.map(member => member.email === updatedUser.email ? updatedUser : member));
 
-            setSelectedRecord(prev => prev ? { ...prev, roles: selectedRoles } : null);
+            setSelectedRecord(prev => prev ? { ...prev, roles: updatedUser.roles } : null);
+
+            setToast({ message: `Successfully downgraded role`, type: 'success' });
+
         } catch (err) {
+            console.error(err)
             setToast({ message: 'Failed to downgrade role', type: 'error' });
         } finally {
             setIsDowngradingRole(false);
+            closeDetails();
         }
     };
 
@@ -109,12 +120,14 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                 throw new Error("Failed to deactivate account");
             }
 
-            setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: false}: user)
-        );
+            setUsers(prev => prev.map(user => user.email === selectedRecord.email ? { ...user, enabled: false } : user));
+
+            setToast({ message: `Successfully deactivated ${selectedRecord.email}`, type: 'success' })
         } catch (err) {
             setToast({ message: 'Failed to deactivate account', type: 'error' });
-        } finally{
+        } finally {
             setIsDeactivating(false);
+            closeDetails();
         }
     };
 
@@ -124,7 +137,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             const response = await fetch(`${API}/users/${selectedRecord.email}/activate`, {
                 method: "PUT",
                 credentials: "include",
-                headers: { 
+                headers: {
                     'content-type': 'application/json',
                     'Authorization': `Bearer ${getToken()}`
                 }
@@ -133,12 +146,15 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             if (!response.ok) {
                 throw new Error("Failed to activate account");
             }
-            setUsers(prev => prev.map(user => user.email === selectedRecord.email ? {...user, enabled: true}: user))
+            setUsers(prev => prev.map(user => user.email === selectedRecord.email ? { ...user, enabled: true } : user))
+
+            setToast({ message: `Successfully activated ${selectedRecord.email}`, type: 'success' })
 
         } catch (err) {
-             setToast({ message: 'Failed to activate account', type: 'error' });
-        } finally{
+            setToast({ message: 'Failed to activate account', type: 'error' });
+        } finally {
             setIsActivating(false);
+            closeDetails()
         }
     }
 
@@ -182,7 +198,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
         findAllMembers(0);
     }, []);
 
-    console.log(selectedRecord)
     useEffect(() => {
 
         const observer = new IntersectionObserver(entries => {
@@ -209,7 +224,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     });
 
     if (!users) return null;
-    if(!user) return <RedirectUser/>
+    if (!user) return <RedirectUser />
 
     const isAdmin = validAdmin(user.roles);
 
@@ -219,7 +234,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                 {selectedRecord && (
                     <div className={styles.modalContent}>
                         {selectedRecord.profileImageUrl ? (
-                            <img src={selectedRecord.profileImageUrl} className={styles.modalImage} alt={selectedRecord.name}/>
+                            <img src={selectedRecord.profileImageUrl} className={styles.modalImage} alt={selectedRecord.name} />
                         ) : (
                             <div className={styles.modalPlaceholder}>
                                 <span className={styles.modalAvatar}>{selectedRecord.name.split(" ").map(word => word[0]).slice(0, 2).join("").toUpperCase()}</span>
@@ -239,7 +254,7 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                                 <span className={styles.value}>{formatRoles(selectedRecord.roles)}</span>
                             </div>
 
-                            
+
 
                             <div className={styles.detailRow}>
                                 <span className={styles.label}>Birthday</span>
@@ -256,12 +271,18 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                                     Change Member Role
                                 </label>
 
-                                <button className={styles.saveBtn} disabled={isUpdatingRole} onClick={handleUpdateRole}>{isUpdatingRole ? "Updating..." : "Update Role"}</button>
-                                <button className={styles.saveBtn} disabled={isDowngradingRole || selectedRecord.roles.length <= 1} onClick={handleDowngradeRole}>{isDowngradingRole ? "Downgrading..." : "Downgrade Role"}</button>
-                                {selectedRecord.enabled !== false ? 
-                                (<button className={styles.deactivateBtn} disabled={isDeactivating} onClick={() => {handleDeactivate();closeDetails();}}>{isDeactivating ? "Deactivating..." : "Deactivate Member"}</button>) 
-                                : 
-                                (<button className={styles.activateBtn} disabled={isActivating} onClick={() => {handleActivate();closeDetails();}}>{isActivating ? "Activating..." : "Activate Member"}</button>)
+                                <button className={styles.saveBtn} disabled={isUpgradingRole || selectedRecord.roles.length === 3} onClick={handleUpgradeRole}>{isUpgradingRole ? "Updating..." : "Update Role"}</button>
+                                <button className={styles.saveBtn} disabled={isDowngradingRole || selectedRecord.roles.length === 1} onClick={handleDowngradeRole}>{isDowngradingRole ? "Downgrading..." : "Downgrade Role"}</button>
+                                {selectedRecord.enabled !== false ?
+                                    (<button className={styles.deactivateBtn} disabled={isDeactivating} onClick={() => {
+                                        handleDeactivate();
+                                        closeDetails();
+                                    }}>{isDeactivating ? "Deactivating..." : "Deactivate Member"}</button>)
+                                    :
+                                    (<button className={styles.activateBtn} disabled={isActivating} onClick={() => {
+                                        handleActivate();
+                                        closeDetails();
+                                    }}>{isActivating ? "Activating..." : "Activate Member"}</button>)
                                 }
                             </div>)}
                         </div>
@@ -272,26 +293,28 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             <div className={styles.pageWrapper}>
                 <h1 className={styles.title}>{title}</h1>
 
-                <div className={styles.controlsBar}>
-                    <div className={styles.toggleContainer}>
-                        <button className={`${styles.toggleBtn} ${view === "cards" ? styles.active : ""}`} onClick={() => setView("cards")}>Cards</button>
-                        <button className={`${styles.toggleBtn} ${view === "table" ? styles.active : ""}`} onClick={() => setView("table")}>Table</button>
+                <div className={styles.toolBar}>
+                    <div className={styles.controlsBar}>
+                        <div className={styles.toggleContainer}>
+                            <button className={`${styles.toggleBtn} ${view === "cards" ? styles.active : ""}`} onClick={() => setView("cards")}>Cards</button>
+                            <button className={`${styles.toggleBtn} ${view === "table" ? styles.active : ""}`} onClick={() => setView("table")}>Table</button>
+                        </div>
+
+                        <input className={styles.searchBar} placeholder="Search members..." value={search} onChange={(e) => setSearch(e.target.value)} />
+
+                        <select className={styles.filter} value={roleFilter} onChange={(e) => setRoleFilter(e.target.value as AppRole | "ALL")}>
+                            <option value="ALL">All Roles</option>
+                            <option value="ADMIN">Admin</option>
+                            <option value="MEMBER">Member</option>
+                            <option value="YOUTH_LEADER">Youth Leader</option>
+                        </select>
+
+                        <select className={styles.filter} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as Status | "ALL")}>
+                            <option value="ALL">All Status</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </select>
                     </div>
-
-                    <input className={styles.searchBar} placeholder="Search members..." value={search} onChange={(e) => setSearch(e.target.value)} />
-
-                    <select className={styles.filter} value={roleFilter} onChange={(e) => setRoleFilter(e.target.value as AppRole | "ALL")}>
-                        <option value="ALL">All Roles</option>
-                        <option value="ADMIN">Admin</option>
-                        <option value="MEMBER">Member</option>
-                        <option value="YOUTH_LEADER">Youth Leader</option>
-                    </select>
-
-                    <select className={styles.filter} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as Status | "ALL")}>
-                        <option value="ALL">All Status</option>
-                        <option value="ACTIVE">Active</option>
-                        <option value="INACTIVE">Inactive</option>
-                    </select>
                 </div>
 
                 {filteredUsers.length === 0 ? (
@@ -323,16 +346,16 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
                                     <tbody>
                                         {filteredUsers.map((user, idx) => (
                                             <tr key={user.email ?? idx} className={styles.tableRow} onClick={() => openDetails(user)} style={{ cursor: 'pointer' }}>
-                                                <td>{user.name}</td>
-                                                <td>{user.email}</td>
-                                                <td>{formatRoles(user.roles)}</td>
-                                                <td>{formatDate(user.dateOfBirth)}</td>
-                                                <td><span className={user.enabled ? styles.activeStatus : styles.inactiveStatus}>{user.enabled ? "● Active" : "● Inactive"}</span></td>
+                                                <td data-label="Name">{user.name}</td>
+                                                <td data-label="Email">{user.email}</td>
+                                                <td data-label="Role">{formatRoles(user.roles)}</td>
+                                                <td data-label="Birthday">{formatDate(user.dateOfBirth)}</td>
+                                                <td data-label="Status"><span className={user.enabled ? styles.activeStatus : styles.inactiveStatus}>{user.enabled ? "● Active" : "● Inactive"}</span></td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                                <div ref={loaderRef}/>
+                                <div ref={loaderRef} />
                             </div>
                         )}
                     </>

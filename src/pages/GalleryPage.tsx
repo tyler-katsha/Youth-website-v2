@@ -1,5 +1,3 @@
-import { Navigation } from "../components/Navigation";
-import { Footer } from "../components/Footer";
 import styles from '../modules/Gallery.module.css';
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -8,18 +6,11 @@ import { GallerySkeleton } from "../skeletons/pages/GallarySkeleton";
 import { RedirectUser } from "../components/RedirectUser";
 import { API } from "../utils/API";
 import { Modal } from "../modals/Modal";
-import { FileUpload, type FileUploadRef } from "../components/FileUpload";
-import { acceptArray, CHUNK_SIZE } from "../utils/types";
+import { FileUpload } from "../components/FileUpload";
+import { acceptArray, CHUNK_SIZE, type FileUploadRef, type GalleryImage, type PartialToast } from "../utils/types";
 import { Profile } from "../components/Profile";
 import { extractName, formatDate, getToken } from "../utils/Utils";
-import { Toast, type PartialToast } from "../modals/Toast";
-
-export interface GalleryImage {
-    imageId: number;
-    imageUrl: string;
-    alt: string;
-    createdAt: string;
-}
+import { Toast } from "../modals/Toast";
 
 export const Gallery = () => {
     const { user, isLoading } = useUser();
@@ -259,8 +250,6 @@ export const Gallery = () => {
 
     return (
         <>
-            <Navigation title='Gallery' />
-
             <Modal isOpen={!!selectedRecord} onClose={closeDetails} title="Image Details">
                 {selectedRecord && (
                     <div className={styles.imagePreview}>
@@ -314,7 +303,6 @@ export const Gallery = () => {
             </Modal>
 
             {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
-            <Footer />
         </>
     );
 };

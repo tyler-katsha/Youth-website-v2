@@ -1,9 +1,7 @@
 import { MemberList } from '../components/MemberList';
-import {Navigation} from '../components/Navigation';
 import { useUser } from '../contexts/UserContext';
 import { RedirectUser } from '../components/RedirectUser';
 import { MembersSkeleton } from '../skeletons/pages/MembersSkeleton';
-import { Footer } from '../components/Footer';
 
 export const Members = () => {
 
@@ -15,11 +13,5 @@ export const Members = () => {
     if(!user){
         return <RedirectUser/>;
     }
-    return(
-        <>
-            <Navigation title='Engedi Members' />  
-            <MemberList title={'Engedi Members'}/>
-            <Footer/>
-        </>
-    )
+    return <MemberList title={'Engedi Members'}/>
 }

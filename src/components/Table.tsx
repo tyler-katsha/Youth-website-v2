@@ -1,10 +1,6 @@
 import styles from '../modules/Requests.module.css';
-import { TableRow, type Requests } from './TableRow';
-
-interface TableProps{
-    requests:Requests[];
-    setRequests: React.Dispatch<React.SetStateAction<Requests[]>>
-}
+import type { Requests, TableProps } from '../utils/types';
+import { TableRow } from './TableRow';
 
 export const handleRemoveRow = async (roleReqId:number, setRequests: React.Dispatch<React.SetStateAction<Requests[]>>) => {
         setRequests(prev => prev.filter(req => req.roleReqId !== roleReqId));

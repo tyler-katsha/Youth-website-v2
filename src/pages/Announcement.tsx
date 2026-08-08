@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { AnnouncementCard } from "../components/AnnouncementCard";
-import { Footer } from "../components/Footer";
-import { Navigation } from "../components/Navigation";
+import { AnnouncementCard } from "../components/AnnouncementCard"; 
 import { Modal } from "../modals/Modal";
-import { Toast, type PartialToast } from "../modals/Toast";
+import { Toast } from "../modals/Toast";
 import styles from '../modules/Announcement.module.css';
 import { API } from "../utils/API";
-import type { AnnouncementProps } from "../utils/types";
+import type { AnnouncementProps, PartialToast } from "../utils/types";
 import { getToken } from "../utils/Utils";
 
 const INITIAL_FORM_STATE: Omit<AnnouncementProps, 'id'> = {
@@ -205,7 +203,6 @@ export const Announcement = () => {
 
     return (
         <>
-            <Navigation title="Announcements" />
 
             <Modal isOpen={!!selectedRecord} onClose={closeDetails} title={isCreating ? "Create Announcement" : `${formData.title || 'Announcement'} Details`}>
                 <form onSubmit={handleSubmit} className={styles.formContainer}>
@@ -276,7 +273,6 @@ export const Announcement = () => {
             <div ref={loaderRef} style={{ height: 40, display: 'flex', justifyContent: 'center', alignContent: 'center' }}/>
             
             {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-            <Footer />
         </>
     );
 };

@@ -1,25 +1,24 @@
 import { useState } from 'react';
 import styles from '../modules/Profile.module.css';
-import { Navigation } from '../components/Navigation';
 import { EditProfileModal, type EditProfileFormData } from '../modals/EditModal';
-import { Footer } from '../components/Footer';
 // import darkModeIcon from '../assets/dark-mode-icon.png';
 // import lightModeIcon from '../assets/light-mode-icon.png';
 import { useUser } from '../contexts/UserContext';
 import { API } from '../utils/API';
 import { ProfileSkeleton } from '../skeletons/pages/ProfileSkeleton';
 import { RedirectUser } from '../components/RedirectUser';
-import { ColorUtil, formatRoles, getAge, getToken, isLocal, removeAll } from '../utils/Utils';
+import { ColorUtil, formatRoles, getAge, getToken, isLocal } from '../utils/Utils';
 import { Profile } from '../components/Profile';
 import { useNavigate } from 'react-router-dom';
-import { Toast, type PartialToast } from '../modals/Toast';
+import { Toast } from '../modals/Toast';
+import type { PartialToast } from '../utils/types';
 // import { useTheme } from '../contexts/ThemeContext';
 
 export const ProfilePage = () => {
     const { user, isLoading, updateUser } = useUser();
     // const { isDark, toggleTheme } = useTheme();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+    // const [showDeactivateModal, setShowDeactivateModal] = useState(false);
     const [toast, setToast] = useState<PartialToast | null>(null)
     const navigate = useNavigate();
 
@@ -65,48 +64,47 @@ export const ProfilePage = () => {
         }
     };
 
-    const handleDeactivate = async () => {
-        try {
-            const response = await fetch(`${API}/users`, {
-                method: "DELETE",
-                credentials: "include",
-                headers: {
-                    'Authorization':`Bearer ${getToken()}`
-                }
-            });
+    // const handleDeactivate = async () => {
+    //     try {
+    //         const response = await fetch(`${API}/users`, {
+    //             method: "DELETE",
+    //             credentials: "include",
+    //             headers: {
+    //                 'Authorization':`Bearer ${getToken()}`
+    //             }
+    //         });
 
-            if (!response.ok) {
-                setToast({
-                    type: 'error',
-                    message: await response.text() ?? 'Failed to deactivate account'
-                })
-                return;
-            }
+    //         if (!response.ok) {
+    //             setToast({
+    //                 type: 'error',
+    //                 message: await response.text() ?? 'Failed to deactivate account'
+    //             })
+    //             return;
+    //         }
 
-            const data = await response.json();
+    //         const data = await response.json();
 
-            updateUser(data);
-            setToast({
-                type: 'success',
-                message: await response.text() ?? 'Successfully deactivated account.'
-            })
-        } catch (err) {
-            setToast({
-                type: 'error',
-                message: 'Something went wrong Please try again'
-            })
-        } finally {
-            setShowDeactivateModal(false);
-            removeAll();
-        }
-    };
+    //         updateUser(data);
+    //         setToast({
+    //             type: 'success',
+    //             message: await response.text() ?? 'Successfully deactivated account.'
+    //         })
+    //     } catch (err) {
+    //         setToast({
+    //             type: 'error',
+    //             message: 'Something went wrong Please try again'
+    //         })
+    //     } finally {
+    //         setShowDeactivateModal(false);
+    //         removeAll();
+    //     }
+    // };
 
     if (isLoading) return <ProfileSkeleton />;
     if (!user) return <RedirectUser />;
 
     return (
         <div className={styles.pageContainer}>
-            <Navigation title='Profile Details' />
 
             <div className={styles.pageWrapper}>
                 <div className={styles.profileCard}>
@@ -194,7 +192,7 @@ export const ProfilePage = () => {
                             
                         <hr className={styles.sectionDivider} />
 
-                        {user.enabled && (<div className={`${styles.profileSection} ${styles.dangerZoneSection}`}>
+                        {/* {user.enabled && (<div className={`${styles.profileSection} ${styles.dangerZoneSection}`}>
                             <h3 className={`${styles.sectionTitle} ${styles.dangerTitle}`}>Danger Zone</h3>
                             <div className={styles.settingRow}>
                                 <div className={styles.settingMeta}>
@@ -205,7 +203,7 @@ export const ProfilePage = () => {
                                     Deactivate Account
                                 </button>
                             </div>
-                        </div>)}
+                        </div>)} */}
 
 
 
@@ -213,7 +211,7 @@ export const ProfilePage = () => {
                 </div>
             </div>
 
-            {showDeactivateModal && (
+            {/* {showDeactivateModal && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modal}>
                         <h2>Deactivate Account</h2>
@@ -227,7 +225,7 @@ export const ProfilePage = () => {
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
 
             <EditProfileModal
                 isOpen={isEditModalOpen}
@@ -238,7 +236,6 @@ export const ProfilePage = () => {
 
             {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
 
-            <Footer />
         </div>
     );
 };

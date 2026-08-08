@@ -3,7 +3,6 @@ import styles from '../modules/NotificationInbox.module.css';
 import type { AnnouncementProps, NotificationProps } from '../utils/types';
 import { notificationsMockData } from '../utils/mockData';
 import { API } from '../utils/API';
-import { Toast, type PartialToast } from '../modals/Toast';
 import { getToken } from '../utils/Utils';
 
 export const NotificationInbox = () => {
@@ -14,7 +13,6 @@ export const NotificationInbox = () => {
     const [_loading, setLoading] = useState(false);
     const [_hasMore, setHasMore] = useState(true);
     const [_page, setPage] = useState<number>(0);
-    const [toast, setToast] = useState<PartialToast | null>(null);
     // const unreadCount = mockNotifications.filter(n => !n.isRead).length;
     const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -52,9 +50,8 @@ export const NotificationInbox = () => {
             setHasMore(!data.last);
             setAnnouncements(prev => [...prev, ...data]);
             setPage(pageNumber);
-        } catch (err: any) {
-            setToast({ message: err.message || 'Could not find announcements.', type: 'error' });
-        } finally {
+
+        } catch (err) { } finally {
             setLoading(false);
         }
     }, []);
@@ -106,7 +103,6 @@ export const NotificationInbox = () => {
             )}
         </div>
 
-        {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
         </>
     );
 

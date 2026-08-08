@@ -3,11 +3,11 @@ import { useUser } from "../contexts/UserContext";
 import { PerformanceSkeleton } from "../skeletons/pages/PerformanceSkeleton";
 import { API } from "../utils/API";
 import styles from '../modules/Logs.module.css';
-import { Navigation } from '../components/Navigation';
 import { Modal } from "../modals/Modal";
 import { RedirectUser } from "../components/RedirectUser";
 import { getToken } from "../utils/Utils";
-import { Toast, type PartialToast } from "../modals/Toast";
+import { Toast } from "../modals/Toast";
+import type { PartialToast } from "../utils/types";
 // import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface PerformanceMetrics {
@@ -114,7 +114,6 @@ export const Performance = () => {
 
     return (
         <>
-            <Navigation title="Admin" />
 
             <Modal isOpen={!!selectedRecord} onClose={closeDetails} title="Performance Details">
                 {selectedRecord && (
