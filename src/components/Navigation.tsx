@@ -6,11 +6,8 @@ import { useUser } from '../contexts/UserContext';
 import { NotificationInbox } from './NotificationInbox';
 import { RedirectUser } from './RedirectUser';
 import { removeAll } from '../utils/Utils';
+import type { NavigationProps } from '../utils/types';
 // import { NotificationInbox } from './NotificationInbox';
-
-interface NavigationProps {
-    title: string;
-}
 
 export const Navigation: React.FC<NavigationProps> = ({ title }) => {
     const navigate = useNavigate();

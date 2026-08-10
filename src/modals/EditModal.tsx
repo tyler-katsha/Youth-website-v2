@@ -1,25 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "./Modal";
 import styles from "../modules/EditModal.module.css";
-import { acceptArray, type YouthProfileProps } from "../utils/types";
-import { FileUpload, type FileUploadRef } from "../components/FileUpload";
-import { formatDate, formatRoles } from "../utils/Utils";
+import { acceptArray, type EditProfileFormData, type EditProfileModalProps, type FileUploadRef } from "../utils/types";
+import { FileUpload } from "../components/FileUpload";
+import { formatDate, formatRoles, isLocal } from "../utils/Utils";
 // import { API } from "../utils/API";
 import { CustomPopup } from "../popups/CustomPopup";
-
-export interface EditProfileFormData {
-    name: string;
-    bio: string;
-    previewUrl: string | null;
-    image: File | null;
-}
-
-interface EditProfileModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    user: YouthProfileProps;
-    onSave: (data: EditProfileFormData) => Promise<void>;
-}
 
 export const EditProfileModal = ({ isOpen, onClose, user, onSave }: EditProfileModalProps) => {
     const [loading, setLoading] = useState(false);
@@ -204,7 +190,7 @@ export const EditProfileModal = ({ isOpen, onClose, user, onSave }: EditProfileM
                     </div>
                 </div>
 
-                <div className={styles.formGroup}>
+                {isLocal(user.authProvider) &&<div className={styles.formGroup}>
                     <label>Profile Picture</label>
 
                     {formData.previewUrl ? (
@@ -215,7 +201,7 @@ export const EditProfileModal = ({ isOpen, onClose, user, onSave }: EditProfileM
                     ) : <FileUpload ref={fileUploadRef} accept={acceptArray.join(", ")} maxFiles={1} multiple={false} onFileSelect={handleFileSelect} />}
 
 
-                </div>
+                </div>}
             </form>
         </Modal>
     );

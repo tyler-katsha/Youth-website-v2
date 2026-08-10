@@ -2,13 +2,9 @@ import styles from '../modules/ProfileImage.module.css'
 import { useNavigate } from "react-router-dom";
 import { ColorUtil } from "../utils/Utils";
 import { getInitials } from '../utils/Utils';
+import type { ProfileCompProps } from '../utils/types';
 
-interface ProfileProps {
-    name: string;
-    profileImageUrl: string | undefined;
-    link?: boolean;
-}
-export const Profile: React.FC<ProfileProps> = ({ name, profileImageUrl, link = true }) => {
+export const Profile: React.FC<ProfileCompProps> = ({ name, profileImageUrl, link = true }) => {
 
     const navigate = useNavigate();
 

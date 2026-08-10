@@ -1,25 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
 import styles from '../modules/PerformanceGraph.module.css'
-
-// Your exact interface
-export interface PerformanceMetrics {
-  performanceId: number;
-  description: string;
-  performanceDetails: string;
-  methodName: string;
-  executionTime: number;
-  createdAt: string;
-}
-
-interface PerformanceGraphProps {
-  filteredPerformances: PerformanceMetrics[];
-}
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: { payload: PerformanceMetrics }[];
-  label?: string;
-}
+import type { CustomTooltipProps, PerformanceGraphProps, PerformanceMetrics } from '../utils/types';
 
 export const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
 

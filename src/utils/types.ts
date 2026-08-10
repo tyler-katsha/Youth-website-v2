@@ -43,6 +43,7 @@ export interface RegisterPayload {
     password: string;
     confirmPassword: string;
     profileImageUrl: File | null;
+    bio:string;
 }
 export interface MemberListProps {
     title: string;
@@ -70,6 +71,7 @@ export interface GuestPayloadResponse{
 }
 export interface PasswordRequirementsProps{
     passwordValue: string;
+    display?:boolean;
 }
 export interface RuleProps{
     label:string;
@@ -138,13 +140,45 @@ export interface GalleryImage {
 export interface UserContextType {
     user: YouthProfileProps | null;
     isLoading: boolean;
-    updateUser: (newData: YouthProfileProps) => void;
+    updateUser: (newData: YouthProfileProps) => YouthProfileProps;
     updatePartialUser: (profileData: ProfileProps) => void;
     continueAsGuest: () => void;
     logout: () => void;
     fetchUser: () => Promise<void>;
     isAuthenticated: boolean;
     setUser: React.Dispatch<React.SetStateAction<YouthProfileProps | null>>
+}
+
+export interface NavigationProps {
+    title: string;
+}
+
+export interface PerformanceMetrics {
+  performanceId: number;
+  description: string;
+  performanceDetails: string;
+  methodName: string;
+  executionTime: number;
+  createdAt: string;
+}
+
+export interface PerformanceGraphProps {
+  filteredPerformances: PerformanceMetrics[];
+}
+
+export interface ProfileCompProps {
+    name: string;
+    profileImageUrl: string | undefined;
+    link?: boolean;
+}
+
+export interface ProtectedRouteProps{
+    children: React.ReactNode;
+}
+export interface CustomTooltipProps {
+  active?: boolean;
+  payload?: { payload: PerformanceMetrics }[];
+  label?: string;
 }
 
 export interface ThemeContextType{
@@ -198,6 +232,25 @@ export interface PartialPlan {
     color: string;
     eventType: EventType;
 }
+
+
+
+
+export interface EditProfileFormData {
+    name: string;
+    bio: string;
+    previewUrl: string | null;
+    image: File | null;
+}
+
+export interface EditProfileModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    user: YouthProfileProps;
+    onSave: (data: EditProfileFormData) => Promise<void>;
+}
+
+
 
 export type AppRole = 'MEMBER' | 'YOUTH_LEADER' | 'GUEST' | 'ADMIN';
 export type Providers = 'Google' | 'Facebook' | 'Instagram';

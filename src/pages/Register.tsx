@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from '../modules/Auth.module.css';
+import editModalStyles from '../modules/EditModal.module.css'
 import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
 import { API } from '../utils/API';
 import { CustomPopup } from '../popups/CustomPopup';
@@ -22,6 +23,7 @@ export const Register = () => {
         dateOfBirth: '',
         password: '',
         confirmPassword: '',
+        bio: '',
         profileImageUrl: null
     });
 
@@ -64,12 +66,55 @@ export const Register = () => {
             return;
         }
 
+        if(!/[A-Z]/.test(data.password)){
+            setPopupConfig({
+                isOpen: true,
+                type: "error",
+                message: "Password must include at least one uppercase letter"
+            });
+            setLoading(false);
+            return;
+        }
+
+        if(!/[a-z]/.test(data.password)){
+            setPopupConfig({
+                isOpen: true,
+                type: "error",
+                message: "Password must include at least one lowercase letter"
+            });
+            setLoading(false);
+            return;
+        }
+
+        if(!/[0-9]/.test(data.password)){
+            setPopupConfig({
+                isOpen: true,
+                type: "error",
+                message: "Password must include at least one number"
+            });
+            setLoading(false);
+            return;
+        }
+
+        if(!/[^A-Za-z0-9]/.test(data.password)){
+            setPopupConfig({
+                isOpen:true,
+                type:'error',
+                message:"Password must include at least one special character"
+            });
+            setLoading(false);
+            return;
+        }
+
         const formData = new FormData();
 
         formData.append('name', `${data.firstName.trim()} ${data.lastName.trim()}`);
         formData.append('email', data.email.trim());
         formData.append('dateOfBirth', data.dateOfBirth);
         formData.append('password', data.password);
+        if(data.bio){
+            formData.append('bio',data.bio);
+        }
 
         if (data.profileImageUrl) {
 
@@ -90,21 +135,21 @@ export const Register = () => {
 
             if (!response.ok) {
 
-                const errMsg = await response.text();
+                const errMsg = await response.json();
                 setPopupConfig({
                     isOpen: true,
                     type: 'error',
-                    message: errMsg || 'Registeration Failed'
+                    message: errMsg.message || 'Registeration Failed'
                 });
                 return;
             }
 
+            const apiResponse = await response.json()
             setPopupConfig({
                 isOpen: true,
-                type: 'success',
-                message: 'Verification link sent to your email'
+                type: apiResponse ? 'success' : 'error',
+                message: apiResponse.message ?? 'Registered Successful'
             });
-
         } catch (error) {
             setPopupConfig({
                 isOpen: true,
@@ -188,6 +233,25 @@ export const Register = () => {
                         <label>Profile Image (Optional):</label>
                         <FileUpload accept={acceptArray.join(', ')} onFileSelect={handleFileSelect} />
                     </div>
+
+                    <div className={editModalStyles.formGroup}>
+                    <label htmlFor="bio">Add Bio</label>
+                    <textarea
+                        id="bio"
+                        className={editModalStyles.textareaField}
+                        value={data.bio}
+                        maxLength={250}
+                        onChange={(e) => setData(prev => ({ ...prev, bio: e.target.value }))}
+                        rows={5}
+                    />
+                    <div className={editModalStyles.bioFooter}>
+                        <div className={editModalStyles.progressTrack}>
+                            <div className={`${editModalStyles.progressFill} ${data.bio.length === 250 ? editModalStyles.danger : data.bio.length >= 225 ? editModalStyles.warning : ""}`} style={{width : `${(data.bio.length / 250) * 100}%`}}/>
+                        </div>
+
+                         <span className={`${editModalStyles.charCount} ${data.bio.length >= 225 ? editModalStyles.warningText : ""} ${data.bio.length === 250 ? editModalStyles.dangerText : ""}`}>{data.bio.length}/250</span>
+                    </div>
+                </div>
                     <button type="submit" className={styles.submitBtn} disabled={loading}>{loading ? "Registering..." : "Register"}</button>
 
                     <Link className={styles.linkText} to='/login'>Already have an account? Log in</Link>

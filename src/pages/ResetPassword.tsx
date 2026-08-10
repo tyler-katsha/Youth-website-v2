@@ -7,8 +7,11 @@ import type { ToastResponse } from '../utils/types';
 import { PasswordRequirements } from '../components/PasswordRequirements';
 
 export const ResetPassword = () => {
+    
+    const isGuest = localStorage.getItem('isGuest')
 
     const navigate = useNavigate();
+    const redirectionPath = isGuest ? '/login':  '/profile'
     const queryParams = new URLSearchParams(window.location.search);
     const token = queryParams.get('token')
     const email = queryParams.get('email');
@@ -30,7 +33,7 @@ export const ResetPassword = () => {
 
     const closePopup = () => setPopupConfig(prev => ({ ...prev, isOpen: false }))
 
-    const profilePage = () => navigate('/profile');
+    const profilePage = () => navigate(redirectionPath);
 
     const handleFormEvent = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -57,6 +60,46 @@ export const ResetPassword = () => {
             return;
         }
 
+        if(!/[A-Z]/.test(password)){
+            setPopupConfig({
+                isOpen: true,
+                type: "error",
+                message: "Password must include at least one uppercase letter"
+            });
+            setLoading(false);
+            return;
+        }
+
+        if(!/[a-z]/.test(password)){
+            setPopupConfig({
+                isOpen: true,
+                type: "error",
+                message: "Password must include at least one lowercase letter"
+            });
+            setLoading(false);
+            return;
+        }
+
+        if(!/[0-9]/.test(password)){
+            setPopupConfig({
+                isOpen: true,
+                type: "error",
+                message: "Password must include at least one number"
+            });
+            setLoading(false);
+            return;
+        }
+
+        if(!/[^A-Za-z0-9]/.test(password)){
+            setPopupConfig({
+                isOpen:true,
+                type:'error',
+                message:"Password must include at least one special character"
+            });
+            setLoading(false);
+            return;
+        }
+
         try {
             const response = await fetch(`${API}/auth/forgot-password`, {
                 method: 'POST',
@@ -65,9 +108,9 @@ export const ResetPassword = () => {
                 },
                 body: JSON.stringify(
                 {
-                    'email':email,
+                    'email': email,
                     'password': password,
-                    'token': token
+                    'token': token,
                 })
             })
 
@@ -89,7 +132,7 @@ export const ResetPassword = () => {
             });
 
 
-            navigate('/login')
+            navigate(redirectionPath)
 
         } catch (error) {
             setPopupConfig({
@@ -115,7 +158,6 @@ export const ResetPassword = () => {
             <div className={styles.formContainer}>
                 <form className={styles.loginForm} onSubmit={handleFormEvent}>
                     <h1>Reset Password</h1>
-
 
                     <div className={styles.inputGroup}>
                         <label>New Password:</label>

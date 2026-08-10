@@ -199,6 +199,7 @@ export const CalendarPage = () => {
                     <div className={style.calendarSection}>
                         <Calendar plans={plans} onDateSelect={(date) => { setSelectedDate(date); setIsFormOpen(false); }} />
                     </div>
+                    
                     <div className={style.eventsPanel}>
                         <div className={style.panelHeader}>
                             <h2>{formattedDate}</h2>

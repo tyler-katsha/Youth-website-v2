@@ -8,6 +8,7 @@ import { API, OAUTH_API } from '../utils/API';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import { removeAll } from '../utils/Utils';
+
 export const OAuthLogin = () => {
     const navigate = useNavigate();
     const { continueAsGuest } = useUser();

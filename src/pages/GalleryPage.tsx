@@ -105,16 +105,17 @@ export const Gallery = () => {
                         credentials: "include",
                         body: formData,
                         headers: {
-                            'content-type': 'application/json',
                             'Authorization': `Bearer ${getToken()}`
                         }
                     });
-
                     if (!response.ok) {
                         const data = await response.json();
                         setToast({ message: data.message ?? 'Server error', type: 'error' })
                         return;
                     }
+
+                    const data = await response.text();
+                    setToast({ message: data ?? 'Image Uploaded', type: 'success' })
                 })
             );
 

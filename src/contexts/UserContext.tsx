@@ -75,6 +75,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const updateUser = (newData: YouthProfileProps) => {
         setUser(newData);
+        return newData;
     }
 
     const updatePartialUser = (newData: ProfileProps) => {

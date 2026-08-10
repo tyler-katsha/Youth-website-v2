@@ -42,9 +42,8 @@ export const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onFileSe
         getFiles: () => files,
     }));
 
-    const handleFileChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        
         if (!e.target.files) return;
 
         const selected = Array.from(e.target.files);

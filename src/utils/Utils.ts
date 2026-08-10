@@ -1,4 +1,4 @@
-import { type AppRole, type AuthProvider, type EventType, type PartialPlan, type UserPayload, type YouthProfileProps } from "./types";
+import { type AppRole, type AuthProvider, type EditProfileFormData, type EventType, type PartialPlan, type UserPayload, type YouthProfileProps } from "./types";
 
 export function splitFullName(name: string) {
     const nameParts = name.split(' ');
@@ -57,6 +57,19 @@ export function mapPayloadToProfile(payload: UserPayload): YouthProfileProps {
         email: payload.email,
         enabled: payload.enabled,
     };
+}
+export function mapProfilePayloadToProfile(profileData: EditProfileFormData,currentData: YouthProfileProps): YouthProfileProps{
+    return {
+        name: currentData.name,
+        age: getAge(currentData.dateOfBirth),
+        roles: currentData.roles.length > 0 ? currentData.roles : ["GUEST"],
+        dateOfBirth: currentData.dateOfBirth,
+        authProvider: currentData.authProvider,
+        bio: profileData.bio,
+        profileImageUrl: profileData.previewUrl === null ? undefined : profileData.previewUrl,
+        email: currentData.email,
+        enabled: currentData.enabled,
+    }
 }
 export function formatTime(timeStr: string): string {
     if (!timeStr) return '';

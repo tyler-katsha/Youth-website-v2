@@ -1,21 +1,22 @@
 import { useState } from 'react';
 import styles from '../modules/Profile.module.css';
-import { EditProfileModal, type EditProfileFormData } from '../modals/EditModal';
+import { EditProfileModal } from '../modals/EditModal';
 // import darkModeIcon from '../assets/dark-mode-icon.png';
 // import lightModeIcon from '../assets/light-mode-icon.png';
 import { useUser } from '../contexts/UserContext';
 import { API } from '../utils/API';
 import { ProfileSkeleton } from '../skeletons/pages/ProfileSkeleton';
 import { RedirectUser } from '../components/RedirectUser';
-import { ColorUtil, formatRoles, getAge, getToken, isLocal } from '../utils/Utils';
-import { Profile } from '../components/Profile';
+import { ColorUtil, formatRoles, getAge, getToken, isLocal, mapProfilePayloadToProfile } from '../utils/Utils';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from '../modals/Toast';
-import type { PartialToast } from '../utils/types';
+import type { EditProfileFormData, PartialToast } from '../utils/types';
+import { Profile } from '../components/Profile';
 // import { useTheme } from '../contexts/ThemeContext';
 
 export const ProfilePage = () => {
-    const { user, isLoading, updateUser } = useUser();
+
+    const { user, isLoading, updateUser, setUser } = useUser();
     // const { isDark, toggleTheme } = useTheme();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     // const [showDeactivateModal, setShowDeactivateModal] = useState(false);
@@ -24,10 +25,19 @@ export const ProfilePage = () => {
 
     const handleSaveProfile = async (formData: EditProfileFormData) => {
         try {
+
+
+            if (user == null) {
+                throw new Error('User is unauthorized');
+            }
+
             const dataToSubmit = new FormData();
             dataToSubmit.append("name", formData.name);
             dataToSubmit.append("bio", formData.bio);
-
+            
+            if (formData.previewUrl) {
+                dataToSubmit.append('previewUrl', formData.previewUrl);
+            }
             if (formData.image) {
                 dataToSubmit.append("image", formData.image);
             }
@@ -36,30 +46,37 @@ export const ProfilePage = () => {
                 method: "PUT",
                 credentials: "include",
                 body: dataToSubmit,
-                headers: { 
-                    'content-type': 'application/json',
+                headers: {
                     'Authorization': `Bearer ${getToken()}`
                 }
             });
 
             if (!response.ok) {
+                const errorMessage = await response.json();
                 setToast({
                     type: 'error',
-                    message: await response.text() ?? "Update failed"
+                    message: errorMessage.message ?? "Update failed"
                 })
                 return;
             }
 
             const data = await response.json();
-
-            updateUser(data);
+        
+            const saved = updateUser(mapProfilePayloadToProfile(data, user));
             
+            setUser(saved);
+
+            setToast({
+                type: 'success',
+                message: 'Profile updated'
+            })
+
         } catch (error) {
             setToast({
                 type: 'error',
                 message: 'Something went wrong Please try again'
             })
-        } finally{
+        } finally {
             setIsEditModalOpen(false);
         }
     };
@@ -173,23 +190,23 @@ export const ProfilePage = () => {
                         </div> */}
 
                         {isLocal(user.authProvider) && (
-                           <>
-                            <hr className={styles.sectionDivider} />
+                            <>
+                                <hr className={styles.sectionDivider} />
 
-                        <div className={styles.profileSection}>
-                            <h3 className={styles.sectionTitle}>Security</h3>
-                            <div className={styles.settingRow}>
-                                <div className={styles.settingMeta}>
-                                    <h4>Account Password</h4>
-                                    <p>Update your password regularly to maintain a secure account environment.</p>
+                                <div className={styles.profileSection}>
+                                    <h3 className={styles.sectionTitle}>Security</h3>
+                                    <div className={styles.settingRow}>
+                                        <div className={styles.settingMeta}>
+                                            <h4>Account Password</h4>
+                                            <p>Update your password regularly to maintain a secure account environment.</p>
+                                        </div>
+                                        <button className={styles.passwordBtn} onClick={() => navigate(`/reset-password?email=${user.email}`)}>
+                                            Change Password
+                                        </button>
+                                    </div>
                                 </div>
-                                <button className={styles.passwordBtn} onClick={() => navigate("/reset-password")}>
-                                    Change Password
-                                </button>
-                            </div>
-                        </div>
-                        </> )}
-                            
+                            </>)}
+
                         <hr className={styles.sectionDivider} />
 
                         {/* {user.enabled && (<div className={`${styles.profileSection} ${styles.dangerZoneSection}`}>
