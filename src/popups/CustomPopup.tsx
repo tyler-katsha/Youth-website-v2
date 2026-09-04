@@ -1,12 +1,6 @@
 import styles from '../modules/Popup.module.css'
+import type { CustomPopupProps } from '../types/modal';
 
-interface CustomPopupProps{
-    isOpen:boolean;
-    type: 'success' | 'error';
-    title?:string;
-    message:string;
-    onClose: () => void;
-}
 
 export const CustomPopup: React.FC<CustomPopupProps> = ({isOpen,type,title,message,onClose}) => {
 

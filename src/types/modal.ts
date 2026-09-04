@@ -11,3 +11,11 @@ export interface PartialToast{
   message:string;
   type: ToastResponse;
 }
+
+export interface CustomPopupProps{
+    isOpen:boolean;
+    type: 'success' | 'error';
+    title?:string;
+    message:string;
+    onClose: () => void;
+}
