@@ -38,8 +38,6 @@ export const OAuthLogin = () => {
         try {
             const response = await fetch(`${API}/auth/continue-as-guest`, {
                 method: "POST",
-                credentials: 'include',
-                
             });
 
 
@@ -54,7 +52,10 @@ export const OAuthLogin = () => {
                 return;
             }
 
+            const token = await response.text();
+            
             localStorage.setItem('isGuest', 'true');
+            localStorage.setItem('jwt-token',token);
             
             continueAsGuest();
             navigate('/');
@@ -76,8 +77,6 @@ export const OAuthLogin = () => {
 
             <div className={styles.socialGrid}>
                 <button className={styles.socialBtn} onClick={() => handleOAuth2Login('google')}><img src={googleIcon} alt='Login with Google' /></button>
-                {/* <button className={styles.socialBtn} onClick={() => handleOAuth2Login('facebook')}><img src={facebookIcon} alt='Login with Google' /></button> */}
-                {/* <button className={styles.socialBtn} onClick={() => handleOAuth2Login('instagram')}><img src={instagramIcon} alt='Login with Google' /></button> */}
             </div>
 
             <button className={styles.guestBtn} onClick={handleContinueAsGuest}>Continue as Guest</button>

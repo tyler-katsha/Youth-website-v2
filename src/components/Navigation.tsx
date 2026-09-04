@@ -2,17 +2,16 @@ import styles from '../modules/Navigation.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Profile } from './Profile';
 import { useUser } from '../contexts/UserContext';
-// import { API } from '../utils/API';
 import { NotificationInbox } from './NotificationInbox';
 import { RedirectUser } from './RedirectUser';
-import { removeAll } from '../utils/Utils';
+import { getToken } from '../utils/Utils';
 import type { NavigationProps } from '../utils/types';
-// import { NotificationInbox } from './NotificationInbox';
+import { API } from '../utils/API';
 
 export const Navigation: React.FC<NavigationProps> = ({ title }) => {
     const navigate = useNavigate();
 
-    const { user, setUser,/* logout */ } = useUser();
+    const { user , logout } = useUser();
 
 
     const isLoggedIn = !user?.roles.includes('GUEST');
@@ -20,44 +19,71 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
     const isAdmin = user?.roles.includes('ADMIN');
     const isLeaderOrAdmin = user?.roles.includes('ADMIN') || user?.roles.includes('YOUTH_LEADER');
 
-    // const signout = async () => {
-    //     try {
-    //         await fetch(`${API}/auth/logout`, {
-    //             method: "POST",
-    //             credentials: 'include',
-    //         })
-    //     } catch (error) { }
-    // }
+    const signout = async () => {
+        const token = getToken();
+
+        try {
+            const response = await fetch(`${API}/auth/logout`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Logout failed: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    };
 
     const handleLogout = async () => {
-        // try {
-        //     await signout();
-        // } finally {
-        //     logout();
-        //     localStorage.removeItem("jwt-token");
-        //     removeAll()
-
-        //     navigate('/')
-        // }
-        localStorage.clear();
-        setUser(null);
-        navigate('/login')
-    }
-
-    const handleLoginRoute = () => {
         try {
-            navigate('/login')
+            await signout();
+        } catch(error){
+            console.error(error)
+        } finally {
+            logout();
+        }
+    };
+
+    const GuestLogin = async() => {
+        const token = getToken();
+        try{
+
+            const response = await fetch(`${API}/auth/guest/redirect?token=${token}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Logout failed: ${response.status}`);
+            }
+
+            console.log('Success')
+        } catch(error){
+            console.error(error);
+        }
+    }
+    const handleLoginRoute = async () => {
+        try {
+            await GuestLogin();
         } catch (err) {
             console.error(err);
         } finally {
-            removeAll()
+            localStorage.removeItem('isGuest')
+            navigate('/login')
         }
     }
 
     if (!user) return <RedirectUser />
 
     const navigateLink = (route: string, name: string) => <li><Link to={route}>{name}</Link></li>
-        
+
     return (
         <nav className={styles.navbar}>
             <div className={styles.navbarLeft}>
@@ -84,12 +110,8 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
 
                     {isAdmin && (
                         <>
-                            {/* {navigateLink('/request-page','Requests')} */}
                             {navigateLink('/logs', 'System Logs')}
                             {navigateLink('/performances', 'System Performances')}
-                            {/* {navigateLink('/about','About')} */}
-                            {/* {navigateLink('/test-emails','Test Emails')} */}
-                            {/* {navigateLink('/announcements','Announcements')} */}
                         </>
                     )}
                 </ul>
@@ -104,9 +126,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
                 ) : (
                     <>
                         <Profile name={'Guest'} profileImageUrl={undefined} link={false} />
-                        <button onClick={handleLoginRoute} className={styles.loginBtn}>
-                            Login
-                        </button>
+                        <button onClick={handleLoginRoute} className={styles.loginBtn}>Login</button>
 
                     </>
 

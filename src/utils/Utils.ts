@@ -160,8 +160,16 @@ export function getToken(): string | null {
    
     return token;
 }
+
+
 export function isCheck() {
     if(localStorage.getItem('isGuest') === 'true'){
         return;
     }
+}
+export function parseCreatedAt(createdAt: number[]): Date {
+
+    const [year,month,day,hour,mintue,second,nano] = createdAt;
+
+    return new Date(year,month - 1,day,hour,mintue,second,Math.floor(nano/1_000_000));
 }

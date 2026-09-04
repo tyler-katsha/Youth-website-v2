@@ -7,37 +7,30 @@ import { Modal } from "../modals/Modal";
 import { RedirectUser } from "../components/RedirectUser";
 import { getToken } from "../utils/Utils";
 import { Toast } from "../modals/Toast";
-import type { PartialToast } from "../utils/types";
-// import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-interface PerformanceMetrics {
-    performanceId: number;
-    description: string;
-    performanceDetails: string;
-    methodName: string;
-    executionTime: number;
-    createdAt: string;
-}
+import type { PartialToast, PerformanceMetrics } from "../utils/types";
+import { PerformanceDashboard } from "../components/LiveDashboard";
+import { PerformanceGraph } from "../components/PerformanceGraph";
+import { PerformanceTable } from "../components/PerformanceTable";
 
 export const Performance = () => {
     const { user, isLoading: userLoading } = useUser();
+    const [searchTerm, setSearchTerm] = useState("");
     const [performances, setPerformances] = useState<PerformanceMetrics[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [toast, setToast] = useState<PartialToast | null>(null)
     const [loading, setLoading] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
+    
     const [viewMode, setViewMode] = useState<"table" | "dashboard" | "graph">("table");
     const [selectedRecord, setSelectedRecord] = useState<PerformanceMetrics | null>(null);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
 
     const loaderRef = useRef<HTMLDivElement>(null);
-
-
-    const openDetails = (record: PerformanceMetrics) => setSelectedRecord(record);
     const closeDetails = () => setSelectedRecord(null);
 
     const fetchPerformances = async (pageNumber: number) => {
+        const token = getToken();
+
         try {
 
             if (loading || !hasMore) return;
@@ -49,7 +42,7 @@ export const Performance = () => {
                 credentials: 'include',
                 headers: { 
                     'content-type': 'application/json',
-                    'Authorization':`Bearer ${getToken()}`
+                    'Authorization':`Bearer ${token}`
                  }
             });
 
@@ -63,8 +56,8 @@ export const Performance = () => {
 
             const temp = await response.json();
 
+            
             const data: PerformanceMetrics[] = temp.content;
-
 
             setPerformances(prev => [...prev, ...data]);
 
@@ -105,13 +98,6 @@ export const Performance = () => {
     if (userLoading || isLoading) return <PerformanceSkeleton />;
     if (!user) return <RedirectUser />;
 
-    const filteredPerformances = performances.filter((performance) =>
-        (performance.description || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (performance.methodName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (performance.performanceDetails || "").toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-
     return (
         <>
 
@@ -134,135 +120,18 @@ export const Performance = () => {
                         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
 
                             <button onClick={() => setViewMode("table")} style={{ padding: "6px 12px", background: viewMode === "table" ? "#222" : "#eee", color: viewMode === "table" ? "#fff" : "#000", border: "none", cursor: "pointer" }}>Table</button>
-                            {/* <button onClick={() => setViewMode("graph")} style={{ padding: "6px 12px", background: viewMode === "graph" ? "#222" : "#eee", color: viewMode === "graph" ? "#fff" : "#000", border: "none", cursor: "pointer" }}>Graph</button> */}
-                            {/* <button onClick={() => setViewMode("dashboard")} style={{ padding: "6px 12px", background: viewMode === "dashboard" ? "#222" : "#eee", color: viewMode === "dashboard" ? "#fff" : "#000", border: "none", cursor: "pointer" }}>Live Dashboard</button> */}
+                            <button onClick={() => setViewMode("graph")} style={{ padding: "6px 12px", background: viewMode === "graph" ? "#222" : "#eee", color: viewMode === "graph" ? "#fff" : "#000", border: "none", cursor: "pointer" }}>Graph</button>
+                            <button onClick={() => setViewMode("dashboard")} style={{ padding: "6px 12px", background: viewMode === "dashboard" ? "#222" : "#eee", color: viewMode === "dashboard" ? "#fff" : "#000", border: "none", cursor: "pointer" }}>Live Dashboard</button>
 
-                            {viewMode === "table" && (
-                                <input type="text" placeholder="Search description, method..." className={styles.searchInput} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                            )}
+                            {viewMode === "table" && (<input type="text" placeholder="Search description, method..." className={styles.searchInput} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />)}
                         </div>
                     </div>
 
-                    {
-                        // "Add in later features"
-                    }
-                    {/* {viewMode === "graph" ? (
-                        <div style={{ width: "100%", height: "500px" }}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart
-                                    data={performances}
-                                    margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 20,
-                                    }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
+                    {viewMode === "dashboard" && <PerformanceDashboard/>}
 
-                                    <XAxis
-                                        dataKey="createdAt"
-                                        tickFormatter={(value) =>
-                                            new Date(value).toLocaleTimeString()
-                                        }
-                                    />
+                    {viewMode === "graph" && (<PerformanceGraph performances={performances.length > 0 ? performances : []}/>)}  
 
-                                    <YAxis
-                                        label={{
-                                            value: "Execution Time (ms)",
-                                            angle: -90,
-                                            position: "insideLeft",
-                                        }}
-                                    />
-
-                                    <Tooltip
-                                        formatter={(value) => [`${value} ms`, "Execution Time"]}
-                                        labelFormatter={(label) =>
-                                            new Date(label).toLocaleString()
-                                        }
-                                    />
-
-                                    <Line
-                                        type="monotone"
-                                        dataKey="executionTime"
-                                        stroke="#2563eb"
-                                        strokeWidth={3}
-                                        dot={{ r: 5 }}
-                                        activeDot={{ r: 8 }}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    ) : (
-                        <div className={styles.tableWrapper}>
-                            <table className={styles.logTable}>
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Description</th>
-                                        <th>Method</th>
-                                        <th>Execution Time</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredPerformances.length === 0 ? (
-                                        <tr>
-                                            <td colSpan={5} className={styles.emptyState}>No records found.</td>
-                                        </tr>
-                                    ) : (
-                                        filteredPerformances.map((p) => (
-                                            <tr key={p.performanceId} onClick={() => openDetails(p)} style={{ cursor: 'pointer' }}>
-                                                <td>{new Date(p.createdAt).toLocaleString()}</td>
-                                                <td>{p.description ?? "N/A"}</td>
-                                                <td style={{ fontFamily: "monospace", fontWeight: 600 }}>{p.methodName}</td>
-                                                <td>
-                                                    <span className={`${styles.statusBadge} ${p.executionTime > 1000 ? styles.statusFailed : styles.statusSuccess}`}>
-                                                        {p.executionTime} ms
-                                                    </span>
-                                                </td>
-                                                <td>{p.performanceDetails ?? "No details provided"}</td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    )} */}
-
-                    <div className={styles.tableWrapper}>
-                        <table className={styles.logTable}>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Method</th>
-                                    <th>Execution Time</th>
-                                    <th>Details</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredPerformances.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={5} className={styles.emptyState}>No records found.</td>
-                                    </tr>
-                                ) : (
-                                    filteredPerformances.map((p) => (
-                                        <tr key={p.performanceId} onClick={() => openDetails(p)} style={{ cursor: 'pointer' }}>
-                                            <td>{new Date(p.createdAt).toLocaleString()}</td>
-                                            <td>{p.description ?? "N/A"}</td>
-                                            <td style={{ fontFamily: "monospace", fontWeight: 600 }}>{p.methodName}</td>
-                                            <td><span className={`${styles.statusBadge} ${p.executionTime > 1000 ? styles.statusFailed : styles.statusSuccess}`}>{p.executionTime} ms</span></td>
-                                            <td>{p.performanceDetails ?? "No details provided"}</td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                        <div ref={loaderRef} style={{ height: 40, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>{loading && <span>Loading...</span>}</div>
-                    </div>
-
-                    
+                    {viewMode === 'table' && <PerformanceTable performances={performances} searchTerm={searchTerm} onRowClick={setSelectedRecord}/>}          
                 </div>
 
             </div>

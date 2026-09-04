@@ -133,8 +133,8 @@ export const Logs = () => {
                                             <td colSpan={4} className={styles.emptyState}>No logs found.</td>
                                         </tr>
                                     ) : (
-                                        filteredLogs.map((log) => (
-                                            <tr key={log.id} onClick={() => openDetails(log)} style={{ cursor: 'pointer' }}>
+                                        filteredLogs.map((log,index) => (
+                                            <tr key={index} onClick={() => openDetails(log)} style={{ cursor: 'pointer' }}>
                                                 <td>{new Date(log.now).toLocaleString()}</td>
                                                 <td className={styles.userCell}>{log.performedBy}</td>
                                                 <td>{log.value}</td>

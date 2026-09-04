@@ -87,6 +87,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const logout = () => {
+        localStorage.removeItem("jwt-token");
         setUser(null);
     }
 

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { lightTheme } from "../theme/theme";
 
 export interface UserPayload extends YouthProfileProps {
@@ -89,22 +90,20 @@ export interface Member {
     email?: string;
     enabled:boolean;
 }
-
-// The raw event coming from the websocket
 export interface RawEvent {
     connectionType: ConnectionType;
-    userId: number;
+    email: string;
     message: string;
     timestamp: string | number;
 }
-
-// The processed event mapped for the chart
+export interface TrafficPayload {
+    event: RawEvent;
+    currentSize: number;
+    maxSize:number;
+}
 export interface ChartEvent extends RawEvent {
     time: string;
     typeValue: number;
-}
-export type MoreUser = Member & {
-    isOnline: boolean;
 }
 export interface ToastProps {
   message: string;
@@ -153,17 +152,19 @@ export interface NavigationProps {
     title: string;
 }
 
-export interface PerformanceMetrics {
-  performanceId: number;
-  description: string;
-  performanceDetails: string;
-  methodName: string;
-  executionTime: number;
-  createdAt: string;
+export interface PerformanceGraphProps {
+  performances: PerformanceMetrics[];
+  searchTerm?: string;
+  onRowClick?: (record: PerformanceMetrics) => void;
 }
 
-export interface PerformanceGraphProps {
-  filteredPerformances: PerformanceMetrics[];
+export interface PerformanceMetrics {
+    performanceId: number;
+    description: string;
+    performanceDetails: string;
+    methodName: string;
+    executionTime: number;
+    createdAt: number[];
 }
 
 export interface ProfileCompProps {
@@ -174,6 +175,17 @@ export interface ProfileCompProps {
 
 export interface ProtectedRouteProps{
     children: React.ReactNode;
+}
+
+export interface Props{
+    children?: ReactNode;
+    title?:string;
+    message?:string;
+}
+
+export interface State{
+    hasError:boolean;
+    error?:Error;
 }
 export interface CustomTooltipProps {
   active?: boolean;
@@ -233,16 +245,12 @@ export interface PartialPlan {
     eventType: EventType;
 }
 
-
-
-
 export interface EditProfileFormData {
     name: string;
     bio: string;
     previewUrl: string | null;
     image: File | null;
 }
-
 export interface EditProfileModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -250,13 +258,11 @@ export interface EditProfileModalProps {
     onSave: (data: EditProfileFormData) => Promise<void>;
 }
 
-
-
 export type AppRole = 'MEMBER' | 'YOUTH_LEADER' | 'GUEST' | 'ADMIN';
 export type Providers = 'Google' | 'Facebook' | 'Instagram';
 export type EventType = 'GENERAL' | 'MEETING' | 'WORSHIP' | 'URGENT' | 'ACTIVITY';
 export type ViewMode = "cards" | "table";
-export type ConnectionType = "CONNECT" | 'ERROR' | 'REQUEST' | 'DISCONNECT' | 'TRAFFIC'
+export type ConnectionType = "CONNECT" | 'DISCONNECT' | 'CONTINUE_AS_GUEST'
 export type Status = "ACTIVE" | "INACTIVE"
 export type AuthProvider = 'LOCAL' | "OAUTH2"
 export type ToastResponse = "success" | "error"
@@ -267,7 +273,7 @@ export const appRoleArray = ['MEMBER','YOUTH_LEADER','GUEST','ADMIN']
 export const providersArray = ['Google', 'Facebook', 'Instagram'];
 export const requestsArray = ['Email','name']
 export const acceptArray = ['image/png, image/jpeg, image/jpg']
-export const connectionTypeArray = ['CONNECT', 'DISCONNECT', 'REQUEST', 'TRAFFIC', 'ERROR']
+export const connectionTypeArray = ['CONNECT', 'DISCONNECT','CONTINUE_AS_GUEST']
 
 export const planColors = [
     { eventType: "GENERAL", label: "General", color: "#2563eb" },
