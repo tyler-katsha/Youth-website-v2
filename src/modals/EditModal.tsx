@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { Modal } from "./Modal";
-import styles from "../modules/EditModal.module.css";
-import { acceptArray, type EditProfileFormData, type EditProfileModalProps, type FileUploadRef } from "../utils/types";
 import { FileUpload } from "../components/FileUpload";
+import styles from "../modules/EditModal.module.css";
 import { formatDate, formatRoles, isLocal } from "../utils/Utils";
-// import { API } from "../utils/API";
+import { Modal } from "./Modal";
 import { CustomPopup } from "../popups/CustomPopup";
+import { acceptArray } from "../types/arrays";
+import type { FileUploadRef } from "../types/image";
+import type { EditProfileModalProps, EditProfileFormData } from "../types/user";
 
 export const EditProfileModal = ({ isOpen, onClose, user, onSave }: EditProfileModalProps) => {
     const [loading, setLoading] = useState(false);
-    // const [sent, SetSent] = useState(false);
     const [formData, setFormData] = useState<EditProfileFormData>({
         name: "",
         bio: "",
@@ -86,42 +86,6 @@ export const EditProfileModal = ({ isOpen, onClose, user, onSave }: EditProfileM
         }
     }, [formData.previewUrl])
 
-    // const sendRequest = async () => {
-    //     try {
-    //         SetSent(true);
-    //         const response = await fetch(`${API}/send-request`, {
-    //             method: "GET",
-    //             credentials: 'include',
-    //             headers: { 'content-type': 'application/json' }
-    //         })
-
-    //         if (!response.ok) {
-
-    //             const text = await response.text();
-    //             setPopupConfig({
-    //                 isOpen: true,
-    //                 type: 'error',
-    //                 message: text ?? 'Failed to send request'
-    //             });
-    //             throw new Error('Failed to send request');
-    //         }
-
-    //         setPopupConfig({
-    //             isOpen: true,
-    //             type: 'success',
-    //             message: 'Request sent.'
-    //         });
-
-    //     } catch (err) {
-    //         setPopupConfig({
-    //             isOpen: true,
-    //             type: 'error',
-    //             message: 'Something went wrong. Please try again'
-    //         });
-    //     } finally {
-    //         SetSent(false);
-    //     }
-    // }
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
@@ -183,14 +147,14 @@ export const EditProfileModal = ({ isOpen, onClose, user, onSave }: EditProfileM
                     />
                     <div className={styles.bioFooter}>
                         <div className={styles.progressTrack}>
-                            <div className={`${styles.progressFill} ${formData.bio.length === 250 ? styles.danger : formData.bio.length >= 225 ? styles.warning : ""}`} style={{width : `${(formData.bio.length / 250) * 100}%`}}/>
+                            <div className={`${styles.progressFill} ${formData.bio.length === 250 ? styles.danger : formData.bio.length >= 225 ? styles.warning : ""}`} style={{ width: `${(formData.bio.length / 250) * 100}%` }} />
                         </div>
 
-                         <span className={`${styles.charCount} ${formData.bio.length >= 225 ? styles.warningText : ""} ${formData.bio.length === 250 ? styles.dangerText : ""}`}>{formData.bio.length}/250</span>
+                        <span className={`${styles.charCount} ${formData.bio.length >= 225 ? styles.warningText : ""} ${formData.bio.length === 250 ? styles.dangerText : ""}`}>{formData.bio.length}/250</span>
                     </div>
                 </div>
 
-                {isLocal(user.authProvider) &&<div className={styles.formGroup}>
+                {isLocal(user.authProvider) && <div className={styles.formGroup}>
                     <label>Profile Picture</label>
 
                     {formData.previewUrl ? (

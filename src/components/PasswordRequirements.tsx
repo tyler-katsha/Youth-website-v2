@@ -1,13 +1,13 @@
-import styles from '../modules/PasswordRequirements.module.css'
-import type { PasswordRequirementsProps, RuleProps } from '../utils/types'
+import styles from '../modules/PasswordRequirements.module.css';
+import type { PasswordRequirementsProps, RuleProps } from '../types/auth';
 
-export const PasswordRequirements: React.FC<PasswordRequirementsProps> = ({passwordValue}) => {
-    const rules:RuleProps[] = [
-        {label:'At least 8 characters',met:passwordValue.length >= 8},
-        {label:'At least one uppercase letter',met:/[A-Z]/.test(passwordValue)},
-        {label:'At least one lowercase letter',met:/[a-z]/.test(passwordValue)},
-        {label:'At least one number',met:/[0-9]/.test(passwordValue)},
-        {label:'At least one special character',met:/[^A-Za-z0-9]/.test(passwordValue)}
+export const PasswordRequirements: React.FC<PasswordRequirementsProps> = ({ passwordValue }) => {
+    const rules: RuleProps[] = [
+        { label: 'At least 8 characters', met: passwordValue.length >= 8 },
+        { label: 'At least one uppercase letter', met: /[A-Z]/.test(passwordValue) },
+        { label: 'At least one lowercase letter', met: /[a-z]/.test(passwordValue) },
+        { label: 'At least one number', met: /[0-9]/.test(passwordValue) },
+        { label: 'At least one special character', met: /[^A-Za-z0-9]/.test(passwordValue) }
     ];
 
     return (

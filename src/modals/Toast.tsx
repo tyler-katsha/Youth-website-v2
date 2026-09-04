@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import styles from "../modules/Toast.module.css";
-import type { ToastProps } from "../utils/types";
+import type { ToastProps } from "../types/modal";
 
 export const Toast = ({ message, type, onClose, duration = 5000 }: ToastProps) => {
   useEffect(() => {

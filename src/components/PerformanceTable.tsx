@@ -1,8 +1,8 @@
 import styles from '../modules/Logs.module.css';
-import type { PerformanceGraphProps } from "../utils/types";
+import type { PerformanceGraphProps } from '../types/performance';
 import { parseCreatedAt } from '../utils/Utils';
 
-export const PerformanceTable: React.FC<PerformanceGraphProps> = ({ performances,searchTerm = "", onRowClick }) => {
+export const PerformanceTable: React.FC<PerformanceGraphProps> = ({ performances, searchTerm = "", onRowClick }) => {
 
     const filteredPerformances = performances.filter((performance) =>
         (performance.description || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -28,7 +28,7 @@ export const PerformanceTable: React.FC<PerformanceGraphProps> = ({ performances
                             <td colSpan={5} className={styles.emptyState}>No records found.</td>
                         </tr>
                     ) : (
-                        filteredPerformances.map((p,index) => (
+                        filteredPerformances.map((p, index) => (
                             <tr key={index} onClick={() => onRowClick?.(p)} style={{ cursor: 'pointer' }}>
                                 <td>{parseCreatedAt(p.createdAt).toLocaleString()}</td>
                                 <td>{p.description ?? "N/A"}</td>

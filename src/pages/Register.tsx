@@ -1,14 +1,16 @@
-import { Link } from 'react-router-dom';
-import styles from '../modules/Auth.module.css';
-import editModalStyles from '../modules/EditModal.module.css'
-import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
-import { API } from '../utils/API';
-import { CustomPopup } from '../popups/CustomPopup';
-import { FileUpload } from '../components/FileUpload';
-import { acceptArray, type RegisterPayload, type ToastResponse } from '../utils/types';
 import imageCompression from 'browser-image-compression';
-import { PasswordRequirements } from '../components/PasswordRequirements';
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { FileUpload } from '../components/FileUpload';
 import { OAuthLogin } from '../components/OAuthLogin';
+import { PasswordRequirements } from '../components/PasswordRequirements';
+import styles from '../modules/Auth.module.css';
+import editModalStyles from '../modules/EditModal.module.css';
+import { CustomPopup } from '../popups/CustomPopup';
+import { API } from '../utils/API';
+import { acceptArray } from '../types/arrays';
+import type { RegisterPayload } from '../types/auth';
+import type { ToastResponse } from '../types/types';
 
 
 export const Register = () => {
@@ -66,7 +68,7 @@ export const Register = () => {
             return;
         }
 
-        if(!/[A-Z]/.test(data.password)){
+        if (!/[A-Z]/.test(data.password)) {
             setPopupConfig({
                 isOpen: true,
                 type: "error",
@@ -76,7 +78,7 @@ export const Register = () => {
             return;
         }
 
-        if(!/[a-z]/.test(data.password)){
+        if (!/[a-z]/.test(data.password)) {
             setPopupConfig({
                 isOpen: true,
                 type: "error",
@@ -86,7 +88,7 @@ export const Register = () => {
             return;
         }
 
-        if(!/[0-9]/.test(data.password)){
+        if (!/[0-9]/.test(data.password)) {
             setPopupConfig({
                 isOpen: true,
                 type: "error",
@@ -96,11 +98,11 @@ export const Register = () => {
             return;
         }
 
-        if(!/[^A-Za-z0-9]/.test(data.password)){
+        if (!/[^A-Za-z0-9]/.test(data.password)) {
             setPopupConfig({
-                isOpen:true,
-                type:'error',
-                message:"Password must include at least one special character"
+                isOpen: true,
+                type: 'error',
+                message: "Password must include at least one special character"
             });
             setLoading(false);
             return;
@@ -112,8 +114,8 @@ export const Register = () => {
         formData.append('email', data.email.trim());
         formData.append('dateOfBirth', data.dateOfBirth);
         formData.append('password', data.password);
-        if(data.bio){
-            formData.append('bio',data.bio);
+        if (data.bio) {
+            formData.append('bio', data.bio);
         }
 
         if (data.profileImageUrl) {
@@ -227,7 +229,7 @@ export const Register = () => {
                         <button type="button" className={styles.toggleBtn} onClick={toggleConfirmPasswordVisibility}>{showConfirmPassword ? 'Hide' : 'Show'}</button>
                     </div>
 
-                    <PasswordRequirements passwordValue={data.password}/>
+                    <PasswordRequirements passwordValue={data.password} />
 
                     <div className={styles.inputGroup}>
                         <label>Profile Image (Optional):</label>
@@ -235,30 +237,30 @@ export const Register = () => {
                     </div>
 
                     <div className={editModalStyles.formGroup}>
-                    <label htmlFor="bio">Add Bio</label>
-                    <textarea
-                        id="bio"
-                        className={editModalStyles.textareaField}
-                        value={data.bio}
-                        maxLength={250}
-                        onChange={(e) => setData(prev => ({ ...prev, bio: e.target.value }))}
-                        rows={5}
-                    />
-                    <div className={editModalStyles.bioFooter}>
-                        <div className={editModalStyles.progressTrack}>
-                            <div className={`${editModalStyles.progressFill} ${data.bio.length === 250 ? editModalStyles.danger : data.bio.length >= 225 ? editModalStyles.warning : ""}`} style={{width : `${(data.bio.length / 250) * 100}%`}}/>
-                        </div>
+                        <label htmlFor="bio">Add Bio</label>
+                        <textarea
+                            id="bio"
+                            className={editModalStyles.textareaField}
+                            value={data.bio}
+                            maxLength={250}
+                            onChange={(e) => setData(prev => ({ ...prev, bio: e.target.value }))}
+                            rows={5}
+                        />
+                        <div className={editModalStyles.bioFooter}>
+                            <div className={editModalStyles.progressTrack}>
+                                <div className={`${editModalStyles.progressFill} ${data.bio.length === 250 ? editModalStyles.danger : data.bio.length >= 225 ? editModalStyles.warning : ""}`} style={{ width: `${(data.bio.length / 250) * 100}%` }} />
+                            </div>
 
-                         <span className={`${editModalStyles.charCount} ${data.bio.length >= 225 ? editModalStyles.warningText : ""} ${data.bio.length === 250 ? editModalStyles.dangerText : ""}`}>{data.bio.length}/250</span>
+                            <span className={`${editModalStyles.charCount} ${data.bio.length >= 225 ? editModalStyles.warningText : ""} ${data.bio.length === 250 ? editModalStyles.dangerText : ""}`}>{data.bio.length}/250</span>
+                        </div>
                     </div>
-                </div>
                     <button type="submit" className={styles.submitBtn} disabled={loading}>{loading ? "Registering..." : "Register"}</button>
 
                     <Link className={styles.linkText} to='/login'>Already have an account? Log in</Link>
-                    
+
                 </form>
 
-                <OAuthLogin/>
+                <OAuthLogin />
 
             </div>
         </div>

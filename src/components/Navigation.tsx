@@ -1,57 +1,30 @@
-import styles from '../modules/Navigation.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { Profile } from './Profile';
 import { useUser } from '../contexts/UserContext';
-import { NotificationInbox } from './NotificationInbox';
-import { RedirectUser } from './RedirectUser';
-import { getToken } from '../utils/Utils';
-import type { NavigationProps } from '../utils/types';
+import styles from '../modules/Navigation.module.css';
 import { API } from '../utils/API';
+import { getToken } from '../utils/Utils';
+import { NotificationInbox } from './NotificationInbox';
+import { Profile } from './Profile';
+import { RedirectUser } from './RedirectUser';
+import type { NavigationProps } from '../types/navigation';
 
 export const Navigation: React.FC<NavigationProps> = ({ title }) => {
     const navigate = useNavigate();
 
-    const { user , logout } = useUser();
-
+    const { user, logout } = useUser();
 
     const isLoggedIn = !user?.roles.includes('GUEST');
 
     const isAdmin = user?.roles.includes('ADMIN');
     const isLeaderOrAdmin = user?.roles.includes('ADMIN') || user?.roles.includes('YOUTH_LEADER');
 
-    const signout = async () => {
-        const token = getToken();
-
-        try {
-            const response = await fetch(`${API}/auth/logout`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Logout failed: ${response.status}`);
-            }
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    };
-
     const handleLogout = async () => {
-        try {
-            await signout();
-        } catch(error){
-            console.error(error)
-        } finally {
-            logout();
-        }
+        logout();
     };
 
-    const GuestLogin = async() => {
+    const GuestLogin = async () => {
         const token = getToken();
-        try{
+        try {
 
             const response = await fetch(`${API}/auth/guest/redirect?token=${token}`, {
                 method: "POST",
@@ -65,7 +38,7 @@ export const Navigation: React.FC<NavigationProps> = ({ title }) => {
             }
 
             console.log('Success')
-        } catch(error){
+        } catch (error) {
             console.error(error);
         }
     }

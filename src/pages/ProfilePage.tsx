@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import styles from '../modules/Profile.module.css';
 import { EditProfileModal } from '../modals/EditModal';
+import styles from '../modules/Profile.module.css';
 // import darkModeIcon from '../assets/dark-mode-icon.png';
 // import lightModeIcon from '../assets/light-mode-icon.png';
-import { useUser } from '../contexts/UserContext';
-import { API } from '../utils/API';
-import { ProfileSkeleton } from '../skeletons/pages/ProfileSkeleton';
-import { RedirectUser } from '../components/RedirectUser';
-import { ColorUtil, formatRoles, getAge, getToken, isLocal, mapProfilePayloadToProfile } from '../utils/Utils';
 import { useNavigate } from 'react-router-dom';
-import { Toast } from '../modals/Toast';
-import type { EditProfileFormData, PartialToast } from '../utils/types';
 import { Profile } from '../components/Profile';
+import { RedirectUser } from '../components/RedirectUser';
+import { useUser } from '../contexts/UserContext';
+import { Toast } from '../modals/Toast';
+import { ProfileSkeleton } from '../skeletons/pages/ProfileSkeleton';
+import type { EditProfileFormData } from '../types/user';
+import { API } from '../utils/API';
+import { getProfileColor, formatRoles, getAge, getToken, isLocal, mapProfilePayloadToProfile } from '../utils/Utils';
+import type { PartialToast } from '../types/modal';
 // import { useTheme } from '../contexts/ThemeContext';
 
 export const ProfilePage = () => {
@@ -34,7 +35,7 @@ export const ProfilePage = () => {
             const dataToSubmit = new FormData();
             dataToSubmit.append("name", formData.name);
             dataToSubmit.append("bio", formData.bio);
-            
+
             if (formData.previewUrl) {
                 dataToSubmit.append('previewUrl', formData.previewUrl);
             }
@@ -61,9 +62,9 @@ export const ProfilePage = () => {
             }
 
             const data = await response.json();
-        
+
             const saved = updateUser(mapProfilePayloadToProfile(data, user));
-            
+
             setUser(saved);
 
             setToast({
@@ -127,7 +128,7 @@ export const ProfilePage = () => {
                 <div className={styles.profileCard}>
 
                     <div className={styles.coverPhoto}>
-                        <div className={styles.avatarContainer} style={{ backgroundColor: ColorUtil(), fontSize: '1rem' }}>
+                        <div className={styles.avatarContainer} style={{ backgroundColor: getProfileColor(user.email), fontSize: '1rem' }}>
                             <div className={styles.avatarImage}>
                                 <Profile name={user.name} profileImageUrl={user.profileImageUrl} />
                             </div>

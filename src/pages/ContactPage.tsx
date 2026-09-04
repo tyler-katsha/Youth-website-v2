@@ -5,6 +5,7 @@ import { CustomPopup } from '../popups/CustomPopup';
 import { useUser } from '../contexts/UserContext';
 import { ContactSkeleton } from '../skeletons/pages/ContactSkeleton';
 import { RedirectUser } from '../components/RedirectUser';
+import { authFetch } from '../utils/client';
 
 export const ContactPage = () => {
 
@@ -43,11 +44,8 @@ export const ContactPage = () => {
         });
 
         try {
-            const response = await fetch(`${API}/email/send-email`, {
+            const response = await authFetch(`${API}/email/send-email`,{
                 method: "POST",
-                headers: { 
-                    'content-type': 'application/json'
-                },
                 body: JSON.stringify(formData)
             });
 

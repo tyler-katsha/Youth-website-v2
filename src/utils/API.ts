@@ -1,4 +1,4 @@
-const production = true;
+const production = false;
 const API_DEV = 'http://localhost:8080/api/v1';
 const API_PROD = 'https://youthengedi-app-v1-0.onrender.com/api/v1';
 const OAUTH_API_DEV = 'http://localhost:8080/oauth2/authorization';

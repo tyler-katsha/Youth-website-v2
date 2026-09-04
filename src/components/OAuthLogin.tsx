@@ -1,12 +1,10 @@
-import styles from '../modules/Auth.module.css'
-// import instagramIcon from '../assets/instagram-icon.png';
-// import facebookIcon from '../assets/facebook-icon.png';
-import googleIcon from '../assets/google-icon.png';
+import styles from '../modules/Auth.module.css';
 import { useState } from 'react';
-import type { ToastResponse } from '../utils/types';
-import { API, OAUTH_API } from '../utils/API';
 import { useNavigate } from 'react-router-dom';
+import googleIcon from '../assets/google-icon.png';
 import { useUser } from '../contexts/UserContext';
+import type { ToastResponse } from '../types/types';
+import { API, OAUTH_API } from '../utils/API';
 import { removeAll } from '../utils/Utils';
 
 export const OAuthLogin = () => {
@@ -21,7 +19,7 @@ export const OAuthLogin = () => {
 
     const handleOAuth2Login = (provider: string) => {
         removeAll();
-        
+
         try {
             window.location.href = `${OAUTH_API}/${provider}`
         } catch (err) {
@@ -53,10 +51,10 @@ export const OAuthLogin = () => {
             }
 
             const token = await response.text();
-            
+
             localStorage.setItem('isGuest', 'true');
-            localStorage.setItem('jwt-token',token);
-            
+            localStorage.setItem('jwt-token', token);
+
             continueAsGuest();
             navigate('/');
 
@@ -67,7 +65,7 @@ export const OAuthLogin = () => {
                 message: 'Something went wrong. Please try again'
             });
             navigate('/login')
-        } finally{
+        } finally {
             setIsGuestLoading(false);
         }
     }

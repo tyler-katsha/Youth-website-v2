@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState, useCallback } from "react";
-import { AnnouncementCard } from "../components/AnnouncementCard"; 
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnnouncementCard } from "../components/AnnouncementCard";
 import { Modal } from "../modals/Modal";
 import { Toast } from "../modals/Toast";
 import styles from '../modules/Announcement.module.css';
 import { API } from "../utils/API";
-import type { AnnouncementProps, PartialToast } from "../utils/types";
-import { getToken } from "../utils/Utils";
+import { authFetch } from "../utils/client";
+import type { AnnouncementProps } from "../types/announcement";
+import type { PartialToast } from "../types/modal";
 
 const INITIAL_FORM_STATE: Omit<AnnouncementProps, 'id'> = {
     title: '',
@@ -20,13 +21,13 @@ export const Announcement = () => {
     const [announcements, setAnnouncements] = useState<AnnouncementProps[]>([]);
     const [selectedRecord, setSelectedRecord] = useState<AnnouncementProps | null>(null);
     const [formData, setFormData] = useState<Omit<AnnouncementProps, 'id'>>(INITIAL_FORM_STATE);
-    
+
     const [submitting, setSubmitting] = useState(false);
     const [loading, setLoading] = useState(true);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState<number>(0);
     const [toast, setToast] = useState<PartialToast | null>(null);
-    
+
     const loaderRef = useRef<HTMLDivElement>(null);
 
     const isCreating = selectedRecord?.id === -1;
@@ -65,14 +66,7 @@ export const Announcement = () => {
     const findAnnouncements = useCallback(async (pageNumber: number) => {
         try {
             setLoading(true);
-            const response = await fetch(`${API}/announcements?page=${pageNumber}&size=30`, {
-                method: "GET",
-                credentials: 'include',
-                headers: { 
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            });
+            const response = await authFetch(`${API}/announcements?page=${pageNumber}&size=30`);
 
             if (!response.ok) {
                 const error = await response.json();
@@ -82,7 +76,7 @@ export const Announcement = () => {
             const temp = await response.json();
 
             const data = temp.content;
-            
+
             setHasMore(!data.last);
             setAnnouncements(prev => [...prev, ...data]);
             setPage(pageNumber);
@@ -96,20 +90,15 @@ export const Announcement = () => {
     const saveAnnouncement = async (dataToSave: AnnouncementProps) => {
         setSubmitting(true);
         const method = isCreating ? "POST" : "PUT";
-        
+
         try {
-            const response = await fetch(`${API}/announcements`, {
+            const response = await authFetch(`${API}/announcements`, {
                 method,
-                credentials: 'include',
-                headers: { 
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${getToken()}`
-                },
                 body: JSON.stringify(dataToSave)
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(data.message ?? 'Something went wrong. Please try again');
             }
@@ -120,9 +109,9 @@ export const Announcement = () => {
                 setAnnouncements(prev => prev.map(a => a.id === dataToSave.id ? data : a));
             }
 
-            setToast({ 
-                message: data.message ?? `Successfully ${isCreating ? 'created' : 'updated'} announcement`, 
-                type: 'success' 
+            setToast({
+                message: data.message ?? `Successfully ${isCreating ? 'created' : 'updated'} announcement`,
+                type: 'success'
             });
             closeDetails();
 
@@ -136,13 +125,8 @@ export const Announcement = () => {
     const removeAnnouncement = async (announcement: AnnouncementProps) => {
         const temp = announcement;
         try {
-            const response = await fetch(`${API}/announcements/${announcement.id}`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: { 
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                }
+            const response = await authFetch(`${API}/announcements/${announcement.id}`, {
+                method: "DELETE"
             });
 
             if (!response.ok) {
@@ -151,11 +135,11 @@ export const Announcement = () => {
             }
 
             setAnnouncements(prev => prev.filter(a => a.id !== announcement.id));
-            
+
             setToast({ message: 'Successfully removed announcement', type: 'success' });
         } catch (err: any) {
             setToast({ message: err.message, type: 'error' });
-            setAnnouncements(prev => [...prev,temp]);
+            setAnnouncements(prev => [...prev, temp]);
         }
     };
 
@@ -169,10 +153,7 @@ export const Announcement = () => {
     // dont run more than once
     // const tempMethod = async () => {
     //     try{
-    //         const response = await fetch(`${API}/tempControllerMethod`,{
-    //             method:"GET",
-    //             credentials:'include'
-    //         })
+    //         const response = await authFetch(`${API}/tempControllerMethod`);
 
     //         if(!response.ok){
     //             throw new Error('This bum method failed to run')
@@ -258,7 +239,7 @@ export const Announcement = () => {
                     <h2 className={styles.headerTitle}>Recent Announcements</h2>
                     <button className={styles.createBtn} onClick={openCreateModal}>Create Announcement +</button>
                 </div>
-                
+
                 {announcements.length === 0 ? (<div className={styles.noAnnouncements}>No Announcements</div>) : (
                     <div className={styles.gridContainer}>
                         {announcements.map((announcement) => (
@@ -270,8 +251,8 @@ export const Announcement = () => {
                 )}
             </div>
 
-            <div ref={loaderRef} style={{ height: 40, display: 'flex', justifyContent: 'center', alignContent: 'center' }}/>
-            
+            <div ref={loaderRef} style={{ height: 40, display: 'flex', justifyContent: 'center', alignContent: 'center' }} />
+
             {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         </>
     );

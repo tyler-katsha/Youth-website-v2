@@ -1,13 +1,16 @@
-import { MemberCard } from "./MemberCard";
-import styles from "../modules/MemberList.module.css";
 import { useEffect, useRef, useState } from "react";
-import { API } from "../utils/API";
-import { Modal } from "../modals/Modal";
-import type { AppRole, Member, MemberListProps, PartialToast, Status, ViewMode, YouthProfileProps } from "../utils/types";
-import { formatDate, formatRoles, getToken, validAdmin } from "../utils/Utils";
 import { useUser } from "../contexts/UserContext";
-import { RedirectUser } from "./RedirectUser";
+import { Modal } from "../modals/Modal";
 import { Toast } from "../modals/Toast";
+import styles from "../modules/MemberList.module.css";
+import { API } from "../utils/API";
+import { formatDate, formatRoles, getToken, validAdmin } from "../utils/Utils";
+import { MemberCard } from "./MemberCard";
+import { RedirectUser } from "./RedirectUser";
+import type { PartialToast } from "../types/modal";
+import type { ViewMode, AppRole, Status } from "../types/types";
+import type { MemberListProps, Member, YouthProfileProps } from "../types/user";
+import { authFetch } from "../utils/client";
 
 export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
@@ -40,14 +43,9 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
         setIsUpgradingRole(true);
 
         try {
-            const res = await fetch(`${API}/users/role/${selectedRecord.email}/upgrade`, {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${getToken()}`
-                },
-            });
+            const res = await authFetch(`${API}/users/role/${selectedRecord.email}/upgrade`,{
+                method: 'PUT'
+            })
 
             if (!res.ok) {
                 throw new Error("Failed to upgrade role");
@@ -74,19 +72,14 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
         setIsDowngradingRole(true);
 
         try {
-            const res = await fetch(`${API}/users/role/${selectedRecord.email}/downgrade`, {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${getToken()}`
-                },
+            const res = await authFetch(`${API}/users/role/${selectedRecord.email}/downgrade`,{
+                method: "PUT"
             });
 
             if (!res.ok) {
                 throw new Error("Failed to downgrade role");
             }
-            
+
             const updatedUser: YouthProfileProps = await res.json();
 
             setUsers(prev => prev.map(member => member.email === updatedUser.email ? updatedUser : member));
@@ -96,7 +89,6 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
             setToast({ message: `Successfully downgraded role`, type: 'success' });
 
         } catch (err) {
-            console.error(err)
             setToast({ message: 'Failed to downgrade role', type: 'error' });
         } finally {
             setIsDowngradingRole(false);
@@ -108,12 +100,8 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
 
         if (!selectedRecord) return;
         try {
-            const response = await fetch(`${API}/users/${selectedRecord.email}/deactivate`, {
-                method: "PUT",
-                credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${getToken()}`
-                }
+            const response = await authFetch(`${API}/users/${selectedRecord.email}/deactivate`,{
+                method: "PUT"
             });
 
             if (!response.ok) {
@@ -134,13 +122,8 @@ export const MemberList: React.FC<MemberListProps> = ({ title }) => {
     const handleActivate = async () => {
         if (!selectedRecord) return;
         try {
-            const response = await fetch(`${API}/users/${selectedRecord.email}/activate`, {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                }
+            const response = await authFetch(`${API}/users/${selectedRecord.email}/activate`,{
+                method: "PUT"
             });
 
             if (!response.ok) {

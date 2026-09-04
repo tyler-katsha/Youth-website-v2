@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
-import styles from '../modules/Auth.module.css';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { API } from '../utils/API';
-import { CustomPopup } from '../popups/CustomPopup';
-import { useUser } from '../contexts/UserContext';
-import { errorMessages, type LoginPayload, type ToastResponse } from '../utils/types';
 import { OAuthLogin } from '../components/OAuthLogin';
+import { useUser } from '../contexts/UserContext';
+import styles from '../modules/Auth.module.css';
+import { CustomPopup } from '../popups/CustomPopup';
+import { errorMessages } from '../types/error';
+import { type ToastResponse } from '../types/types';
+import { API } from '../utils/API';
 import { removeAll } from '../utils/Utils';
+import type { AuthTokens, LoginPayload } from '../types/auth';
+import { saveAuthTokens } from '../utils/tokenStorage';
 
 export const Login = () => {
-    
-    localStorage.setItem('login-register-pages','true')
+
+    localStorage.setItem('login-register-pages', 'true')
     const navigate = useNavigate();
     const { fetchUser } = useUser();
     const [searchParams] = useSearchParams();
@@ -45,7 +48,7 @@ export const Login = () => {
         removeAll();
 
         try {
-            
+
             const response = await fetch(`${API}/auth/login`, {
                 method: "POST",
                 headers: {
@@ -74,10 +77,11 @@ export const Login = () => {
                 });
                 return;
             }
+
+            const authData:AuthTokens = await response.json();
             
-            const token = await response.text();
-            localStorage.setItem('jwt-token',token);
-              
+            saveAuthTokens(authData);
+            
             setPopupConfig({
                 isOpen: true,
                 type: 'success',
@@ -94,8 +98,6 @@ export const Login = () => {
                 type: 'error',
                 message: 'Something went wrong. Please try again'
             });
-        } finally {
-            removeAll()
         }
     }
 
@@ -139,7 +141,7 @@ export const Login = () => {
                             <button type="button" className={styles.toggleBtn} onClick={togglePasswordVisibility}>{showPassword ? 'Hide' : 'Show'}</button>
                         </div>
 
-                       <Link className={styles.linkText} to='/reset-email'>Forgot Password?</Link>
+                        <Link className={styles.linkText} to='/reset-email'>Forgot Password?</Link>
 
                         <button type="submit" className={styles.submitBtn}>Sign In</button>
 

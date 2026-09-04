@@ -1,25 +1,26 @@
 import { useState } from 'react';
-import styles from '../modules/Auth.module.css'
-import { API } from '../utils/API';
 import { useNavigate } from 'react-router-dom';
-import { CustomPopup } from '../popups/CustomPopup';
-import type { ToastResponse } from '../utils/types';
 import { PasswordRequirements } from '../components/PasswordRequirements';
+import styles from '../modules/Auth.module.css';
+import { CustomPopup } from '../popups/CustomPopup';
+import type { ToastResponse } from '../types/types';
+import { API } from '../utils/API';
+import { authFetch } from '../utils/client';
 
 export const ResetPassword = () => {
-    
+
     const isGuest = localStorage.getItem('isGuest')
 
     const navigate = useNavigate();
-    const redirectionPath = isGuest ? '/login':  '/profile'
+    const redirectionPath = isGuest ? '/login' : '/profile'
     const queryParams = new URLSearchParams(window.location.search);
     const token = queryParams.get('token')
     const email = queryParams.get('email');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [password,setPassword] = useState('');
-    const [confirmPassword,setConfirmPassword] = useState('')
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('')
 
     const [popupConfig, setPopupConfig] = useState({
         isOpen: false,
@@ -60,7 +61,7 @@ export const ResetPassword = () => {
             return;
         }
 
-        if(!/[A-Z]/.test(password)){
+        if (!/[A-Z]/.test(password)) {
             setPopupConfig({
                 isOpen: true,
                 type: "error",
@@ -70,7 +71,7 @@ export const ResetPassword = () => {
             return;
         }
 
-        if(!/[a-z]/.test(password)){
+        if (!/[a-z]/.test(password)) {
             setPopupConfig({
                 isOpen: true,
                 type: "error",
@@ -80,7 +81,7 @@ export const ResetPassword = () => {
             return;
         }
 
-        if(!/[0-9]/.test(password)){
+        if (!/[0-9]/.test(password)) {
             setPopupConfig({
                 isOpen: true,
                 type: "error",
@@ -90,29 +91,26 @@ export const ResetPassword = () => {
             return;
         }
 
-        if(!/[^A-Za-z0-9]/.test(password)){
+        if (!/[^A-Za-z0-9]/.test(password)) {
             setPopupConfig({
-                isOpen:true,
-                type:'error',
-                message:"Password must include at least one special character"
+                isOpen: true,
+                type: 'error',
+                message: "Password must include at least one special character"
             });
             setLoading(false);
             return;
         }
 
         try {
-            const response = await fetch(`${API}/auth/forgot-password`, {
-                method: 'POST',
-                headers: {
-                    'content-type':'application/json'
-                },
+            const response = await authFetch(`${API}/auth/forgot-password`,{
+                method: "POST",
                 body: JSON.stringify(
-                {
-                    'email': email,
-                    'password': password,
-                    'token': token,
-                })
-            })
+                    {
+                        'email': email,
+                        'password': password,
+                        'token': token,
+                    })
+            });
 
             if (!response.ok) {
 
@@ -171,11 +169,11 @@ export const ResetPassword = () => {
                         <button type="button" className={styles.toggleBtn} onClick={toggleConfirmPasswordVisibility}>{showConfirmPassword ? 'Hide' : 'Show'}</button>
                     </div>
 
-                    <PasswordRequirements passwordValue={password}/>
+                    <PasswordRequirements passwordValue={password} />
 
                     <button type="button" onClick={profilePage} className={styles.submitBtn} disabled={loading}>Cancel</button>
                     <button type="submit" className={styles.submitBtn} disabled={loading}>{loading ? "Resetting password..." : "Reset password"}</button>
-                    
+
                 </form>
             </div>
         </div>

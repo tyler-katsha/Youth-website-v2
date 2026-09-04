@@ -1,16 +1,19 @@
-import styles from '../modules/Gallery.module.css';
-import { useUser } from "../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { GallerySkeleton } from "../skeletons/pages/GallarySkeleton";
-import { RedirectUser } from "../components/RedirectUser";
-import { API } from "../utils/API";
-import { Modal } from "../modals/Modal";
+import { useNavigate } from "react-router-dom";
 import { FileUpload } from "../components/FileUpload";
-import { acceptArray, CHUNK_SIZE, type FileUploadRef, type GalleryImage, type PartialToast } from "../utils/types";
 import { Profile } from "../components/Profile";
-import { extractName, formatDate, getToken } from "../utils/Utils";
+import { RedirectUser } from "../components/RedirectUser";
+import { useUser } from "../contexts/UserContext";
+import { Modal } from "../modals/Modal";
 import { Toast } from "../modals/Toast";
+import styles from '../modules/Gallery.module.css';
+import { GallerySkeleton } from "../skeletons/pages/GallarySkeleton";
+import { API } from "../utils/API";
+import { extractName, formatDate, getToken } from "../utils/Utils";
+import { authFetch } from "../utils/client";
+import type { PartialToast } from "../types/modal";
+import { acceptArray } from "../types/arrays";
+import { type GalleryImage, type FileUploadRef, CHUNK_SIZE } from "../types/image";
 
 export const Gallery = () => {
     const { user, isLoading } = useUser();
@@ -43,14 +46,7 @@ export const Gallery = () => {
 
         try {
 
-            const response = await fetch(`${API}/images?page=${pageNumber}&size=100`, {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            });
+            const response = await authFetch(`${API}/images?page=${pageNumber}&size=100`);
 
             if (!response.ok) {
                 const data = await response.json();
@@ -100,13 +96,9 @@ export const Gallery = () => {
                     const formData = new FormData();
                     formData.append("image", file);
 
-                    const response = await fetch(`${API}/images/upload`, {
+                    const response = await authFetch(`${API}/images/upload`,{
                         method: "POST",
-                        credentials: "include",
-                        body: formData,
-                        headers: {
-                            'Authorization': `Bearer ${getToken()}`
-                        }
+                        body: formData
                     });
                     if (!response.ok) {
                         const data = await response.json();

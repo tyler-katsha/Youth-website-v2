@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import styles from '../modules/NotificationInbox.module.css';
-import type { AnnouncementProps } from '../utils/types';
 import { API } from '../utils/API';
-import { getToken } from '../utils/Utils';
+import type { AnnouncementProps } from '../types/announcement';
+import { authFetch } from '../utils/client';
 
 export const NotificationInbox = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,17 +15,10 @@ export const NotificationInbox = () => {
 
 
     const findAnnouncements = useCallback(async (pageNumber: number) => {
-        const token = getToken();
 
         try {
             setLoading(true);
-            const response = await fetch(`${API}/announcements?page=${pageNumber}&size=30`, {
-                method: "GET",
-                headers: { 
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await authFetch(`${API}/announcements?page=${pageNumber}&size=30`);
 
             if (!response.ok) {
                 const error = await response.json();
@@ -44,48 +37,49 @@ export const NotificationInbox = () => {
             setLoading(false);
         }
     }, []);
+
     useEffect(() => {
         findAnnouncements(0);
     }, []);
 
     return (
         <>
-        <div className={styles.inboxWrapper}>
+            <div className={styles.inboxWrapper}>
 
-            <button className={styles.bellBtn} onClick={toggleOpen} aria-label="Notifications">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                </svg>
-            </button>
+                <button className={styles.bellBtn} onClick={toggleOpen} aria-label="Notifications">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </button>
 
-            {isOpen && (
-                <div className={styles.inboxDropdown}>
-                    <div className={styles.inboxHeader}>
-                        <h3>Notifications</h3>
-                    </div>
+                {isOpen && (
+                    <div className={styles.inboxDropdown}>
+                        <div className={styles.inboxHeader}>
+                            <h3>Notifications</h3>
+                        </div>
 
-                    <div className={styles.inboxList}>
-                        {announcements.length === 0 ? (
-                            <div className={styles.emptyState}>No new announcements</div>
-                        ) : (
-                            announcements.map((announcement: AnnouncementProps) => (
-                                <div key={announcement.title} className={styles.notifItem}>
-                                    <div className={`${styles.notifIndicator} ${styles[announcement.type]}`}></div>
+                        <div className={styles.inboxList}>
+                            {announcements.length === 0 ? (
+                                <div className={styles.emptyState}>No new announcements</div>
+                            ) : (
+                                announcements.map((announcement: AnnouncementProps) => (
+                                    <div key={announcement.title} className={styles.notifItem}>
+                                        <div className={`${styles.notifIndicator} ${styles[announcement.type]}`}></div>
 
-                                    <div className={styles.notifContent}>
-                                        <div className={styles.notifTitleRow}>
-                                            <h4>{announcement.title}</h4>
-                                            <span className={styles.notifTime}>{announcement.expiresAt}</span>
+                                        <div className={styles.notifContent}>
+                                            <div className={styles.notifTitleRow}>
+                                                <h4>{announcement.title}</h4>
+                                                <span className={styles.notifTime}>{announcement.expiresAt}</span>
+                                            </div>
+                                            <p className={styles.notifMessage}>{announcement.message}</p>
                                         </div>
-                                        <p className={styles.notifMessage}>{announcement.message}</p>
                                     </div>
-                                </div>
-                            )))}
+                                )))}
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
 
         </>
     );

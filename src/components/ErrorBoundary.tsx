@@ -1,18 +1,17 @@
 import { Component, type ErrorInfo } from "react";
-import styles from '../modules/ErrorBoundary.module.css'
-import type { Props, State } from "../utils/types";
+import styles from '../modules/ErrorBoundary.module.css';
+import type { Props, State } from "../types/error";
+export class ErrorBoundary extends Component<Props, State> {
 
-export class ErrorBoundary extends Component<Props,State>{
-    
-    public state:State = {hasError:false};
+    public state: State = { hasError: false };
 
-    static getDerivedStateFromError(error:Error): State{
-        return {hasError:true,error};
+    static getDerivedStateFromError(error: Error): State {
+        return { hasError: true, error };
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-        console.error('ErrorBoundary caught an error:',error,errorInfo);
-        
+        console.error('ErrorBoundary caught an error:', error, errorInfo);
+
         // Later call an api to add to database
     }
 
@@ -25,10 +24,10 @@ export class ErrorBoundary extends Component<Props,State>{
         // Reload the page
         window.location.reload();
     };
-    render(){
+    render() {
 
-        if(this.state.hasError){
-            return(
+        if (this.state.hasError) {
+            return (
                 <div className={styles.errorContainer}>
                     <h1 className={styles.errorTitle}>{this.props.title ?? "Opps! Something went wrong"}</h1>
                     <p className={styles.errorMessage}>

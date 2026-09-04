@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Calendar } from "../components/Calendar";
-import { CalendarSkeleton } from "../skeletons/pages/CalendarSkeleton";
-import { useUser } from "../contexts/UserContext";
-import { API } from "../utils/API";
-import { eventColors, times, type EventType, type PartialPlan, type PartialToast, type Plan } from "../utils/types";
-import style from '../modules/CalendarPage.module.css';
-import { formatTime, getToken, isPermitted, resetCalendarForm } from "../utils/Utils";
-import { Toast } from "../modals/Toast";
 import { RedirectUser } from "../components/RedirectUser";
+import { useUser } from "../contexts/UserContext";
+import { Toast } from "../modals/Toast";
+import style from '../modules/CalendarPage.module.css';
+import { CalendarSkeleton } from "../skeletons/pages/CalendarSkeleton";
+import { type PartialPlan, type Plan } from "../types/event";
+import { eventColors, times, type EventType } from "../types/types";
+import { API } from "../utils/API";
+import { formatTime, isPermitted, resetCalendarForm } from "../utils/Utils";
+import type { PartialToast } from "../types/modal";
+import { authFetch } from "../utils/client";
 
 export const CalendarPage = () => {
     const { user, isLoading: userLoading } = useUser();
@@ -18,7 +21,7 @@ export const CalendarPage = () => {
     const [updatingPlans, setUpdatingPlans] = useState<Set<number>>(new Set());
     const [deletingPlans, setDeletingPlans] = useState<Set<number>>(new Set());
     const [isFormOpen, setIsFormOpen] = useState(false);
-    const [isSaving,setIsSaving] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [formData, setFormData] = useState<PartialPlan>({
         title: '',
@@ -34,27 +37,20 @@ export const CalendarPage = () => {
     const todaysPlans = plans.filter(plan => plan.dateKey === dateKey);
 
     const timeOptions = times.map((time) => (<option key={time} value={time}>{time}</option>))
-    
+
     const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const loaderRef = useRef<HTMLDivElement>(null);
 
     const fetchAllEvents = async (pageNumber: number) => {
-        const token = getToken();
 
         try {
-            const response = await fetch(`${API}/event/events?page=${pageNumber}&size=100`, { 
-                method: 'GET',
-                credentials: "include",
-                headers: { 
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await authFetch(`${API}/event/events?page=${pageNumber}&size=100`);
+
             if (!response.ok) {
                 const error = await response.json();
-                setToast({message: error.message ?? "Failed to find all events.",type:"error"});
+                setToast({ message: error.message ?? "Failed to find all events.", type: "error" });
                 return;
             }
 
@@ -67,12 +63,12 @@ export const CalendarPage = () => {
             setHasMore(!temp.last);
 
             setPage(pageNumber);
-        } catch (err) { 
-            setToast({message: "Something went wrong. Please try again",type:"error"}); 
+        } catch (err) {
+            setToast({ message: "Something went wrong. Please try again", type: "error" });
         }
-        finally { 
+        finally {
             setIsPageLoading(false);
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -101,22 +97,16 @@ export const CalendarPage = () => {
 
         setPlans(prev => currentEditingId !== null ? prev.map(plan => plan.id === currentEditingId ? optimisticPlan : plan) : [...prev, optimisticPlan]);
 
-        const token = getToken();
         try {
 
-            const response = await fetch(url, {
+            const response = await authFetch(url,{
                 method,
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ ...formData, dateKey }),
+                body: JSON.stringify({...formData,dateKey})
             });
 
             if (!response.ok) {
                 const error = await response.json();
-                setToast({message: error.message ?? "Failed to save plan.",type:"error"});
+                setToast({ message: error.message ?? "Failed to save plan.", type: "error" });
                 return;
             }
 
@@ -128,11 +118,11 @@ export const CalendarPage = () => {
             setIsFormOpen(false);
             setEditingId(null);
 
-            setToast({message: "Successfully added event. Check inbox/Announcements",type:"success"});
+            setToast({ message: "Successfully added event. Check inbox/Announcements", type: "success" });
         } catch (err) {
-            setToast({message: "Something went wrong. Please try again",type:"error"});
+            setToast({ message: "Something went wrong. Please try again", type: "error" });
 
-            rollBackChanges(currentEditingId,tempId,originalPlan);
+            rollBackChanges(currentEditingId, tempId, originalPlan);
         } finally {
             if (currentEditingId !== null) {
                 setUpdatingPlans(prev => {
@@ -161,27 +151,23 @@ export const CalendarPage = () => {
     };
 
     const handleDeletePlan = async (id: number) => {
+
         setDeletingPlans(prev => new Set(prev).add(id));
-        const token = getToken();
+
         try {
-            const response = await fetch(`${API}/event/events/${id}`, { 
-                method: "DELETE", 
-                credentials: "include",
-                headers: { 
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await authFetch(`${API}/event/events/${id}`,{
+                method: "DELETE"
+            }); 
             setPlans(prev => prev.filter(p => p.id !== id));
-            
-            if(!response.ok){
+
+            if (!response.ok) {
                 const error = await response.json();
-                setToast({message: error.message ?? "Failed to save plan.",type:"error"});
+                setToast({ message: error.message ?? "Failed to save plan.", type: "error" });
                 return;
             }
-            setToast({message: "Successfully deleted event",type:"success"});
-        } catch (err) { 
-            setToast({message: "Something went wrong. Please try again",type:"error"});
+            setToast({ message: "Successfully deleted event", type: "success" });
+        } catch (err) {
+            setToast({ message: "Something went wrong. Please try again", type: "error" });
         }
         finally {
             setDeletingPlans(prev => {
@@ -192,9 +178,9 @@ export const CalendarPage = () => {
         }
     };
 
-    const rollBackChanges = (currentEditingId:number | null,tempId:number,originalPlan:Plan|null) => {
+    const rollBackChanges = (currentEditingId: number | null, tempId: number, originalPlan: Plan | null) => {
         setPlans(prev => {
-            if(currentEditingId === null){
+            if (currentEditingId === null) {
                 return prev.filter(plan => plan.id !== tempId);
             }
 
@@ -206,22 +192,22 @@ export const CalendarPage = () => {
         fetchAllEvents(0);
     }, []);
     useEffect(() => {
-    
-            const observer = new IntersectionObserver(entries => {
-    
-                if (entries[0].isIntersecting && hasMore && !loading) {
-                    fetchAllEvents(page + 1);
-                }
-            }, { threshold: 0.1, rootMargin: '200px' });
-    
-            if (loaderRef.current) {
-                observer.observe(loaderRef.current);
-            }
-    
-            return () => observer.disconnect()
-        }, [page, hasMore, loading])
 
-    if (!user) return <RedirectUser/>;
+        const observer = new IntersectionObserver(entries => {
+
+            if (entries[0].isIntersecting && hasMore && !loading) {
+                fetchAllEvents(page + 1);
+            }
+        }, { threshold: 0.1, rootMargin: '200px' });
+
+        if (loaderRef.current) {
+            observer.observe(loaderRef.current);
+        }
+
+        return () => observer.disconnect()
+    }, [page, hasMore, loading])
+
+    if (!user) return <RedirectUser />;
     if (userLoading || isPageLoading) return <CalendarSkeleton />;
 
     return (
@@ -231,7 +217,7 @@ export const CalendarPage = () => {
                     <div className={style.calendarSection}>
                         <Calendar plans={plans} onDateSelect={(date) => { setSelectedDate(date); setIsFormOpen(false); }} />
                     </div>
-                    
+
                     <div className={style.eventsPanel}>
                         <div className={style.panelHeader}>
                             <h2>{formattedDate}</h2>

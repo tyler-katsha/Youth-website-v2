@@ -1,11 +1,14 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Client } from "@stomp/stompjs";
-import { connectionTypeArray, type ChartEvent, type ConnectionType, type RawEvent, type TrafficPayload } from '../utils/types';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import styles from '../modules/PerformanceDashboard.module.css';
+import { API, WEBSOCKET_API } from '../utils/API';
 import { getToken } from '../utils/Utils';
 import { RedirectUser } from './RedirectUser';
-import { API, WEBSOCKET_API } from '../utils/API';
+import { connectionTypeArray } from "../types/arrays";
+import type { ConnectionType } from "../types/types";
+import type { ChartEvent, RawEvent, TrafficPayload } from "../types/websocket";
+import { authFetch } from "../utils/client";
 
 export const PerformanceDashboard: React.FC = () => {
     const [events, setEvents] = useState<ChartEvent[]>([]);
@@ -15,10 +18,10 @@ export const PerformanceDashboard: React.FC = () => {
     const clientRef = useRef<Client | null>(null);
 
     const formatTime = (timestamp: number | string): string => {
-        return new Date(timestamp).toLocaleTimeString([], { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit' 
+        return new Date(timestamp).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
         });
     };
 
@@ -40,41 +43,33 @@ export const PerformanceDashboard: React.FC = () => {
             return;
         }
 
-        const headers = { 
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        const fetchDashboardData = async () => {
+            try {
+                const [statsRes, recentRes] = await Promise.all([authFetch(`${API}/dashboard/stats`), authFetch(`${API}/dashboard/recent`)]);
+
+                if (statsRes.status === 403 || recentRes.status === 403 || statsRes.status === 401 || recentRes.status === 401) {
+                    setHasAuthError(true);
+                    return;
+                }
+
+                if (statsRes.ok) {
+                    const statsData = await statsRes.json();
+                    if (typeof statsData?.currentSize === 'number') setBufferSize(statsData.currentSize);
+                    if (typeof statsData?.maxSize === 'number') setMaxBufferSize(statsData.maxSize);
+                }
+
+                if (recentRes.ok) {
+                    const history: RawEvent[] = await recentRes.json();
+                    if (Array.isArray(history)) {
+                        setEvents(history.map(mapRawToChartEvent).slice(-20));
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load dashboard data:', err);
+            }
         };
 
-        fetch(`${API}/dashboard/stats`, { headers })
-            .then(res => {
-                if (res.status === 401 || res.status === 403) throw new Error("AUTH_ERROR");
-                return res.ok ? res.json() : null;
-            })
-            .then(data => {
-                if (data) {
-                    if (typeof data.currentSize === 'number') setBufferSize(data.currentSize);
-                    if (typeof data.maxSize === 'number') setMaxBufferSize(data.maxSize);
-                }
-            })
-            .catch(err => {
-                if (err.message === "AUTH_ERROR") setHasAuthError(true);
-            });
-
-        fetch(`${API}/dashboard/recent`, { headers })
-            .then(res => {
-                if (res.status === 401 || res.status === 403) throw new Error("AUTH_ERROR");
-                if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-                return res.json();
-            })
-            .then((history: RawEvent[]) => {
-                if (Array.isArray(history)) {
-                    setEvents(history.map(mapRawToChartEvent).slice(-20));
-                }
-            })
-            .catch(err => {
-                if (err.message === "AUTH_ERROR") setHasAuthError(true);
-                else console.error("Failed to load historical events:", err);
-            });
+        fetchDashboardData();
 
         // STOMP Real-Time Stream
         const client = new Client({
@@ -89,7 +84,6 @@ export const PerformanceDashboard: React.FC = () => {
                     try {
                         const traffic: TrafficPayload = JSON.parse(message.body);
 
-                        console.log(traffic)
                         if (typeof traffic.currentSize === 'number') {
                             setBufferSize(traffic.currentSize);
                         }

@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { useUser } from "../contexts/UserContext";
-import { PerformanceSkeleton } from "../skeletons/pages/PerformanceSkeleton";
-import { API } from "../utils/API";
-import styles from '../modules/Logs.module.css';
-import { Modal } from "../modals/Modal";
-import { RedirectUser } from "../components/RedirectUser";
-import { getToken } from "../utils/Utils";
-import { Toast } from "../modals/Toast";
-import type { PartialToast, PerformanceMetrics } from "../utils/types";
 import { PerformanceDashboard } from "../components/LiveDashboard";
 import { PerformanceGraph } from "../components/PerformanceGraph";
 import { PerformanceTable } from "../components/PerformanceTable";
+import { RedirectUser } from "../components/RedirectUser";
+import { useUser } from "../contexts/UserContext";
+import { Modal } from "../modals/Modal";
+import { Toast } from "../modals/Toast";
+import styles from '../modules/Logs.module.css';
+import { PerformanceSkeleton } from "../skeletons/pages/PerformanceSkeleton";
+import { API } from "../utils/API";
+import { getToken } from "../utils/Utils";
+import type { PartialToast } from "../types/modal";
+import type { ViewMode } from "../types/types";
+import type { PerformanceMetrics } from "../types/performance";
 
 export const Performance = () => {
     const { user, isLoading: userLoading } = useUser();
@@ -19,8 +21,8 @@ export const Performance = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [toast, setToast] = useState<PartialToast | null>(null)
     const [loading, setLoading] = useState(false);
-    
-    const [viewMode, setViewMode] = useState<"table" | "dashboard" | "graph">("table");
+
+    const [viewMode, setViewMode] = useState<ViewMode>("table");
     const [selectedRecord, setSelectedRecord] = useState<PerformanceMetrics | null>(null);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(0);
@@ -40,10 +42,10 @@ export const Performance = () => {
             const response = await fetch(`${API}/admin/performances?page=${pageNumber}&size=100`, {
                 method: 'GET',
                 credentials: 'include',
-                headers: { 
+                headers: {
                     'content-type': 'application/json',
-                    'Authorization':`Bearer ${token}`
-                 }
+                    'Authorization': `Bearer ${token}`
+                }
             });
 
             if (!response.ok) {
@@ -56,7 +58,7 @@ export const Performance = () => {
 
             const temp = await response.json();
 
-            
+
             const data: PerformanceMetrics[] = temp.content;
 
             setPerformances(prev => [...prev, ...data]);
@@ -127,17 +129,17 @@ export const Performance = () => {
                         </div>
                     </div>
 
-                    {viewMode === "dashboard" && <PerformanceDashboard/>}
+                    {viewMode === "dashboard" && <PerformanceDashboard />}
 
-                    {viewMode === "graph" && (<PerformanceGraph performances={performances.length > 0 ? performances : []}/>)}  
+                    {viewMode === "graph" && (<PerformanceGraph performances={performances.length > 0 ? performances : []} />)}
 
-                    {viewMode === 'table' && <PerformanceTable performances={performances} searchTerm={searchTerm} onRowClick={setSelectedRecord}/>}          
+                    {viewMode === 'table' && <PerformanceTable performances={performances} searchTerm={searchTerm} onRowClick={setSelectedRecord} />}
                 </div>
 
             </div>
 
             {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
-            
+
         </>
     );
 };

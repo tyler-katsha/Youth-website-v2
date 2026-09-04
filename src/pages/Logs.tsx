@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from '../modules/Logs.module.css';
-import { API } from '../utils/API';
+import { RedirectUser } from '../components/RedirectUser';
 import { useUser } from '../contexts/UserContext';
 import { Modal } from '../modals/Modal';
-import { RedirectUser } from '../components/RedirectUser';
 import { Toast } from '../modals/Toast';
-import type { AuditLog, PartialToast } from '../utils/types';
-import { getToken } from '../utils/Utils';
-
+import styles from '../modules/Logs.module.css';
+import { API } from '../utils/API';
+import type { PartialToast } from '../types/modal';
+import type { AuditLog } from '../types/log';
+import { authFetch } from '../utils/client';
 
 export const Logs = () => {
-
 
     const [logs, setLogs] = useState<AuditLog[]>([]);
     const [_isLoading, setIsLoading] = useState(true);
@@ -27,20 +26,12 @@ export const Logs = () => {
     const closeDetails = () => setSelectedRecord(null);
 
     const fetchLogs = async (pageNumber: number) => {
-        const token = getToken();
         try {
-            const response = await fetch(`${API}/admin/logs?page=${pageNumber}&size=100`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await authFetch(`${API}/admin/logs?page=${pageNumber}&size=100`);
 
             if (!response.ok) {
                 const error = await response.json();
-                setToast({message: error.message ?? 'Failed to fetch logs',type:'error'})
+                setToast({ message: error.message ?? 'Failed to fetch logs', type: 'error' })
                 return;
             }
 
@@ -54,7 +45,7 @@ export const Logs = () => {
 
             setPage(pageNumber);
         } catch (error) {
-            setToast({message: 'Could not load system logs.',type:'error'})
+            setToast({ message: 'Could not load system logs.', type: 'error' })
         } finally {
             setIsLoading(false);
             setLoading(false);
@@ -133,7 +124,7 @@ export const Logs = () => {
                                             <td colSpan={4} className={styles.emptyState}>No logs found.</td>
                                         </tr>
                                     ) : (
-                                        filteredLogs.map((log,index) => (
+                                        filteredLogs.map((log, index) => (
                                             <tr key={index} onClick={() => openDetails(log)} style={{ cursor: 'pointer' }}>
                                                 <td>{new Date(log.now).toLocaleString()}</td>
                                                 <td className={styles.userCell}>{log.performedBy}</td>

@@ -1,12 +1,14 @@
-import { createContext, useEffect, useState, useContext } from "react";
-import { API } from "../utils/API";
-import { type ProfileProps, type UserContextType, type YouthProfileProps } from "../utils/types";
+import { createContext, useContext, useEffect, useState } from "react";
 import { HomeSkeleton } from "../skeletons/pages/HomeSkeleton";
-import { getToken } from "../utils/Utils";
+import { API } from "../utils/API";
+import { removeAll } from "../utils/Utils";
+import type { UserContextType, YouthProfileProps, ProfileProps } from "../types/user";
+import { authFetch, BigLogout } from "../utils/client";
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+
     const [user, setUser] = useState<YouthProfileProps | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const isAuthenticated = !!user;
@@ -28,11 +30,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const fetchUser = async () => {
 
-        if(localStorage.getItem('login-register-pages') === 'true'){
+        if (localStorage.getItem('login-register-pages') === 'true') {
             setIsLoading(false);
             return;
         }
-        if(localStorage.getItem('email') === 'true'){
+        if (localStorage.getItem('email') === 'true') {
             setIsLoading(false);
             return;
         }
@@ -42,14 +44,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return;
         }
         try {
-            const response = await fetch(`${API}/users/me`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: { 
-                    'content-type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            });
+            const response = await authFetch(`${API}/users/me`);
 
             if (!response.ok) {
 
@@ -86,15 +81,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
     }
 
-    const logout = () => {
-        localStorage.removeItem("jwt-token");
-        setUser(null);
+    const logout = async () => {
+        try {
+            await BigLogout();
+        } catch (error) { }
+        finally {
+            removeAll();
+            setUser(null);
+        }
     }
 
     if (!isReady) return <HomeSkeleton />;
 
     return (
-        <UserContext.Provider value={{ user, isLoading, updateUser, continueAsGuest, logout, fetchUser, updatePartialUser, isAuthenticated,setUser }}>
+        <UserContext.Provider value={{ user, isLoading, updateUser, continueAsGuest, logout, fetchUser, updatePartialUser, isAuthenticated, setUser }}>
             {children}
         </UserContext.Provider>
     )

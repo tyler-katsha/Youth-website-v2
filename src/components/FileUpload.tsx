@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import styles from "../modules/FileUpload.module.css";
-import type { FileUploadProps, FileUploadRef } from "../utils/types";
+import type { FileUploadRef, FileUploadProps } from "../types/image";
 
 export const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onFileSelect, accept, multiple = false, maxFiles = 10 }, ref) => {
     const [files, setFiles] = useState<File[]>([]);
@@ -43,7 +43,7 @@ export const FileUpload = forwardRef<FileUploadRef, FileUploadProps>(({ onFileSe
     }));
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        
+
         if (!e.target.files) return;
 
         const selected = Array.from(e.target.files);

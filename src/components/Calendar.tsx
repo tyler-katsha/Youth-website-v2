@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../modules/Calendar.module.css';
-import type { CalendarProps } from '../utils/types';
+import type { CalendarProps } from '../types/event';
 
 export const Calendar: React.FC<CalendarProps> = ({ plans = [], onDateSelect }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -13,7 +13,7 @@ export const Calendar: React.FC<CalendarProps> = ({ plans = [], onDateSelect }) 
     const firstDayOfMonth = new Date(year, month, 1).getDay();
 
     const monthNames = [
-        "January", "February", "March", "April", "May", "June", 
+        "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
     const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
@@ -52,7 +52,7 @@ export const Calendar: React.FC<CalendarProps> = ({ plans = [], onDateSelect }) 
 
                     // Find plans specifically for this day
                     const dayPlans = plans.filter(p => p.dateKey === dateKey);
-                    
+
                     // State checks for CSS classes
                     const isSelected = selectedDate?.toDateString() === dateObj.toDateString();
                     const isToday = new Date().toDateString() === dateObj.toDateString();
