@@ -164,3 +164,97 @@
   color: #9ca3af;
   font-style: italic;
 }
+
+/* ==========================================================================
+   Mobile & Small Screen Optimizations (< 640px)
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* Reduce outer gutters and avoid horizontal scroll */
+  .dashboardWrapper {
+    padding: 14px 12px;
+  }
+
+  /* Stack header elements cleanly */
+  .dashboardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .dashboardHeader h2 {
+    font-size: 1.25rem;
+  }
+
+  .liveIndicator {
+    font-size: 0.775rem;
+    padding: 4px 10px;
+  }
+
+  /* Compact grid spacing */
+  .dashboardGrid {
+    gap: 14px;
+  }
+
+  /* Card padding reduction */
+  .dashboardCard {
+    padding: 14px 12px;
+    border-radius: 10px;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+
+  /* Scale chart height for standard mobile viewports */
+  .chartContainer {
+    height: 240px;
+  }
+
+  /* Limit log container height so cards don't dominate the viewport */
+  .logsContainer {
+    height: 260px;
+    padding-right: 4px;
+    /* Native-feeling momentum scroll on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Logs layout: wrap lines and allow breakable user data */
+  .logItem {
+    padding: 10px;
+    margin-bottom: 6px;
+  }
+
+  .logHeader {
+    gap: 8px;
+  }
+
+  .logBadge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .logTime {
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .logBody {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+
+  .logUser {
+    display: inline-block;
+    margin-right: 4px;
+  }
+
+  .emptyState {
+    font-size: 0.825rem;
+    padding: 16px 0;
+  }
+}

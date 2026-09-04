@@ -195,3 +195,79 @@
     border: none;
     border-top: 1px solid #e2e8f0;
 }
+
+/* ==========================================================================
+   Mobile & Small Screen Optimizations (< 640px)
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* Reduce excessive outer whitespace */
+  .pageWrapper {
+    padding: 16px 12px;
+  }
+
+  /* Compact the main container */
+  .dashboardContainer {
+    padding: 16px 14px;
+    border-radius: 10px;
+  }
+
+  /* Stack header controls vertically */
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 1.25rem;
+  }
+
+  /* Make search and dropdown span full width */
+  .searchInput {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px; /* Prevents auto-zoom on iOS Safari focus */
+    padding: 0.65rem 0.85rem;
+  }
+
+  .dropDownBox {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    font-size: 16px; /* Prevents auto-zoom on iOS Safari focus */
+  }
+
+  /* Table adjustments for horizontal scroll */
+  .tableWrapper {
+    border-radius: 6px;
+    -webkit-overflow-scrolling: touch; /* Momentum scrolling */
+    margin: 0 -2px;
+  }
+
+  .logTable th {
+    padding: 0.75rem 0.65rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .logTable td {
+    padding: 0.75rem 0.65rem;
+    font-size: 0.85rem;
+    white-space: nowrap; /* Keeps rows structured rather than warping cells */
+  }
+
+  /* Compact status badges */
+  .statusBadge {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    letter-spacing: 0.25px;
+  }
+
+  .emptyState,
+  .loading {
+    padding: 24px !important;
+    font-size: 0.9rem;
+  }
+}

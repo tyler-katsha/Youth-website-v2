@@ -90,3 +90,64 @@
   display: block;
   margin-bottom: 4px;
 }
+
+/* ==========================================================================
+   Mobile & Small Screen Optimizations
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* Scale down graph wrapper height and padding to fit mobile viewport */
+  .graphContainer {
+    height: 300px;
+    padding: 0.875rem 0.5rem;
+    margin-top: 1rem;
+    border-radius: 6px;
+    /* Ensure child SVG/canvas doesn't overflow */
+    overflow-x: hidden;
+  }
+
+  .emptyState {
+    height: 250px;
+    margin-top: 1rem;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+
+  /* Prevent tooltip from pushing screen width or overflowing edges */
+  .customTooltip {
+    min-width: 180px;
+    max-width: calc(100vw - 32px);
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    /* Improve pointer interaction on touch devices */
+    pointer-events: none;
+  }
+
+  .tooltipDate {
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+  }
+
+  .tooltipRow {
+    font-size: 0.8rem;
+    margin: 4px 0;
+    gap: 6px;
+  }
+
+  .tooltipMethod {
+    font-size: 0.75rem;
+    padding: 1px 4px;
+  }
+
+  .tooltipDetails {
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 0.775rem;
+    max-width: 100%;
+    /* Break long error strings or hashes without wrapping bugs */
+    overflow-wrap: anywhere;
+  }
+}
