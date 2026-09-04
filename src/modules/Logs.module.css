@@ -1,218 +1,213 @@
-.pageWrapper {
-    min-height: 100vh;
-    /* A very subtle off-white to make the white dashboard card pop */
-    background-color: #f8fafc; 
-    padding: 40px 20px;
-    display: flex;
-    justify-content: center;
-    font-family: 'Inter', system-ui, sans-serif;
+/* Ensure consistent box model */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-/* --- Main Container (Matches Calendar Wrapper) --- */
+.pageWrapper {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #f8fafc;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* --- Main Container --- */
 .dashboardContainer {
-    width: 100%;
-    max-width: 1200px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-    color: #0f172a;
-    box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
 }
 
 /* --- Header --- */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .header h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #0f172a;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.015em;
+}
+
+/* Controls wrapper if search & dropdown sit side-by-side */
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .searchInput {
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background-color: #f8fafc;
-    color: #334155;
-    width: 300px;
-    outline: none;
-    transition: all 0.2s ease;
-    font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  color: #334155;
+  width: 280px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .searchInput:focus {
-    background-color: #ffffff;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background-color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
 .searchInput::placeholder {
-    color: #94a3b8;
+  color: #94a3b8;
 }
 
-/* --- The Table --- */
+/* --- Dropdown (Unified with Slate Palette) --- */
+.dropDownBox {
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 180px;
+  padding: 0.6rem 36px 0.6rem 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #334155;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  /* Crisp SVG Chevron */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
+.dropDownBox:hover {
+  border-color: #94a3b8;
+}
+
+.dropDownBox:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.dropDownOption {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+/* --- Table --- */
 .tableWrapper {
-    overflow-x: auto;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background-color: transparent;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
 }
 
 .logTable {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    background-color: transparent;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
 }
 
 .logTable th {
-    background-color: transparent;
-    padding: 1rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #64748b;
-    text-transform: uppercase;
-    border-bottom: 1px solid #e2e8f0;
+  padding: 0.85rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .logTable td {
-    padding: 1rem;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 0.95rem;
-    color: #334155;
-    background-color: transparent;
-    transition: background-color 0.2s ease;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.925rem;
+  color: #334155;
+  transition: background-color 0.15s ease;
 }
 
 .logTable tbody tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
-/* Matches the calendar day cell hover */
 .logTable tbody tr:hover td {
-    background-color: #f1f5f9; 
+  background-color: #f8fafc;
 }
 
-/* Matches the calendar selected blue */
 .userCell {
-    font-weight: 600;
-    color: #2563eb; 
-}
-
-.emptyState {
-    text-align: center;
-    padding: 40px !important;
-    color: #64748b;
-    font-weight: 500;
+  font-weight: 600;
+  color: #2563eb;
 }
 
 /* --- Status Badges --- */
 .statusBadge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    display: inline-block;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 .statusSuccess {
-    background-color: #dcfce7;
-    color: #166534;
-    border: 1px solid #bbf7d0;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
 }
 
 .statusFailed {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fecaca;
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
 }
 
+/* --- Feedback States --- */
+.emptyState,
 .loading {
-    text-align: center;
-    padding: 50px;
-    color: #64748b;
-    font-size: 1.1rem;
-    font-weight: 500;
+  text-align: center;
+  padding: 48px 16px;
+  color: #64748b;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
-.dropDownBox {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-
-    min-width: 180px;
-    padding: 10px 40px 10px 14px;
-
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-
-    background: #fff;
-    color: #1f2937;
-    font-size: 0.95rem;
-    font-weight: 500;
-
-    cursor: pointer;
-    outline: none;
-    transition: all 0.2s ease;
-
-    background-image:
-        linear-gradient(45deg, transparent 50%, #6b7280 50%),
-        linear-gradient(135deg, #6b7280 50%, transparent 50%);
-    background-position:
-        calc(100% - 18px) calc(50% - 3px),
-        calc(100% - 12px) calc(50% - 3px);
-    background-size: 6px 6px;
-    background-repeat: no-repeat;
-}
-
-.dropDownBox:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
-}
-
-.dropDownBox:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-}
-
-.dropDownOption {
-    background: #fff;
-    color: #1f2937;
-    font-size: 0.95rem;
-}
 .divider {
-    width: 100%;
-    border: none;
-    border-top: 1px solid #e2e8f0;
+  width: 100%;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 20px 0;
 }
 
-/* ==========================================================================
-   Mobile & Small Screen Optimizations (< 640px)
-   ========================================================================== */
-
+/* --- Mobile Breakpoint (< 640px) --- */
 @media (max-width: 640px) {
-  /* Reduce excessive outer whitespace */
   .pageWrapper {
-    padding: 16px 12px;
+    padding: 12px;
   }
 
-  /* Compact the main container */
   .dashboardContainer {
     padding: 16px 14px;
     border-radius: 10px;
   }
 
-  /* Stack header controls vertically */
   .header {
     flex-direction: column;
     align-items: stretch;
@@ -224,50 +219,16 @@
     font-size: 1.25rem;
   }
 
-  /* Make search and dropdown span full width */
-  .searchInput {
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 16px; /* Prevents auto-zoom on iOS Safari focus */
-    padding: 0.65rem 0.85rem;
-  }
-
+  .searchInput,
   .dropDownBox {
     width: 100%;
     min-width: 0;
-    box-sizing: border-box;
-    font-size: 16px; /* Prevents auto-zoom on iOS Safari focus */
+    font-size: 16px; /* Prevents auto-zoom on iOS */
   }
 
-  /* Table adjustments for horizontal scroll */
-  .tableWrapper {
-    border-radius: 6px;
-    -webkit-overflow-scrolling: touch; /* Momentum scrolling */
-    margin: 0 -2px;
-  }
-
-  .logTable th {
-    padding: 0.75rem 0.65rem;
-    font-size: 0.7rem;
-    white-space: nowrap;
-  }
-
+  .logTable th,
   .logTable td {
     padding: 0.75rem 0.65rem;
-    font-size: 0.85rem;
-    white-space: nowrap; /* Keeps rows structured rather than warping cells */
-  }
-
-  /* Compact status badges */
-  .statusBadge {
-    padding: 4px 8px;
-    font-size: 0.7rem;
-    letter-spacing: 0.25px;
-  }
-
-  .emptyState,
-  .loading {
-    padding: 24px !important;
-    font-size: 0.9rem;
+    white-space: nowrap;
   }
 }

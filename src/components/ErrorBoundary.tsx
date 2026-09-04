@@ -11,8 +11,6 @@ export class ErrorBoundary extends Component<Props, State> {
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
         console.error('ErrorBoundary caught an error:', error, errorInfo);
-
-        // Later call an api to add to database
     }
 
     handleRetry = () => {

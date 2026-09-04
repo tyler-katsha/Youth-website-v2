@@ -3,7 +3,6 @@ import styles from '../modules/ProfileImage.module.css';
 import type { ProfileCompProps } from "../types/user";
 import { getInitials, getProfileColor } from "../utils/Utils";
 
-
 export const Profile: React.FC<ProfileCompProps> = ({ name, profileImageUrl, link = true }) => {
 
     const navigate = useNavigate();

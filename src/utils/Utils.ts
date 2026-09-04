@@ -179,6 +179,6 @@ export function getToken(): string | null {
 }
 
 export function parseCreatedAt(createdAt: number[]): Date {
-  const [year = 1970, month = 1, day = 1, hour = 0, minute = 0, second = 0, nano = 0] = createdAt;
+  const [year , month , day , hour , minute , second , nano ] = createdAt;
   return new Date(year, month - 1, day, hour, minute, second, Math.floor(nano / 1_000_000));
 }

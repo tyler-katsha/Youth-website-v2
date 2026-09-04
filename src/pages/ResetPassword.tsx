@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { PasswordRequirements } from '../components/PasswordRequirements';
 import styles from '../modules/Auth.module.css';
 import { CustomPopup } from '../popups/CustomPopup';
-import type { ToastResponse } from '../types/types';
 import { API } from '../utils/API';
 import { authFetch } from '../utils/client';
+import { DEFAULT_POPUP_CONFIG } from '../data/default';
 
 export const ResetPassword = () => {
 
@@ -22,11 +22,7 @@ export const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    const [popupConfig, setPopupConfig] = useState({
-        isOpen: false,
-        type: 'success' as ToastResponse,
-        message: ''
-    });
+    const [popupConfig, setPopupConfig] = useState(DEFAULT_POPUP_CONFIG);
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 

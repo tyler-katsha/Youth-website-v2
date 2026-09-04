@@ -1,153 +1,175 @@
-/* Container styling to frame the graph nicely */
+/* Container styling */
 .graphContainer {
   width: 100%;
-  height: 400px;
-  margin-top: 2rem;
+  height: clamp(300px, 45vh, 420px);
+  margin-top: 1.5rem;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+  padding: 1.25rem 1.5rem;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Empty state styling */
 .emptyState {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 400px;
-  color: #6b7280;
-  font-style: italic;
-  background: #f9fafb;
-  border-radius: 8px;
-  border: 1px dashed #d1d5db;
-  margin-top: 2rem;
+  gap: 8px;
+  width: 100%;
+  height: clamp(240px, 35vh, 360px);
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  color: #64748b;
+  font-size: 0.925rem;
+  font-weight: 500;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+  box-sizing: border-box;
 }
 
-/* --- Custom Tooltip Styles --- */
+/* --- Custom Tooltip (Frosted Glass & Depth) --- */
 .customTooltip {
-  background-color: #ffffff;
-  padding: 1rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  font-family: system-ui, -apple-system, sans-serif;
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.875rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 
+    0 10px 25px -5px rgba(15, 23, 42, 0.1),
+    0 8px 10px -6px rgba(15, 23, 42, 0.05);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-width: 220px;
+  max-width: 320px;
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 0.15s ease;
 }
 
 .tooltipDate {
   margin: 0 0 8px 0;
   font-weight: 600;
-  color: #111827;
-  border-bottom: 1px solid #f3f4f6;
+  color: #0f172a;
+  border-bottom: 1px solid #f1f5f9;
   padding-bottom: 6px;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
 }
 
 .tooltipRow {
   margin: 6px 0;
-  color: #374151;
-  font-size: 0.9rem;
+  color: #334155;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .tooltipMethod {
-  font-family: monospace;
-  font-weight: 600;
-  color: #4f46e5; /* Indigo */
-  background: #e0e7ff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
   padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.85rem;
+  border-radius: 5px;
+  letter-spacing: 0.02em;
 }
 
 .statusSuccess {
-  color: #059669; /* Emerald */
+  display: inline-flex;
+  align-items: center;
   font-weight: 600;
+  font-size: 0.8rem;
+  color: #059669;
 }
 
 .statusFailed {
-  color: #dc2626; /* Red */
+  display: inline-flex;
+  align-items: center;
   font-weight: 600;
+  font-size: 0.8rem;
+  color: #dc2626;
 }
 
 .tooltipDetails {
-  margin-top: 12px;
-  font-size: 0.85rem;
-  color: #4b5563;
-  background: #f9fafb;
-  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #475569;
+  background: #f8fafc;
+  padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #f3f4f6;
-  max-width: 280px;
-  word-wrap: break-word;
+  border: 1px solid #e2e8f0;
+  overflow-wrap: anywhere;
 }
 
 .tooltipDetails strong {
-  color: #111827;
+  color: #0f172a;
+  font-weight: 600;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* ==========================================================================
-   Mobile & Small Screen Optimizations
+   Mobile & Small Screen Optimizations (< 640px)
    ========================================================================== */
 
 @media (max-width: 640px) {
-  /* Scale down graph wrapper height and padding to fit mobile viewport */
   .graphContainer {
-    height: 300px;
-    padding: 0.875rem 0.5rem;
+    height: 280px;
+    padding: 0.875rem;
     margin-top: 1rem;
-    border-radius: 6px;
-    /* Ensure child SVG/canvas doesn't overflow */
-    overflow-x: hidden;
+    border-radius: 10px;
+    overflow: hidden;
   }
 
   .emptyState {
-    height: 250px;
+    height: 200px;
     margin-top: 1rem;
-    padding: 1rem;
-    text-align: center;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
+    border-radius: 10px;
   }
 
-  /* Prevent tooltip from pushing screen width or overflowing edges */
   .customTooltip {
-    min-width: 180px;
+    min-width: 190px;
     max-width: calc(100vw - 32px);
     padding: 0.75rem;
-    font-size: 0.85rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    /* Improve pointer interaction on touch devices */
-    pointer-events: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
   }
 
   .tooltipDate {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     margin-bottom: 6px;
     padding-bottom: 4px;
   }
 
   .tooltipRow {
-    font-size: 0.8rem;
+    font-size: 0.775rem;
     margin: 4px 0;
-    gap: 6px;
   }
 
   .tooltipMethod {
-    font-size: 0.75rem;
-    padding: 1px 4px;
+    font-size: 0.7rem;
+    padding: 1px 5px;
   }
 
   .tooltipDetails {
     margin-top: 8px;
-    padding: 8px;
-    font-size: 0.775rem;
-    max-width: 100%;
-    /* Break long error strings or hashes without wrapping bugs */
-    overflow-wrap: anywhere;
+    padding: 6px 8px;
+    font-size: 0.75rem;
   }
 }

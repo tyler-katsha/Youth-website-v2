@@ -7,15 +7,8 @@ import { API } from "../utils/API";
 import { authFetch } from "../utils/client";
 import type { AnnouncementProps } from "../types/announcement";
 import type { PartialToast } from "../types/modal";
+import { INITIAL_FORM_STATE } from "../data/default";
 
-const INITIAL_FORM_STATE: Omit<AnnouncementProps, 'id'> = {
-    title: '',
-    message: '',
-    type: 'INFO',
-    createdAt: 'Just now',
-    expiresAt: '',
-    isUrgent: false
-};
 
 export const Announcement = () => {
     const [announcements, setAnnouncements] = useState<AnnouncementProps[]>([]);

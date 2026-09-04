@@ -5,11 +5,11 @@ import { useUser } from '../contexts/UserContext';
 import styles from '../modules/Auth.module.css';
 import { CustomPopup } from '../popups/CustomPopup';
 import { errorMessages } from '../types/error';
-import { type ToastResponse } from '../types/types';
 import { API } from '../utils/API';
 import { removeAll } from '../utils/Utils';
 import type { AuthTokens, LoginPayload } from '../types/auth';
 import { saveAuthTokens } from '../utils/tokenStorage';
+import { DEFAULT_LOGIN_PAYLOAD, DEFAULT_POPUP_CONFIG } from '../data/default';
 
 export const Login = () => {
 
@@ -18,18 +18,11 @@ export const Login = () => {
     const { fetchUser } = useUser();
     const [searchParams] = useSearchParams();
 
-    const [popupConfig, setPopupConfig] = useState({
-        isOpen: false,
-        type: 'success' as ToastResponse,
-        message: ''
-    });
+    const [popupConfig, setPopupConfig] = useState(DEFAULT_POPUP_CONFIG);
     const closePopup = () => setPopupConfig(prev => ({ ...prev, isOpen: false }))
     const [showPassword, setShowPassword] = useState(false);
 
-    const [data, setData] = useState<LoginPayload>({
-        email: "",
-        password: ""
-    });
+    const [data, setData] = useState<LoginPayload>(DEFAULT_LOGIN_PAYLOAD);
 
     const error = searchParams.get("error");
 

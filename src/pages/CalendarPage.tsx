@@ -11,6 +11,7 @@ import { API } from "../utils/API";
 import { formatTime, isPermitted, resetCalendarForm } from "../utils/Utils";
 import type { PartialToast } from "../types/modal";
 import { authFetch } from "../utils/client";
+import { DEFAULT_PARTIAL_PLAN } from "../data/default";
 
 export const CalendarPage = () => {
     const { user, isLoading: userLoading } = useUser();
@@ -23,14 +24,7 @@ export const CalendarPage = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
-    const [formData, setFormData] = useState<PartialPlan>({
-        title: '',
-        description: '',
-        startTime: '',
-        endTime: '',
-        color: '#2563eb',
-        eventType: 'GENERAL' as EventType
-    });
+    const [formData, setFormData] = useState<PartialPlan>(DEFAULT_PARTIAL_PLAN);
 
     const dateKey = selectedDate.toLocaleDateString('en-CA');
     const formattedDate = selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });

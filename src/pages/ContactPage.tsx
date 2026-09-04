@@ -6,26 +6,18 @@ import { useUser } from '../contexts/UserContext';
 import { ContactSkeleton } from '../skeletons/pages/ContactSkeleton';
 import { RedirectUser } from '../components/RedirectUser';
 import { authFetch } from '../utils/client';
+import { DEFAULT_CONTACT_FORM, DEFAULT_POPUP_CONFIG } from '../data/default';
 
 export const ContactPage = () => {
 
     const { user, isLoading } = useUser();
     const [isSending, setIsSending] = useState(false);
 
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-    });
+    const [formData, setFormData] = useState(DEFAULT_CONTACT_FORM);
 
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const [popupConfig, setPopupConfig] = useState({
-        isOpen: false,
-        type: 'success' as 'success' | 'error',
-        message: ''
-    });
+    const [popupConfig, setPopupConfig] = useState(DEFAULT_POPUP_CONFIG);
     const closePopup = () => setPopupConfig(prev => ({ ...prev, isOpen: false }))
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -93,11 +85,6 @@ export const ContactPage = () => {
                                 <span className={styles.detailValue}>youth@engedichurch.com</span>
                             </div>
 
-                            {/* <div className={styles.detailItem}>
-                                <span className={styles.detailLabel}>Call Us</span>
-                                <span className={styles.detailValue}>(555) 123-4567</span>
-                            </div> */}
-
                             <div className={styles.detailItem}>
                                 <span className={styles.detailLabel}>Youth Building</span>
                                 <span className={styles.detailValue}>
@@ -109,7 +96,6 @@ export const ContactPage = () => {
                         </div>
                     </div>
 
-                    {/* Right Side: The Form */}
                     <div className={styles.formBox}>
                         <h3>Send a Message</h3>
 

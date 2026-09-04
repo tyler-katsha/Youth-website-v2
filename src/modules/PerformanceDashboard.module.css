@@ -1,36 +1,42 @@
 /* Container styling */
 .dashboardWrapper {
   padding: 24px;
-  background-color: #f3f4f6; /* Light gray background */
+  background-color: #f8fafc;
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100dvh;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  box-sizing: border-box;
 }
 
 .dashboardHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   margin-bottom: 24px;
 }
 
 .dashboardHeader h2 {
   margin: 0;
-  color: #111827;
+  color: #0f172a;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.015em;
 }
 
 /* Pulsing live indicator */
 .liveIndicator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #10b981;
-  font-weight: 500;
-  font-size: 0.875rem;
+  color: #059669;
+  font-weight: 600;
+  font-size: 0.8125rem;
   background: #ecfdf5;
-  padding: 6px 12px;
-  border-radius: 999px;
+  border: 1px solid #a7f3d0;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  flex-shrink: 0;
 }
 
 .pulseDot {
@@ -38,13 +44,29 @@
   height: 8px;
   background-color: #10b981;
   border-radius: 50%;
-  animation: pulse 1.5s infinite ease-in-out;
+  animation: pulse 1.75s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.65);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Respect user accessibility settings */
+@media (prefers-reduced-motion: reduce) {
+  .pulseDot {
+    animation: none;
+  }
 }
 
 /* Grid layout */
@@ -64,7 +86,8 @@
 .dashboardCard {
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -72,10 +95,10 @@
 
 .cardTitle {
   margin: 0 0 16px 0;
-  color: #374151;
+  color: #1e293b;
   font-size: 1.125rem;
   font-weight: 600;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #f1f5f9;
   padding-bottom: 12px;
 }
 
@@ -84,11 +107,13 @@
   width: 100%;
 }
 
-/* Custom scrollbar for logs */
+/* Scrollbar for logs (Firefox + WebKit standards) */
 .logsContainer {
   height: 320px;
   overflow-y: auto;
   padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
 }
 
 .logsContainer::-webkit-scrollbar {
@@ -96,31 +121,36 @@
 }
 
 .logsContainer::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-  border-radius: 8px;
+  background: #f8fafc;
+  border-radius: 6px;
 }
- 
+
 .logsContainer::-webkit-scrollbar-thumb {
-  background: #d1d5db; 
-  border-radius: 8px;
+  background: #cbd5e1;
+  border-radius: 6px;
 }
 
 .logsContainer::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af; 
+  background: #94a3b8;
 }
 
 /* Log item styling */
 .logItem {
   padding: 12px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   margin-bottom: 8px;
-  transition: transform 0.1s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.logItem:last-child {
+  margin-bottom: 0;
 }
 
 .logItem:hover {
-  background: #f3f4f6;
+  background: #f1f5f9;
+  border-color: #cbd5e1;
 }
 
 .logHeader {
@@ -131,29 +161,34 @@
 }
 
 .logBadge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
   border-radius: 4px;
   text-transform: uppercase;
-  background: #e0e7ff;
-  color: #4f46e5;
+  letter-spacing: 0.03em;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #dbeafe;
 }
 
 .logTime {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
 }
 
 .logBody {
   font-size: 0.875rem;
-  color: #4b5563;
+  color: #334155;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .logUser {
   font-weight: 600;
-  color: #111827;
-  margin-right: 8px;
+  color: #0f172a;
+  margin-right: 6px;
 }
 
 .emptyState {
@@ -161,7 +196,9 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #9ca3af;
+  min-height: 200px;
+  color: #64748b;
+  font-size: 0.925rem;
   font-style: italic;
 }
 
@@ -170,12 +207,10 @@
    ========================================================================== */
 
 @media (max-width: 640px) {
-  /* Reduce outer gutters and avoid horizontal scroll */
   .dashboardWrapper {
     padding: 14px 12px;
   }
 
-  /* Stack header elements cleanly */
   .dashboardHeader {
     flex-direction: column;
     align-items: flex-start;
@@ -187,17 +222,10 @@
     font-size: 1.25rem;
   }
 
-  .liveIndicator {
-    font-size: 0.775rem;
-    padding: 4px 10px;
-  }
-
-  /* Compact grid spacing */
   .dashboardGrid {
     gap: 14px;
   }
 
-  /* Card padding reduction */
   .dashboardCard {
     padding: 14px 12px;
     border-radius: 10px;
@@ -209,32 +237,24 @@
     padding-bottom: 8px;
   }
 
-  /* Scale chart height for standard mobile viewports */
   .chartContainer {
     height: 240px;
   }
 
-  /* Limit log container height so cards don't dominate the viewport */
   .logsContainer {
     height: 260px;
     padding-right: 4px;
-    /* Native-feeling momentum scroll on iOS */
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Logs layout: wrap lines and allow breakable user data */
   .logItem {
     padding: 10px;
     margin-bottom: 6px;
   }
 
-  .logHeader {
-    gap: 8px;
-  }
-
   .logBadge {
-    font-size: 0.7rem;
-    padding: 2px 6px;
+    font-size: 0.65rem;
+    padding: 2px 5px;
   }
 
   .logTime {
@@ -244,17 +264,5 @@
 
   .logBody {
     font-size: 0.8rem;
-    line-height: 1.35;
-    overflow-wrap: anywhere;
-  }
-
-  .logUser {
-    display: inline-block;
-    margin-right: 4px;
-  }
-
-  .emptyState {
-    font-size: 0.825rem;
-    padding: 16px 0;
   }
 }

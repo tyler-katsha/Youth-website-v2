@@ -1,96 +1,117 @@
-import React from 'react';
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import React, { useMemo } from 'react';
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from 'recharts';
 import styles from '../modules/PerformanceGraph.module.css';
 import { parseCreatedAt } from '../utils/Utils';
 import { CustomTooltip } from './CustomTooltip';
 import type { PerformanceGraphProps } from '../types/performance';
 
 export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ performances }) => {
-  if (!performances || performances.length === 0) {
+  // Memoize data sorting and transformation to prevent expensive re-sorting on render
+  const sortedData = useMemo(() => {
+    if (!performances || performances.length === 0) return [];
+
+    return [...performances]
+      .map((performance) => ({
+        ...performance,
+        createdAtDate: parseCreatedAt(performance.createdAt)
+      }))
+      .sort((a, b) => a.createdAtDate.getTime() - b.createdAtDate.getTime());
+  }, [performances]);
+
+  if (sortedData.length === 0) {
     return (
       <div className={styles.emptyState}>
-        No performance records available for graph.
+        <p>No performance records available for graph.</p>
       </div>
     );
   }
 
-  const sortedData = [...performances].map((performance) => ({ ...performance, createdAtDate: parseCreatedAt(performance.createdAt) }))
-    .sort((a, b) => a.createdAtDate.getTime() - b.createdAtDate.getTime());
-
   return (
     <div className={styles.graphContainer}>
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart
+        <AreaChart
           data={sortedData}
           margin={{
-            top: 20,
-            right: 30,
-            left: 10,
-            bottom: 10
+            top: 16,
+            right: 16,
+            left: 0,
+            bottom: 4
           }}
         >
+          <defs>
+            <linearGradient id="latencyGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#2563eb" stopOpacity={0.18} />
+              <stop offset="95%" stopColor="#2563eb" stopOpacity={0.0} />
+            </linearGradient>
+          </defs>
 
           <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="#e5e7eb"
+            strokeDasharray="4 4"
+            stroke="#e2e8f0"
             vertical={false}
           />
 
           <XAxis
             dataKey="createdAtDate"
-            tickFormatter={(value) =>
+            tickFormatter={(value: Date) =>
               value.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit'
               })
             }
-            stroke="#6b7280"
-            fontSize={12}
-            tickMargin={12}
+            stroke="#94a3b8"
+            tick={{ fill: '#64748b', fontSize: 11, fontWeight: 500 }}
+            tickLine={false}
+            axisLine={{ stroke: '#e2e8f0' }}
+            dy={8}
           />
 
           <YAxis
-            label={{
-              value: 'Execution Time (ms)',
-              angle: -90,
-              position: 'insideLeft',
-              fill: '#6b7280',
-              fontSize: 12,
-              offset: -5
-            }}
-            stroke="#6b7280"
-            fontSize={12}
+            stroke="#94a3b8"
+            tick={{ fill: '#64748b', fontSize: 11, fontWeight: 500 }}
+            tickLine={false}
+            axisLine={false}
+            width={58}
             tickFormatter={(value) => `${value}ms`}
           />
 
           <Tooltip
             content={<CustomTooltip />}
             cursor={{
-              stroke: '#9ca3af',
+              stroke: '#cbd5e1',
               strokeWidth: 1,
               strokeDasharray: '4 4'
             }}
           />
 
-          <Line
+          <Area
             type="monotone"
             dataKey="executionTime"
-            stroke="#4f46e5"
-            strokeWidth={3}
+            stroke="#2563eb"
+            strokeWidth={2.5}
+            fill="url(#latencyGradient)"
             dot={{
-              r: 4,
-              fill: '#4f46e5',
-              strokeWidth: 0
-            }}
-            activeDot={{
-              r: 7,
-              fill: '#4f46e5',
-              stroke: '#ffffff',
+              r: 3.5,
+              fill: '#ffffff',
+              stroke: '#2563eb',
               strokeWidth: 2
             }}
+            activeDot={{
+              r: 6,
+              fill: '#2563eb',
+              stroke: '#ffffff',
+              strokeWidth: 2.5
+            }}
           />
-
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );

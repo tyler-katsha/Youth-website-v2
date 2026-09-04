@@ -16,6 +16,7 @@ export const OAuthLogin = () => {
         type: 'success' as ToastResponse,
         message: ''
     });
+    
 
     const handleOAuth2Login = (provider: string) => {
         removeAll();

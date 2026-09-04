@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../modules/Auth.module.css';
 import { CustomPopup } from '../popups/CustomPopup';
-import type { ToastResponse } from '../types/types';
 import { API } from '../utils/API';
 import { authFetch } from '../utils/client';
+import { DEFAULT_POPUP_CONFIG } from '../data/default';
 
 export const ResetEmail = () => {
 
@@ -13,11 +13,7 @@ export const ResetEmail = () => {
     const loginPage = () => navigate('/login');
     const [email, setEmail] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [popupConfig, setPopupConfig] = useState({
-        isOpen: false,
-        type: 'success' as ToastResponse,
-        message: ''
-    });
+    const [popupConfig, setPopupConfig] = useState(DEFAULT_POPUP_CONFIG);
     const closePopup = () => setPopupConfig(prev => ({ ...prev, isOpen: false }))
 
     const handleFormEvent = async (e: React.SubmitEvent<HTMLFormElement>) => {

@@ -13,14 +13,11 @@ import type { EditProfileFormData } from '../types/user';
 import { API } from '../utils/API';
 import { getProfileColor, formatRoles, getAge, getToken, isLocal, mapProfilePayloadToProfile } from '../utils/Utils';
 import type { PartialToast } from '../types/modal';
-// import { useTheme } from '../contexts/ThemeContext';
 
 export const ProfilePage = () => {
 
     const { user, isLoading, updateUser, setUser } = useUser();
-    // const { isDark, toggleTheme } = useTheme();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    // const [showDeactivateModal, setShowDeactivateModal] = useState(false);
     const [toast, setToast] = useState<PartialToast | null>(null)
     const navigate = useNavigate();
 
@@ -82,42 +79,6 @@ export const ProfilePage = () => {
         }
     };
 
-    // const handleDeactivate = async () => {
-    //     try {
-    //         const response = await fetch(`${API}/users`, {
-    //             method: "DELETE",
-    //             credentials: "include",
-    //             headers: {
-    //                 'Authorization':`Bearer ${getToken()}`
-    //             }
-    //         });
-
-    //         if (!response.ok) {
-    //             setToast({
-    //                 type: 'error',
-    //                 message: await response.text() ?? 'Failed to deactivate account'
-    //             })
-    //             return;
-    //         }
-
-    //         const data = await response.json();
-
-    //         updateUser(data);
-    //         setToast({
-    //             type: 'success',
-    //             message: await response.text() ?? 'Successfully deactivated account.'
-    //         })
-    //     } catch (err) {
-    //         setToast({
-    //             type: 'error',
-    //             message: 'Something went wrong Please try again'
-    //         })
-    //     } finally {
-    //         setShowDeactivateModal(false);
-    //         removeAll();
-    //     }
-    // };
-
     if (isLoading) return <ProfileSkeleton />;
     if (!user) return <RedirectUser />;
 
@@ -166,9 +127,9 @@ export const ProfilePage = () => {
                             </div>
                         </div>
 
-                        {/* <hr className={styles.sectionDivider} /> */}
+                        {/* <hr className={styles.sectionDivider} />
 
-                        {/* <div className={styles.profileSection}>
+                        <div className={styles.profileSection}>
                             <h3 className={styles.sectionTitle}>Appearance</h3>
 
                             <div className={styles.settingRow}>
@@ -209,41 +170,9 @@ export const ProfilePage = () => {
                             </>)}
 
                         <hr className={styles.sectionDivider} />
-
-                        {/* {user.enabled && (<div className={`${styles.profileSection} ${styles.dangerZoneSection}`}>
-                            <h3 className={`${styles.sectionTitle} ${styles.dangerTitle}`}>Danger Zone</h3>
-                            <div className={styles.settingRow}>
-                                <div className={styles.settingMeta}>
-                                    <h4>Deactivate Account</h4>
-                                    <p>Once you deactivate your account, your data will be permanently cleared. This process cannot be undone.</p>
-                                </div>
-                                <button className={styles.deactivateBtn} onClick={() => setShowDeactivateModal(true)}>
-                                    Deactivate Account
-                                </button>
-                            </div>
-                        </div>)} */}
-
-
-
                     </div>
                 </div>
             </div>
-
-            {/* {showDeactivateModal && (
-                <div className={styles.modalOverlay}>
-                    <div className={styles.modal}>
-                        <h2>Deactivate Account</h2>
-                        <p>
-                            Are you sure you want to deactivate your account?
-                            This action cannot be undone.
-                        </p>
-                        <div className={styles.modalButtons}>
-                            <button className={styles.cancelBtn} onClick={() => setShowDeactivateModal(false)}>Cancel</button>
-                            <button className={styles.confirmDeactivateBtn} onClick={handleDeactivate}>Yes, Deactivate</button>
-                        </div>
-                    </div>
-                </div>
-            )} */}
 
             <EditProfileModal
                 isOpen={isEditModalOpen}

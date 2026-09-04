@@ -10,7 +10,7 @@ import { CustomPopup } from '../popups/CustomPopup';
 import { API } from '../utils/API';
 import { acceptArray } from '../types/arrays';
 import type { RegisterPayload } from '../types/auth';
-import type { ToastResponse } from '../types/types';
+import { DEFAULT_POPUP_CONFIG, DEFAULT_REGISTER_PAYLOAD } from '../data/default';
 
 
 export const Register = () => {
@@ -18,22 +18,10 @@ export const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [_previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [data, setData] = useState<RegisterPayload>({
-        firstName: '',
-        lastName: '',
-        email: '',
-        dateOfBirth: '',
-        password: '',
-        confirmPassword: '',
-        bio: '',
-        profileImageUrl: null
-    });
+    const [data, setData] = useState<RegisterPayload>(DEFAULT_REGISTER_PAYLOAD);
 
-    const [popupConfig, setPopupConfig] = useState({
-        isOpen: false,
-        type: 'success' as ToastResponse,
-        message: ''
-    });
+    const [popupConfig, setPopupConfig] = useState(DEFAULT_POPUP_CONFIG);
+
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword)

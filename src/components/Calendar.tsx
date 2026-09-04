@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../modules/Calendar.module.css';
 import type { CalendarProps } from '../types/event';
+import { daysOfWeek, monthNames } from '../types/arrays';
 
 export const Calendar: React.FC<CalendarProps> = ({ plans = [], onDateSelect }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -11,12 +12,6 @@ export const Calendar: React.FC<CalendarProps> = ({ plans = [], onDateSelect }) 
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = new Date(year, month, 1).getDay();
-
-    const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
-    const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
     const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
     const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));

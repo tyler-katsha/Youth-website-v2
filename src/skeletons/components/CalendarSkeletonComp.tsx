@@ -1,5 +1,6 @@
 import styles from '../../modules/Calendar.module.css'
 import { Skeleton } from './Skeleton';
+
 export const CalendarSkeletonComp = () => {
     return (
          <div className={styles.calendarWrapper}>
