@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Calendar } from "../components/Calendar";
 import { CalendarSkeleton } from "../skeletons/pages/CalendarSkeleton";
 import { useUser } from "../contexts/UserContext";
@@ -34,35 +34,47 @@ export const CalendarPage = () => {
     const todaysPlans = plans.filter(plan => plan.dateKey === dateKey);
 
     const timeOptions = times.map((time) => (<option key={time} value={time}>{time}</option>))
-    const fetchAllEvents = async () => {
+    
+    const [page, setPage] = useState<number>(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const loaderRef = useRef<HTMLDivElement>(null);
+
+    const fetchAllEvents = async (pageNumber: number) => {
+        const token = getToken();
+
         try {
-            const response = await fetch(`${API}/event/events`, { 
+            const response = await fetch(`${API}/event/events?page=${pageNumber}&size=100`, { 
                 method: 'GET',
                 credentials: "include",
                 headers: { 
                     'content-type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             if (!response.ok) {
                 const error = await response.json();
                 setToast({message: error.message ?? "Failed to find all events.",type:"error"});
                 return;
-                
             }
-            const data = await response.json();
-            setPlans(data);
+
+            const temp = await response.json();
+
+            const data: Plan[] = temp.content;
+
+            setPlans(prev => [...prev, ...data]);
+
+            setHasMore(!temp.last);
+
+            setPage(pageNumber);
         } catch (err) { 
             setToast({message: "Something went wrong. Please try again",type:"error"}); 
         }
         finally { 
-            setIsPageLoading(false); 
+            setIsPageLoading(false);
+            setLoading(false); 
         }
     };
-
-    useEffect(() => {
-        if (user) fetchAllEvents();
-    }, [user]);
 
     const handleSavePlan = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -89,7 +101,7 @@ export const CalendarPage = () => {
 
         setPlans(prev => currentEditingId !== null ? prev.map(plan => plan.id === currentEditingId ? optimisticPlan : plan) : [...prev, optimisticPlan]);
 
-        
+        const token = getToken();
         try {
 
             const response = await fetch(url, {
@@ -97,7 +109,7 @@ export const CalendarPage = () => {
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
-                    'Authorization': `Bearer ${getToken()}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ ...formData, dateKey }),
             });
@@ -150,13 +162,14 @@ export const CalendarPage = () => {
 
     const handleDeletePlan = async (id: number) => {
         setDeletingPlans(prev => new Set(prev).add(id));
+        const token = getToken();
         try {
             const response = await fetch(`${API}/event/events/${id}`, { 
                 method: "DELETE", 
                 credentials: "include",
                 headers: { 
                     'content-type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             setPlans(prev => prev.filter(p => p.id !== id));
@@ -188,6 +201,25 @@ export const CalendarPage = () => {
             return prev.map(plan => plan.id === currentEditingId && originalPlan ? originalPlan : plan)
         })
     }
+
+    useEffect(() => {
+        fetchAllEvents(0);
+    }, []);
+    useEffect(() => {
+    
+            const observer = new IntersectionObserver(entries => {
+    
+                if (entries[0].isIntersecting && hasMore && !loading) {
+                    fetchAllEvents(page + 1);
+                }
+            }, { threshold: 0.1, rootMargin: '200px' });
+    
+            if (loaderRef.current) {
+                observer.observe(loaderRef.current);
+            }
+    
+            return () => observer.disconnect()
+        }, [page, hasMore, loading])
 
     if (!user) return <RedirectUser/>;
     if (userLoading || isPageLoading) return <CalendarSkeleton />;
@@ -262,6 +294,7 @@ export const CalendarPage = () => {
                     </div>
                 </div>
             </div>
+            <div ref={loaderRef} style={{ height: 40, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>{loading && <span>Loading...</span>}</div>
             {toast && (<Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />)}
         </>
     );

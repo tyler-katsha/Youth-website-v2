@@ -27,14 +27,14 @@ export const Logs = () => {
     const closeDetails = () => setSelectedRecord(null);
 
     const fetchLogs = async (pageNumber: number) => {
-
+        const token = getToken();
         try {
             const response = await fetch(`${API}/admin/logs?page=${pageNumber}&size=100`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
