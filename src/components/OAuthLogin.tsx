@@ -78,8 +78,8 @@ export const OAuthLogin = () => {
 
             <div className={styles.socialGrid}>
                 <button className={styles.socialBtn} onClick={() => handleOAuth2Login('google')}><img src={googleIcon} alt='Login with Google' /></button>
-                <button className={styles.socialBtn} onClick={() => handleOAuth2Login('facebook')}><img src={facebookIcon} alt='Login with Facebook' /></button>
-                <button className={styles.socialBtn} onClick={() => handleOAuth2Login('azure')}><img src={microsoftIcon} alt='Login with Microsoft' /></button>
+                {/* <button className={styles.socialBtn} onClick={() => handleOAuth2Login('facebook')}><img src={facebookIcon} alt='Login with Facebook' /></button>
+                <button className={styles.socialBtn} onClick={() => handleOAuth2Login('azure')}><img src={microsoftIcon} alt='Login with Microsoft' /></button> */}
             </div>
 
             <button className={styles.guestBtn} onClick={handleContinueAsGuest}>Continue as Guest</button>
