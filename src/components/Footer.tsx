@@ -3,8 +3,8 @@ import styles from '../modules/Footer.module.css';
 import { validGuest } from '../utils/Utils';
 
 export const Footer = () => {
-    const isGuest = localStorage.getItem('isGuest')
-    
+    const isGuest = localStorage.getItem('isGuest');
+
     return (
         <footer className={styles.footer}>
             <div className={styles.footerContent}>
@@ -20,15 +20,20 @@ export const Footer = () => {
                     <div className={styles.linkGroup}>
                         <h4>Navigation</h4>
                         <Link to='/'>Home</Link>
-                        <Link to={validGuest(isGuest,'/profile')}>{isGuest ? "Login to unlock" : "My Profile"}</Link>
-                        <Link to={validGuest(isGuest,'/calendar')}>{isGuest ? "Login to unlock" : "Calendar"}</Link>
+                        <Link to={validGuest(isGuest, '/profile')}>{isGuest ? "Login to unlock" : "My Profile"}</Link>
+                        <Link to={validGuest(isGuest, '/calendar')}>{isGuest ? "Login to unlock" : "Calendar"}</Link>
                     </div>
                     
                     <div className={styles.linkGroup}>
                         <h4>Connect</h4>
                         <Link to='/contact-us' replace>Contact Us</Link>
-                        <Link to='https://www.instagram.com/engedi_offical/' replace>Instagram</Link>
-                        {/* <Link to='www.youtube.com' replace>YouTube</Link> */}
+                        <a href='https://www.instagram.com/engedi_offical/' target='_blank' rel='noopener noreferrer'>Instagram</a>
+                        {/* <a href='https://www.youtube.com' target='_blank' rel='noopener noreferrer'>YouTube</a> */}
+                    </div>
+
+                    <div className={styles.linkGroup}>
+                        <h4>Legal</h4>
+                        <Link to='/policy'>Privacy Policy</Link>
                     </div>
                 </div>
                 

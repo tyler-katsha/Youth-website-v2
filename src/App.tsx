@@ -19,6 +19,7 @@ import { ThemeProvider } from './contexts/ThemeContext'
 import { ResetEmail } from './pages/ResetEmail'
 import { MainLayout } from './components/MainLayout'
 import { LoadingProvider } from './contexts/GlobalLoadingContext'
+import { PolicyPage } from './pages/PolicyPage'
 
 function App() {
 
@@ -79,6 +80,10 @@ function App() {
               <Members />
             </ProtectedRoute>
           ),
+        },
+        {
+          path: '/policy',
+          element: <PolicyPage/>
         },
         {
           path: "/calendar",
